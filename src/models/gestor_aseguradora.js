@@ -1,0 +1,51 @@
+export default {
+	properties: [
+		{
+			text: 'N°',
+			key: 'num',
+			type: 'text',
+			value: '',
+			not_show_on_form: true,
+			show: true,
+		},
+		{
+			text: 'Nombre',
+			key: 'nombre',
+			type: 'text',
+			value: '',
+			is_title: true,
+		},
+		{
+			text: 'Celular',
+			key: 'celular',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Telefono',
+			key: 'telefono',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Email',
+			key: 'email',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Unidad de negocios',
+			key: 'unidad_negocio_id',
+			type: 'select',
+			value: 0,
+			show: true,
+		},
+	],
+	singular_model_name_spanish: 'Gestor Aseguradora',
+	plural_model_name_spanish: 'Gestores Aseguradora',
+	create_model_name_spanish: 'Nuevo',
+	text_delete: 'el',
+}

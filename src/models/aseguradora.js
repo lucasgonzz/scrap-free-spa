@@ -1,0 +1,51 @@
+export default {
+	properties: [
+		{
+			text: 'N°',
+			key: 'num',
+			type: 'text',
+			value: '',
+			not_show_on_form: true,
+			show: true,
+		},
+		{
+			text: 'Nombre',
+			key: 'nombre',
+			type: 'text',
+			value: '',
+			is_title: true,
+		},
+		{
+			text: 'Direccion',
+			key: 'direccion',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Contacto',
+			key: 'contacto',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Nombre contacto',
+			key: 'nombre_contacto',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Notas',
+			key: 'notas',
+			type: 'textarea',
+			value: '',
+			show: true,
+		},
+	],
+	singular_model_name_spanish: 'Aseguradora',
+	plural_model_name_spanish: 'Aseguradoras',
+	create_model_name_spanish: 'Nueva',
+	text_delete: 'la',
+}

@@ -1,0 +1,51 @@
+export default {
+	properties: [
+		{
+			text: 'N°',
+			key: 'num',
+			type: 'text',
+			value: '',
+			not_show_on_form: true,
+			show: true,
+		},
+		{
+			text: 'Nombre',
+			key: 'nombre',
+			type: 'text',
+			value: '',
+			is_title: true,
+		},
+		{
+			text: 'codigo',
+			key: 'codigo',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'email',
+			key: 'email',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'telefono',
+			key: 'telefono',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'notas',
+			key: 'notas',
+			type: 'textarea',
+			value: '',
+			show: true,
+		},
+	],
+	singular_model_name_spanish: 'Transportista',
+	plural_model_name_spanish: 'Transportistas',
+	create_model_name_spanish: 'Nuevo',
+	text_delete: 'el',
+}

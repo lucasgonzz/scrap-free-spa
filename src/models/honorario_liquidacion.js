@@ -1,0 +1,46 @@
+export default {
+	properties: [
+		{
+			text: 'N°',
+			key: 'num',
+			type: 'text',
+			value: '',
+			not_show_on_form: true,
+			show: true,
+		},
+		{
+			text: 'Aseguradora',
+			key: 'aseguradora_id',
+			type: 'select',
+			value: 0,
+			is_title: true,
+		},
+		{
+			text: 'fecha efectiva honorarios gestion',
+			key: 'fecha_efectiva_honorarios_gestion',
+			type: 'date',
+			is_date: true,
+			value: '',
+			show: true,
+		},
+		{
+			text: 'honorarios gestion',
+			key: 'honorarios_gestion',
+			type: 'number',
+			is_price: true,
+			value: '',
+			show: true,
+		},
+		{
+			text: 'notas',
+			key: 'notas',
+			type: 'textarea',
+			value: '',
+			show: true,
+		},
+	],
+	singular_model_name_spanish: 'Honorario liquidacion',
+	plural_model_name_spanish: 'Honorarios liquidacion',
+	create_model_name_spanish: 'Nuevo',
+	text_delete: 'el',
+}
