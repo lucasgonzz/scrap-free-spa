@@ -3,10 +3,11 @@
     <confirm
     text="la imagen"
     :actions="actions"
-    :id="'delete-'+model_name+'-image'"
+    :id="'delete-'+model_name+'-image-'+prop.key"
     :model_name="model_name"
+    emit="deleteFromHasMany"
+    @deleteFromHasMany="deleteFromHasMany"
     toast="Imagen eliminada"></confirm>
-
 	<div>
 		<div
 		v-if="model[prop.key]">
@@ -69,7 +70,7 @@ import Confirm from '@/common-vue/components/Confirm'
 import VueLoadImage from 'vue-load-image'
 import { Carousel, Slide } from 'vue-carousel'
 export default {
-	props: ['model', 'prop', 'model_name'],
+	props: ['model', 'prop', 'model_name', 'has_many_parent_model', 'has_many_prop'],
 	components: {
 		Confirm,
 		VueLoadImage,
@@ -92,8 +93,16 @@ export default {
 		},
 		setDelete() {
 			this.$store.commit(this.model_name+'/setDeleteImageProp', this.prop.key)
-			this.$bvModal.show('delete-'+this.model_name+'-image')
+			this.$bvModal.show('delete-'+this.model_name+'-image-'+this.prop.key)
 		},
+		deleteFromHasMany() {
+			if (this.has_many_parent_model) {
+				let model = this.has_many_parent_model[this.has_many_prop.key].find(_model => {
+					return _model.id == this.model.id 
+				})
+				model[this.prop.key] = null
+			}
+		}
 	}
 }
 </script>

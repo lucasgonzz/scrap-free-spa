@@ -12,6 +12,12 @@ export default {
 		is_owner() {
 			return this.user && !this.user.owner_id
 		},
+        owner_id() {
+        	if (this.user.owner_id) {
+        		return this.user.owner_id
+        	}
+        	return this.user.id
+        },
 		view() {
 			return this.$route.params.view
 		},
@@ -47,6 +53,12 @@ export default {
 		},
 	},
 	methods: {
+		propText(prop) {
+			if (prop.text) {
+				return prop.text 
+			}
+			return prop.key.replaceAll('_', ' ')
+		},
 		saveIfNotExist(prop) {
 			if (prop.save_if_not_exist == false) {
 				return false 
@@ -151,7 +163,7 @@ export default {
 		propsToFilter(model_name) {
 			let props = this.modelPropertiesFromName(model_name)
 			let to_filter = props.filter(prop => {
-				return prop.use_to_filter_in_search
+				return prop.use_in_search_modal
 			})
 			if (to_filter.length) {
 				return to_filter
@@ -233,7 +245,7 @@ export default {
 		modelsStoreFromName(model_name) {
 			return this.$store.state[model_name].models
 		},
-		propText(model, prop, from_pivot = false) {
+		propertyText(model, prop, from_pivot = false) {
 			if (prop.type == 'images' || prop.type == 'image') {
 				return null
 			}
@@ -283,8 +295,7 @@ export default {
 				return this.price(model[prop.key]) 
 			}
 			if (prop.type == 'search') {
-				console.log(prop.text+' ENTRO A TIPE SEARCH')
-				console.log(model[prop.key])
+				console.log('typeof de '+prop.key)
 				console.log(typeof model[prop.key])
 				if (typeof model[prop.key] == 'array') {
 					return model[prop.key].length 
@@ -297,8 +308,11 @@ export default {
 				} 
 			}
 			if (prop.belongs_to_many) {
-				return ''
+				return model[prop.key].length
 			}
+			if (prop.has_many) {
+				return model[prop.key].length
+			} 
 			return model[prop.key] 
 		},
 		isRelationKey(prop) {
@@ -308,11 +322,11 @@ export default {
 		propertiesToShow(props, with_title_and_images = true) {
 			if (with_title_and_images) {
 				return props.filter(prop => {
-					return this.canProp(prop) && (prop.show || prop.is_title)
+					return this.canProp(prop) && prop.type != 'search' && (typeof prop.not_show == 'undefined' || prop.is_title)
 				})
 			} else {
 				return props.filter(prop => {
-					return this.canProp(prop) && prop.show && !prop.is_title && prop.type != 'image' && prop.type != 'images' 
+					return this.canProp(prop) && prop.type != 'search' && (typeof prop.not_show == 'undefined') && !prop.is_title && prop.type != 'image' && prop.type != 'images' 
 				})
 			}
 		},
@@ -320,7 +334,7 @@ export default {
 			return typeof prop.can == 'undefined' || this.can(prop.can)
 		},
 		modelPlural(model, replace_guion = false) {
-			let plural 
+			let plural  
 			if (model.charAt(model.length-1) == 'y') {
 				plural = model.substring(0, model.length-1)+'ies'
 			} else if (model.charAt(model.length-1) == 's') {
@@ -353,13 +367,9 @@ export default {
 
 			let options = []
 			options.push({
-				value: 0, text: 'Seleccione '+prop.text 
+				value: 0, text: 'Seleccione '+this.propText(prop) 
 			})
 			if (prop.options_from_selected_model_prop) {
-				console.log('model_name: '+model_name)
-				console.log('prop.options_from_selected_model_prop: '+prop.options_from_selected_model_prop)
-				console.log('model: ')
-				console.log(model)
 				let selected_model = this.$store.state[model_name].selected_model
 				if (selected_model) {
 					models = selected_model[prop.options_from_selected_model_prop]
@@ -397,7 +407,7 @@ export default {
 		booleanOptions(prop, model = null) {
 			let options = []
 			options.push({
-				value: -1, text: 'Seleccione '+prop.text 
+				value: -1, text: 'Seleccione '+this.propText(prop) 
 			})
 			options.push({value: 1, text: 'Si'})
 			options.push({value: 0, text: 'No'})

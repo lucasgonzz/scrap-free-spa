@@ -102,6 +102,7 @@ export default {
 		{
 			text: 'Sub Linea',
 			key: 'sub_linea_id',
+			depends_on: 'linea_id',
 			type: 'select',
 			value: 0,
 			show: true,
@@ -201,7 +202,6 @@ export default {
 			show: true,
 		},
 		{
-			text: 'numero_serie',
 			key: 'numero_serie',
 			type: 'text',
 			value: '',

@@ -1,5 +1,9 @@
 <template>
 	<div>
+    	<model
+    	@modelSaved="modelSaved"
+    	:model_name="model_name"></model>
+
 		<search-modal
 		:_id="id"
 		:query_value="query"
@@ -12,6 +16,8 @@
 		:model="model"
 		:models_to_search="models_to_search"
 		:save_if_not_exist="save_if_not_exist"
+		:show_btn_create="show_btn_create"
+		@callSearchModal="callSearchModal"
 		@setQuery="setQuery"
 		@setSelected="setSelected"></search-modal>
 
@@ -32,9 +38,6 @@
 					v-model="query"
 					:placeholder="_placeholder"></b-form-input>
 				</div>
-				<btn-create-model
-				v-if="show_btn_create && (!prop.has_many || (prop.has_many && !prop.has_many.models_from_parent_prop))"
-				:model_name="model_name"></btn-create-model>
 			</div>
 		</div>
 		<selected-info
@@ -48,15 +51,14 @@
 </template>
 <script>
 import SearchModal from '@/common-vue/components/search/Modal'
-import BtnCreateModel from '@/common-vue/components/search/BtnCreateModel'
 import TableComponent from '@/common-vue/components/display/TableComponent'
 
 export default {
 	components: {
 		SearchModal,
-		BtnCreateModel,
 		TableComponent,
 		SelectedInfo: () => import('@/common-vue/components/search/SelectedInfo'),
+		Model: () => import('@/common-vue/components/model/Index'),
 	},
 	props: {
 		id: {
@@ -134,6 +136,23 @@ export default {
 		this.setSelectedModelProp()
 	},
 	methods: {
+		modelSaved(model) {
+			if (this.prop.is_between) {
+				let index = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].findIndex(_model => {
+					return _model.id == model.id 
+				})
+				if (index == -1) {
+					this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].concat([model]))
+					console.log('se agrego')
+				} else {
+					let models = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop]
+					models.splice(index, 1, model)
+					this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, models)
+					console.log('se actualizo')
+				}
+				this.callSearchModal()
+			}
+		},
 		clearSelected() {
 			if (this.model) {
 				this.model[this.prop.store] = null
@@ -148,9 +167,9 @@ export default {
 			}
 		},
 		setModelsToSearch() {
-			console.log('model_name: '+this.model_name)
-			let models = this.modelsStoreFromName(this.model_name)
+			let models = []
 			if (this.prop && this.prop.depends_on && this.model) {
+			 	models = this.modelsStoreFromName(this.model_name)
 				models = models.filter(_model => {
 					console.log('model')
 					console.log(this.model)
@@ -158,15 +177,18 @@ export default {
 					return _model[this.prop.depends_on] == this.model[this.prop.depends_on]
 				})
 			} else if (this.prop && this.prop.is_between) {
+				console.log('parent_model_prop')
 				console.log(this.model[this.prop.is_between.parent_model_prop])
 				if (this.model[this.prop.is_between.parent_model_prop] && this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].length) {
 					console.log(this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop])
 					models = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop]
-				}
+				} 
 			} else if (this.prop && this.prop.has_many && this.prop.has_many.models_from_parent_prop) {
 				let model = this.$store.state[this.prop.has_many.models_from_parent_prop.parent_model_name].model 
 				models = model[this.prop.has_many.models_from_parent_prop.models_prop_name]
-			} 
+			} else {
+				models = this.modelsStoreFromName(this.model_name)
+			}
 			this.models_to_search = models 
 			console.log(this.models_to_search) 
 		},
@@ -174,11 +196,11 @@ export default {
 			if (this.show_selected) {
 				if (this.model && this.model[this.modelNameFromRelationKey(this.prop)]) {
 					this.selected_model = this.model[this.modelNameFromRelationKey(this.prop)]
-					if (this.idiom == 'es') {
-						this.query = this.model[this.modelNameFromRelationKey(this.prop)].nombre
-					} else {
-						this.query = this.model[this.modelNameFromRelationKey(this.prop)].name
-					}
+					// if (this.idiom == 'es') {
+					// 	this.query = this.model[this.modelNameFromRelationKey(this.prop)].nombre
+					// } else {
+					// 	this.query = this.model[this.modelNameFromRelationKey(this.prop)].name
+					// }
 				} 
 			} 
 		},

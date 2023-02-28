@@ -16,6 +16,12 @@ export default {
 			is_title: true,
 		},
 		{
+			text: 'Numero asociado',
+			key: 'numero_asociado',
+			type: 'text',
+			value: '',
+		},
+		{
 			text: 'Telefono',
 			key: 'telefono',
 			type: 'text',

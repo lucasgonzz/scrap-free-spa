@@ -8,38 +8,28 @@ export default {
 			not_show_on_form: true,
 			show: true,
 		},
+
 		{
-			text: 'Asegurado',
-			key: 'asegurado_id',
-			type: 'search',
-			value: '',
-			is_title: true,
+			text: 'Dias',
+			key: 'dias_en_estado_siniestro',
+			can_not_modify: true,
 		},
+
 		{
 			text: 'Aseguradora',
 			key: 'aseguradora_id',
-			type: 'search',
-			value: '',
-			show: true,
-			// is_between: {
-			// 	parent_model_prop: 'asegurado',
-			// 	model_prop: 'aseguradoras',
-			// }
+			type: 'select',
+			value: 0,
 		},
+
 		{
-			text: 'Causa siniestro',
-			key: 'causa_siniestro_id',
+			text: 'Tipo de orden de Servicio',
+			key: 'tipo_orden_de_servicio_id',
 			type: 'select',
 			value: 0,
 			show: true,
 		},
-		{
-			text: 'Estado general del siniestro',
-			key: 'estado_general_siniestro_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
+
 		{
 			text: 'Estado siniestro',
 			key: 'estado_siniestro_id',
@@ -47,14 +37,114 @@ export default {
 			value: 0,
 			show: true,
 		},
+
 		{
-			text: 'Historial Estados siniestro',
-			key: 'estado_siniestros',
-			store: 'estado_siniestro',
-			belongs_to_many: {
-				can_not_modify: true,
-			},
+			text: 'Estado general del siniestro',
+			key: 'estado_general_siniestro_id',
+			type: 'select',
+			value: 0,
+			show: true,
 		},
+
+		{
+			text: 'Notas importantes',
+			key: 'notas_importantes',
+			type: 'text',
+			show: true,
+		},
+
+		{
+			text: 'Centro reparacion',
+			key: 'centro_reparacion_id',
+			type: 'select',
+			value: 0,
+			show: true,
+		},
+
+		{
+			text: 'Numero siniestro',
+			key: 'numero_siniestro',
+			type: 'text',
+			value: '',
+			is_title: true,
+		},
+
+		{
+			text: 'Gestor Aseguradora',
+			key: 'gestor_aseguradora_id',
+			type: 'select',
+			value: 0,
+			show: true,
+		},
+
+		{
+			text: 'Gestor Scrap Free',
+			key: 'gestor_scrap_free_id',
+			type: 'select',
+			value: 0,
+			show: true,
+		},
+
+		{
+			text: 'N° Orden servicio',
+			key: 'orden_servicio',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+
+		{
+			text: 'Asegurado',
+			key: 'asegurado_id',
+			type: 'search',
+			value: '',
+		},
+
+		{
+			text: 'Domicilio completo Google',
+			key: 'domicilio_completo_google',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+
+		{
+			text: 'Entre calles',
+			key: 'entre_calles',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+
+		{
+			text: 'Fecha ocurrencia',
+			key: 'fecha_ocurrencia',
+			type: 'date',
+			value: '',
+		},
+
+		{
+			text: 'Fecha denuncia',
+			key: 'fecha_denuncia',
+			type: 'date',
+			value: '',
+		},
+
+		{
+			text: 'Descripcion del hecho',
+			key: 'descripcion_del_hecho',
+			type: 'text',
+			value: '',
+		},
+
+		{
+			text: 'Causa siniestro',
+			key: 'causa_siniestro_id',
+			type: 'select',
+			value: 0,
+			show: true,
+		},
+
 		{
 			text: 'Provincia',
 			key: 'provincia_id',
@@ -62,6 +152,7 @@ export default {
 			value: 0,
 			show: true,
 		},
+
 		{
 			text: 'Localidad',
 			key: 'localidad_id',
@@ -70,48 +161,15 @@ export default {
 			value: 0,
 			show: true,
 		},
-		{
-			text: 'Tipo de orden de Servicio',
-			key: 'tipo_orden_de_servicio_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Gestor Scrap Free',
-			key: 'gestor_scrap_free_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Gestor Aseguradora',
-			key: 'gestor_aseguradora_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Codigo postal',
-			key: 'codigo_postal',
-			type: 'text',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Comentarios seguro',
-			key: 'comentarios_seguro',
-			type: 'textarea',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Costo reporte',
-			key: 'costo_reporte',
-			type: 'number',
-			value: '',
-			show: true,
-		},
+
+		// {
+		// 	text: 'Codigo postal',
+		// 	key: 'codigo_postal',
+		// 	type: 'text',
+		// 	value: '',
+		// 	show: true,
+		// },
+
 		{
 			text: 'Bienes',
 			key: 'bienes',
@@ -119,6 +177,37 @@ export default {
 				model_name: 'bien',
 			}
 		},
+
+		// {
+		// 	text: 'Ramo',
+		// 	key: 'ramo_id',
+		// 	type: 'select',
+		// 	value: 0,
+		// },
+
+		// {
+		// 	key: 'Tipo Producto',
+		// 	key: 'tipo_producto_de_seguro_id',
+		// 	type: 'select',
+		// 	value: 0,
+		// },
+
+		{
+			text: 'Historial Estados siniestro',
+			key: 'estado_siniestros',
+			store: 'estado_siniestro',
+			belongs_to_many: {
+				pivot_props_to_show: [
+					{
+						text: 'Dias',
+						key: 'dias_en_estado_siniestro',	
+					},
+				],
+				can_not_modify: true,
+			},
+
+		},	
+
 		{
 			text: 'Logisticas',
 			key: 'logisticas',
@@ -126,6 +215,33 @@ export default {
 				model_name: 'logistica',
 			}
 		},
+
+		{
+			text: 'poliza',
+			key: 'poliza_id',
+			type: 'search',
+			is_between: {
+				parent_model_prop: 'asegurado',
+				model_prop: 'polizas',
+			}
+		},
+
+		{
+			text: 'Comentarios seguro',
+			key: 'comentarios_seguro',
+			type: 'textarea',
+			value: '',
+			show: true,
+		},
+
+		{
+			text: 'Costo reporte',
+			key: 'costo_reporte',
+			type: 'number',
+			value: '',
+			show: true,
+		},
+
 		{
 			text: 'Denunciante',
 			key: 'denunciante',
@@ -133,6 +249,7 @@ export default {
 			value: '',
 			show: true,
 		},
+
 		{
 			text: 'Foto deposito deducible',
 			key: 'foto_deposito_deducible',
@@ -140,20 +257,7 @@ export default {
 			value: '',
 			show: true,
 		},
-		{
-			text: 'Domicilio completo Google',
-			key: 'domicilio_completo_google',
-			type: 'text',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Entre calles',
-			key: 'entre_calles',
-			type: 'text',
-			value: '',
-			show: true,
-		},
+
 		{
 			text: 'Fecha alta en Scrap Free',
 			key: 'fecha_alta_scrap_free',
@@ -161,6 +265,7 @@ export default {
 			value: '',
 			show: true,
 		},
+
 		{
 			text: 'Fecha cierre administrativo',
 			key: 'fecha_cierre_administrativo',
@@ -168,6 +273,7 @@ export default {
 			value: '',
 			show: true,
 		},
+
 		{
 			text: 'Fecha cierre aseguradora',
 			key: 'fecha_cierre_aseguradora',
@@ -175,6 +281,7 @@ export default {
 			value: '',
 			show: true,
 		},
+
 		{
 			text: 'Fecha cierre scrap free',
 			key: 'fecha_cierre_scrap_free',
@@ -182,20 +289,7 @@ export default {
 			value: '',
 			show: true,
 		},
-		{
-			text: 'Fecha denuncia',
-			key: 'fecha_denuncia',
-			type: 'date',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Fecha ocurrencia',
-			key: 'fecha_ocurrencia',
-			type: 'date',
-			value: '',
-			show: true,
-		},
+
 		{
 			text: 'Liquidacion deducible',
 			key: 'liquidacion_deducible',
@@ -204,6 +298,7 @@ export default {
 			is_price: true,
 			show: true,
 		},
+
 		{
 			text: 'Liquidacion siniestro',
 			key: 'liquidacion_siniestro',
@@ -212,6 +307,7 @@ export default {
 			is_price: true,
 			show: true,
 		},
+
 		{
 			text: 'Notas domicilio',
 			key: 'notas_domicilio',
@@ -219,13 +315,7 @@ export default {
 			value: '',
 			show: true,
 		},
-		{
-			text: 'N° Orden servicio',
-			key: 'orden_servicio',
-			type: 'text',
-			value: '',
-			show: true,
-		},
+
 		{
 			text: 'Recomendacion',
 			key: 'recomendacion',
@@ -233,6 +323,7 @@ export default {
 			value: '',
 			show: true,
 		},
+
 		{
 			text: 'Reparacion Deducible',
 			key: 'reparacion_deducible',
@@ -241,6 +332,7 @@ export default {
 			is_price: true,
 			show: true,
 		},
+
 		{
 			text: 'Reparacion paga asegurado',
 			key: 'reparacion_paga_asegurado',
@@ -249,6 +341,7 @@ export default {
 			is_price: true,
 			show: true,
 		},
+
 		{
 			text: 'Reparacion siniestro',
 			key: 'reparacion_siniestro',
@@ -257,13 +350,7 @@ export default {
 			is_price: true,
 			show: true,
 		},
-		{
-			text: 'Numero siniestro',
-			key: 'numero_siniestro',
-			type: 'text',
-			value: '',
-			show: true,
-		},
+
 	],
 	singular_model_name_spanish: 'Siniestro',
 	plural_model_name_spanish: 'Siniestros',

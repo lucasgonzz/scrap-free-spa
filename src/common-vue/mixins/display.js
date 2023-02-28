@@ -6,72 +6,92 @@ export default {
 				this.$store.commit(model_name+'/setSelectedModel', selected_model)
 			}
 		},
-		setModel(model, model_name, _properties = null) {
-			if (!_properties) {
-				_properties = this.modelPropertiesFromName(model_name)
-			}
-			let properties =  this.getPivotProperties(model, _properties)
+		setModel(model, model_name, properties_to_override = []) {
+			let properties = this.getPivotProperties(model, model_name)
+			properties = this.overrideProperties(properties, properties_to_override)
+			// console.log(properties)
 			this.$store.commit(model_name+'/setModel', {
-				model,
+				model, 
 				properties
 			})
-			console.log('mostrando modal: '+model_name)
 			this.$bvModal.show(model_name)
 		},
-		getPivotProperties(model, properties) {
+		overrideProperties(properties, properties_to_override) {
+			let index  
+			// console.log('overrideProperties')
+			// console.log('properties:')
+			// properties.forEach(prop => {
+			// 	console.table(prop)
+			// })
+			// console.log('properties_to_override:')
+			// properties_to_override.forEach(prop => {
+			// 	console.table(prop)
+			// })
+			properties_to_override.forEach(prop_to_override => {
+				index = properties.findIndex(prop => {
+					return prop.key == prop_to_override.key 
+				}) 
+				if (index != -1) {
+					console.log('reemplzacando '+prop_to_override.key)
+					properties.splice(index, 1, prop_to_override)
+				} else {
+					properties.push(prop_to_override)
+				}
+			})
+			// console.log('quedo asi:')
+			// properties.forEach(prop => {
+			// 	console.table(prop)
+			// })
+			return properties
+		},
+		getPivotProperties(model, model_name) {
 			let properties_to_add = []
-			if (properties) {
-				properties.forEach(prop => {
-					if (prop.belongs_to_many && !prop.belongs_to_many.related_with_all && !prop.type == 'checkbox') {
-						if (!model) {
-							properties_to_add.push({
-								key: prop.key,
-								value: [],
-							})
-						}
-					} else if (prop.belongs_to_many && prop.type == 'checkbox') {
-						if (!model) {
-							properties_to_add.push({
-								key: prop.key+'_id',
-								value: []
-							})
-							console.log(properties_to_add)
-						} else {
-							let ids_to_add = []
-							model[prop.key].forEach(relation => {
-								ids_to_add.push(relation.id)
-							})
-							model[prop.key+'_id'] = ids_to_add
-						}
-					} else if (prop.has_many) {
-						if (!model) {
-							// let model_to_add = {
-							// 	...prop.has_many.model
-							// }
-							// properties_to_add.push({
-							// 	key: prop.key,
-							// 	value: [model_to_add],
-							// })
-							properties_to_add.push({
-								key: prop.key,
-								value: [],
-							})
-						}
-					} else if (prop.belongs_to_many && prop.belongs_to_many.related_with_all) {
-						if (!model) {
-							let all_models_for_relation = this.modelsStoreFromName(prop.store)
-							let propertye_to_add = {
-								key: prop.key,
-								value: [], 
-							}
-							all_models_for_relation.forEach(model_to_relation => {
-								propertye_to_add.value.push(this.getRelationToAdd(model, prop, model_to_relation))
-							})
-							properties_to_add.push(propertye_to_add)
-						}
+			this.modelPropertiesFromName(model_name).forEach(prop => {
+				if (prop.belongs_to_many && !prop.belongs_to_many.related_with_all && prop.type != 'checkbox') {
+					if (!model) {
+						properties_to_add.push({
+							key: prop.key,
+							value: [],
+						})
 					}
-				})
-			}
+				} else if (prop.belongs_to_many && prop.type == 'checkbox') {
+					if (!model) {
+						properties_to_add.push({
+							key: prop.key+'_id',
+							value: []
+						})
+					} else {
+						let ids_to_add = []
+						model[prop.key].forEach(relation => {
+							ids_to_add.push(relation.id)
+						})
+						model[prop.key+'_id'] = ids_to_add
+					}
+				} else if (prop.has_many) {
+					if (!model) {
+						properties_to_add.push({
+							key: prop.key,
+							value: [],
+						})
+					}
+				} else if (prop.belongs_to_many && prop.belongs_to_many.related_with_all) {
+					if (!model) {
+						let all_models_for_relation = this.modelsStoreFromName(prop.store)
+						let propertye_to_add = {
+							key: prop.key,
+							value: [], 
+						}
+						all_models_for_relation.forEach(model_to_relation => {
+							propertye_to_add.value.push(this.getRelationToAdd(model, prop, model_to_relation))
+						})
+						properties_to_add.push(propertye_to_add)
+					}
+				}
+			})
+			// console.log('properties_to_add:')
+			// properties_to_add.forEach(prop => {
+			// 	console.table(prop)
+			// })
 			return properties_to_add
 		},
 		getRelationToAdd(model, prop, model_to_relation) {

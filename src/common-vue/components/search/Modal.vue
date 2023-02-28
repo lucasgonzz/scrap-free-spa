@@ -6,14 +6,22 @@ hide-footer
 :id="modal_id">
 	<div
 	class="search-component-modal">
-		<b-form-input
-		@keyup="callSearch"
-		@keydown.enter="enterSelect"
-		@keydown.up="selectUp"
-		@keydown.down="selectDown"
-		v-model="query"
-		:id="_id+'-search-modal-input'"
-		:placeholder="_placeholder"></b-form-input>
+		<div class="header">
+			<b-form-input
+			@keyup="callSearch"
+			@keydown.enter="enterSelect"
+			@keydown.up="selectUp"
+			@keydown.down="selectDown"
+			v-model="query"
+			:id="_id+'-search-modal-input'"
+			:placeholder="_placeholder"></b-form-input>
+			<btn-create-model
+			v-if="show_btn_create && (!prop.has_many || (prop.has_many && !prop.has_many.models_from_parent_prop))"
+			@callSearchModal="callSearchModal"
+			:model="model"
+			:prop="prop"
+			:model_name="model_name"></btn-create-model>
+		</div>
 		<div>
 			<div
 			v-if="loading || results.length">
@@ -42,7 +50,7 @@ hide-footer
 					No se encontraron resultados
 				</div>
 				<div 
-				v-if="prop && save_if_not_exist"
+				v-if="prop && save_if_not_exist && query.length"
 				class="text-with-icon">
 					<i class="icon-check"></i>
 					ENTER para crear {{ singular(model_name) }}
@@ -61,11 +69,13 @@ import TableComponent from '@/common-vue/components/display/TableComponent'
 export default {
 	components: {
 		TableComponent,
+		BtnCreateModel: () => import('@/common-vue/components/search/BtnCreateModel')
 	},
 	props: {
 		_id: String,
 		query_value: String,
 		prop: Object,
+		show_btn_create: Boolean,
 		model_name: String,
 		model: Object,
 		models_to_search: Array,
@@ -92,7 +102,6 @@ export default {
 			waiting_time: 1,
 			searching: false,
 			results: [],
-			props_to_filter: [],
 			selected_index: -1,
 			saving_if_not_exist: false,
 		}
@@ -110,7 +119,7 @@ export default {
 		},
 		title() {
 			if (this.prop) {
-				return 'Buscar '+this.prop.text.toLowerCase()
+				return 'Buscar '+this.propText(this.prop)
 			}
 			return 'Buscar'
 		},
@@ -126,11 +135,17 @@ export default {
 			if (this.placeholder) {
 				return this.placeholder
 			} else if (this.prop) {
-				return 'Buscar '+this.prop.text.toLowerCase()
+				return 'Buscar '+this.propText(this.prop)
 			}
+		},
+		props_to_filter() {
+			return this.propsToFilter(this.model_name)
 		},
 	},
 	methods: {
+		callSearchModal() {
+			this.$emit('callSearchModal')
+		},
 		callSearch(e) {
 			if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
 				this.loading = true 
@@ -158,7 +173,7 @@ export default {
 			if (this.query.length >= this.str_limint) {
 				let results = []
 				this.searching = true
-				this.propsToFilter(this.model_name).forEach(prop => {
+				this.props_to_filter.forEach(prop => {
 					results = this.models_to_search.filter(model => {
 						let value = ''+model[prop.key]
 						return value && value.toLowerCase().includes(this.query.toLowerCase())
@@ -211,7 +226,9 @@ export default {
 			this.saving_if_not_exist = true
 			let properties_to_set = [] 
 			let property_to_send 
-			if (this.idiom == 'es') {
+			if (this.props_to_filter.length == 1) {
+				property_to_send = this.props_to_filter[0].key 
+			} else if (this.idiom == 'es') {
 				property_to_send = 'nombre'
 			} else {
 				property_to_send = 'name'
@@ -227,6 +244,12 @@ export default {
 				properties_to_set.push({
 					key: this.prop.depends_on,
 					value: this.model[this.prop.depends_on],
+				})
+			}
+			if (this.prop && this.prop.is_between) {
+				properties_to_set.push({
+					key: this.prop.is_between.parent_model_prop+'_id',
+					value: this.model[this.prop.is_between.parent_model_prop+'_id'],
 				})
 			}
 			this.$api.post(`search/save-if-not-exist/${this.model_name}/${property_to_send}/${this.query}`, {
@@ -267,6 +290,9 @@ export default {
 	width: 100%
 	display: flex
 	flex-direction: column
+	.header
+		display: flex
+		flex-direction: row
 	.results-title
 		font-size: 1.2em
 		font-weight: bold

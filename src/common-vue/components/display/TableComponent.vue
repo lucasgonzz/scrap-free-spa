@@ -43,12 +43,12 @@
 							<b-form-textarea
 							v-if="prop.type == 'textarea'"
 							:class="getInputSize(prop)"
-							:placeholder="propText(models[data.index], prop)"
+							:placeholder="propertyText(models[data.index], prop)"
 							v-model="models[data.index][prop.key]"></b-form-textarea>
 							<b-form-input
 							v-if="prop.type == 'text'"
 							:class="getInputSize(prop)"
-							:placeholder="propText(models[data.index], prop)"
+							:placeholder="propertyText(models[data.index], prop)"
 							v-model="models[data.index][prop.key]"></b-form-input>
 							<p
 							v-if="prop.type == 'checkbox'">
@@ -66,11 +66,18 @@
 						v-else-if="prop.button"
 						:variant="prop.button.variant"
 						@click="callMethod(prop, models[data.index])">
-							{{ propText(models[data.index], prop) }}
+							{{ propertyText(models[data.index], prop) }}
 						</b-button>
 						<span
 						v-else>
-							{{ propText(models[data.index], prop) }}
+							<span
+							v-if="prop.from_pivot">
+								{{ propertyText(models[data.index].pivot, prop) }}
+							</span>
+							<span
+							v-else>
+								{{ propertyText(models[data.index], prop) }}
+							</span>
 						</span>
 					</template>
 
@@ -83,7 +90,6 @@
 							<slot 
 							name="btn-edit"
 							:model="models[data.index]"></slot>
-
 							<div
 							class="cont-pivot-inputs"
 							v-if="pivot && pivot.properties_to_set">
@@ -93,10 +99,10 @@
 									v-if="prop.type == 'text' || prop.type == 'textarea' || prop.type == 'number' || prop.type == 'select' || prop.type == 'checkbox' || prop.type == 'date'"
 									:key="'pivot-prop-'+index"
 									class="pivot-input"
-									:label="prop.text">
+									:label="propText(prop)">
 										<p
 										v-if="prop.only_show">
-											{{ propText(models[data.index], prop, true) }}
+											{{ propertyText(models[data.index], prop, true) }}
 										</p>
 										<div
 										v-else>
@@ -104,13 +110,13 @@
 											:class="getInputSize(prop)"
 											v-if="prop.type == 'textarea'"
 											:type="prop.type"
-											:placeholder="'Ingrese '+prop.text"
+											:placeholder="'Ingrese '+propText(prop)"
 											v-model="models[data.index].pivot[prop.key]"></b-form-textarea>
 											<b-form-select
 											v-else-if="prop.type == 'select'"
 											v-model="models[data.index].pivot[prop.key]"
 											:class="getInputSize(prop)"
-											:options="getOptions({key: prop.key, text: prop.text, select_prop_name: prop.select_prop_name})"></b-form-select>
+											:options="getOptions({key: prop.key, text: propText(prop), select_prop_name: prop.select_prop_name})"></b-form-select>
 											<b-form-checkbox
 											v-else-if="prop.type == 'checkbox'"
 											:value="1"
@@ -121,7 +127,7 @@
 											v-else
 											:type="prop.type"
 											:class="getInputSize(prop)"
-											:placeholder="'Ingrese '+prop.text"
+											:placeholder="'Ingrese '+propText(prop)"
 											v-model="models[data.index].pivot[prop.key]"></b-form-input>
 										</div>
 									</b-form-group>
@@ -130,7 +136,7 @@
 									@click="callMethod(prop, models[data.index])"
 									variant="primary"
 									size="sm">
-										{{ prop.text }}
+										{{ propText(prop) }}
 									</b-button>
 								</div>
 							</div>
@@ -271,7 +277,7 @@ export default {
 			this.propertiesToShow(this.properties, true).forEach(prop => {
 				fields.push({
 					key: prop.key,
-					label: prop.text,
+					label: this.propText(prop),
 					sortable: prop.sortable,
 				})
 			})
@@ -279,7 +285,7 @@ export default {
 			// 	this.propsToSet().forEach(prop => {
 			// 		fields.push({
 			// 			key: prop.key,
-			// 			label: prop.text,
+			// 			label: this.propText(prop),
 			// 		})
 			// 	})
 			// }
@@ -306,7 +312,7 @@ export default {
 					if (prop.function) {
 						item[prop.key] = this.getFunctionValue(prop, model)
 					} else {
-						item[prop.key] = this.propText(model, prop)
+						item[prop.key] = this.propertyText(model, prop)
 					}
 				})
 				item._rowVariant = this.hasColor(model)
@@ -349,7 +355,8 @@ export default {
 				this.$store.commit('auth/setLoading', true)
 				setTimeout(() => {
 					this.$emit('clicked', model)
-					this.setModel(model, this.model_name, this.properties)
+					// this.setModel(model, this.model_name, this.properties)
+					this.setModel(model, this.model_name)
 					this.$refs.tableComponent.clearSelected()
 					setTimeout(() => {
 						this.$store.commit('auth/setLoading', false)

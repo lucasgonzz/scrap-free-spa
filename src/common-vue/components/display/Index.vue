@@ -1,5 +1,8 @@
 <template>
-	<div>
+	<div
+	class="display">
+		<load-pages-info
+		:model_name="model_name"></load-pages-info>
 		<color-info
 		:model_name="model_name"></color-info>
 		<div
@@ -207,15 +210,15 @@ export default {
 		},
 		_models() {
 			if (this.models.length || this.show_models_if_empty) {
-				console.log('return models que vinieron por props')
+				// console.log('return models que vinieron por props')
 				return this.models
 			} else {
 				if (typeof this.is_filtered != 'undefined' && this.is_filtered) {
 					let filtered = this.$store.state[this.model_name].filtered 
-					console.log('return filtered_models')
+					// console.log('return filtered_models')
 					return filtered
 				}  
-				console.log('return store_models')
+				// console.log('return store_models')
 				return this.$store.state[this.model_name].models 
 			}
 		},
@@ -253,6 +256,7 @@ export default {
 	},
 	components: {
 		ColorInfo: () => import('@/common-vue/components/display/ColorInfo'),
+		LoadPagesInfo: () => import('@/common-vue/components/display/LoadPagesInfo'),
 		TableComponent,
 		CardsComponent,
 		BtnAddToShow,
@@ -260,8 +264,14 @@ export default {
 }
 </script>
 <style lang="sass">
-.list-title
-	text-align: left
-	font-weight: bold
-	margin-top: 15px
+.display
+	table 
+		@media screen and (max-width: 768px)
+			border-radius: 0px !important
+	.list-title
+		text-align: left
+		font-weight: bold
+		margin-top: 15px
+		@media screen and (max-width: 768px)
+			padding-left: 15px	
 </style>

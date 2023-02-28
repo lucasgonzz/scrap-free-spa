@@ -29,7 +29,7 @@
 			<p
 			v-for="prop in propertiesToShow(properties, false)"
 			v-if="showProperty(prop, model, true)">
-				{{ prop.text }}
+				{{ propText(prop) }}
 				<strong>
 					{{ propText(model, prop) }}
 				</strong>
@@ -47,10 +47,10 @@
 			<b-form-group
 			v-for="(prop, index) in pivot.properties_to_set"
 			:key="'pivot-prop-'+index"
-			:label="prop.text">
+			:label="propText(prop)">
 				<b-form-input
 				:type="prop.type"
-				:placeholder="'Ingrese '+prop.text"
+				:placeholder="'Ingrese '+propText(prop)"
 				v-model="model.pivot[prop.key]"></b-form-input>
 				<hr>
 			</b-form-group>

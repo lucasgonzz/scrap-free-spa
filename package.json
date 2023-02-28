@@ -1,5 +1,5 @@
 {
-  "name": "base-spa",
+  "name": "ScrapFree",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,6 +21,8 @@
     "vue-toast-notification": "^0.6.3",
     "vue-carousel": "^0.18.0",
     "vue-cookies": "^1.8.2",
+    "pusher-js": "^7.0.0",
+    "laravel-echo": "^1.8.1",
     "vue-load-image": "^0.1.12"
   },
   "devDependencies": {

@@ -6,17 +6,23 @@
 		<div 
 		class="animate__animated animate__pulse">
 	        <img class="logo" src="@/assets/logo.png" alt="">
-	        
 	        <b-spinner 
-	        v-if="!there_is_update"
 	        variant="primary"></b-spinner>
-			<b-progress 
+			<!-- <b-progress 
 			v-else
-			variant="primary" :value="progress" :max="100" show-progress animated></b-progress>
-
+			height="15px"
+			variant="primary" 
+			:value="_progress" 
+			:max="100" 
+			show-progress 
+			striped
+			animated></b-progress> -->
+			
 	        <p
 	        v-if="message != ''"
-	        class="text-loader text-primary">{{ message }}</p>
+	        class="text-loader text-primary">
+	    		<strong>{{ message }}</strong>
+	    	</p>
 		</div>
 	</div>
 </template>
@@ -31,7 +37,7 @@ export default {
 		},
 		message() {
 			return this.$store.state.auth.message
-		}
+		},
 	}
 }
 </script>
@@ -56,10 +62,14 @@ export default {
 		.spinner-border
 			width: 20px
 			height: 20px
-		.progress 
+		.cont-progress
+			height: 100px
 			width: 200px
+			.progress 
+				// width: 200px
+				// height: 15px
+
 		.text-loader
-			font-weight: bold
 			font-size: 1.1em
 			margin-top: 10px
 </style>

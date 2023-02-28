@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import auth from '@/common-vue/store/auth'
 import employee from '@/common-vue/store/employee'
 import permission from '@/common-vue/store/permission'
+import update_app from '@/common-vue/store/update_app'
 import siniestro from '@/store/siniestro'
 import aseguradora from '@/store/aseguradora'
 import causa_siniestro from '@/store/causa_siniestro'
@@ -29,6 +30,8 @@ import ramo from '@/store/ramo'
 import asegurado from '@/store/asegurado'
 import honorario_liquidacion from '@/store/honorario_liquidacion'
 import transportista from '@/store/transportista'
+import tipo_documento from '@/store/tipo_documento'
+import centro_reparacion from '@/store/centro_reparacion'
 
 Vue.use(Vuex)
 
@@ -43,6 +46,7 @@ export default new Vuex.Store({
         auth,
         employee,
         permission,
+        update_app,
         siniestro,
         aseguradora,
         causa_siniestro,
@@ -68,5 +72,7 @@ export default new Vuex.Store({
         asegurado,
         honorario_liquidacion,
         transportista,
+        tipo_documento,
+        centro_reparacion,
     }
 })

@@ -14,6 +14,17 @@ Vue.prototype.$scrollToTop = (() => {
   }, 100)
 }) 
 
+// Laravel-echo
+window.Pusher = require('pusher-js');
+import Echo from "laravel-echo"
+
+Vue.prototype.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.VUE_APP_PUSHER_KEY,
+    cluster: process.env.VUE_APP_PUSHER_CLUSTER,
+    forceTLS: false
+});
+
 // Notifications
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';

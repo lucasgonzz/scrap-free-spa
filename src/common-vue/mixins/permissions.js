@@ -1,3 +1,4 @@
+import routes from '@/router/routes'
 export default {
 	methods: {
 		can(permission_slug) {
@@ -8,7 +9,7 @@ export default {
 			if (!has_permission) {
 				has_permission = this.hasPermissionTo(permission_slug)
 			}
-			console.log('permiso para '+permission_slug+': '+has_permission)
+			// console.log('permiso para '+permission_slug+': '+has_permission)
 			return has_permission
 		},
 		hasPermissionTo(permission_slug) {
@@ -20,32 +21,56 @@ export default {
 	        })
 	        return has_permission
 		},
-		hasPermissionForRoute() {
-			let route_name = this.$route.name
-			console.log('viendo permisos para la ruta: '+route_name)
-			if (route_name == 'abm') {
-				route_name = this.view 
-				console.log('la ruta era abm, ahora va a ser '+route_name)
-			}
-			if (this.can(route_name+'.index')) {
-				return true 
-			} else {
+		checkPermissionForCurrentRoute() {
+			if (this.$route.path == '/' || this.$route.path == '/login') {
+				console.log('estaba en la ruta /')
 				this.redirect()
+			} else {
+				console.log('por llamar getRoutePermissionSlug con la ruta: '+this.$route.path)
+				let route_name = this.getRoutePermissionSlug()
+				if (this.can(route_name)) {
+					return true 
+				} else {
+					this.redirect()
+				}
 			}
 		},
 		redirect() {
 			console.log('entro a redirect')
-			let routes = this.$router.options.routes
-			let route_name
-			for (var i = routes.length - 1; i >= 0; i--) {
-				let route_name = routes[i].name
-				console.log('viendo permiso para la ruta '+route_name) 
-				if (this.can(route_name)) {
-					this.$router.push({name: route_name})
-					break 		  
+			let route 
+			let route_to_redirect = null
+			for (var i = 0; i < routes.length; i++) {
+				route = routes[i]
+				console.log('viendo permiso para la ruta '+route.name+', permission_slug: '+routes[i].can) 
+				if (route.check_is_owner && this.is_owner) {
+					route_to_redirect = route.name
+					break
+				} else if (route.can && this.can(route.can)) {
+					console.log('tiene permiso para '+route.can)
+					route_to_redirect = route.name
+					break
 				} 
 			}
-			console.log('NO TIENE PERMISO PARA NINGUNA RUTA')
+			if (route_to_redirect) {
+				this.$router.push({name: route_to_redirect})
+			} else {
+				console.log('NO TIENE PERMISO PARA NINGUNA RUTA')
+			}
+		},
+		getRoutePermissionSlug(route_name = null) {
+			if (route_name == 'abm') {
+				return this.view+'.index' 
+			}
+			if (!route_name) {
+				console.log('por buscar la ruta: '+this.route_name)
+				let finded_route = routes.find(route => {
+					// console.log('comparando '+route.name+' con '+this.route_name)
+					return route.name == this.route_name 
+				})
+				console.log('finded_route:')
+				console.log(finded_route)
+				return finded_route.can 
+			}
 		}
 	}
 }

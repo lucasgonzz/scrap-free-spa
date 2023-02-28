@@ -20,6 +20,8 @@
 		<div>
 			<one-image
 			v-if="prop.type == 'image'"
+			:has_many_parent_model="has_many_parent_model"
+			:has_many_prop="has_many_prop"
 			@uploadImage="uploadImage"
 			:model="model"
 			:prop="prop"
@@ -39,7 +41,7 @@ import myUpload from 'vue-image-crop-upload/upload-2.vue'
 import OneImage from '@/common-vue/components/model/images/OneImage'
 import Carrousel from '@/common-vue/components/model/images/Carrousel'
 export default {
-	props: ['model', 'model_name', 'prop'],
+	props: ['model', 'model_name', 'prop', 'has_many_parent_model', 'has_many_prop'],
 	components: {
 		myUpload,
 		OneImage,
@@ -111,6 +113,14 @@ export default {
 			} else {
 				this.$store.commit(this.model_name+'/add', jsonData.model)
 				this.$bvModal.hide(this.model_name)
+				if (this.has_many_parent_model) {
+					let index = this.has_many_parent_model[this.has_many_prop.key].findIndex(model => {
+						return model.id == this.model.id 
+					})
+					if (index != -1) {
+						this.has_many_parent_model[this.has_many_prop.key].splice(index, 1, jsonData.model)
+					}
+				}
 				this.$toast.success('Imagen actualizada')
 			}
 		},

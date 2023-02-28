@@ -16,6 +16,11 @@ export default {
 			is_title: true,
 		},
 		{
+			text: 'Codigo postal',
+			key: 'codigo_postal',
+			type: 'text',
+		},
+		{
 			text: 'Provincia',
 			key: 'provincia_id',
 			type: 'select',

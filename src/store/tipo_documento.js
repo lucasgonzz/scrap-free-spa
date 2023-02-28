@@ -7,11 +7,10 @@ import generals from '@/common-vue/mixins/generals'
 export default {
 	namespaced: true,
 	state: {
-		model_name: 'siniestro',
+		model_name: 'tipo_documento',
 		from_dates: false,
 		is_selecteable: false,
 
-		use_per_page: true,
 		// Se usa cuando es belongs_to_many_from_dates. Por ejemplo para ver los pagos de un cliente
 		// plural_model_name: '',
 		// selected_model: null,
@@ -20,10 +19,6 @@ export default {
 
 		from_date: moment().format('YYYY-MM-DD'),
 		until_date: '',
-
-		page: 1,
-		per_page: 25,
-		total_pages: 1, 
 
 		models: [],
 		model: {},
@@ -67,18 +62,6 @@ export default {
 				}
 				state.model = obj
 			}
-		},
-		addModels(state, value) {
-			state.models = state.models.concat(value)
-		},
-		incrementPage(state) {
-			state.page++
-		},
-		setPage(state, value) {
-			state.page = value 
-		},
-		setTotalPages(state, value) {
-			state.total_pages = value 
 		},
 		setModels(state, value) {
 			if (value) {
@@ -175,14 +158,7 @@ export default {
 		},
 	},
 	actions: {
-		getModels({commit, state, dispatch}) {
-			if (state.use_per_page) {
-				commit('setPage', 1)
-				commit('setModels', [])
-			}
-			dispatch('_getModels')
-		},
-		_getModels({commit, state, dispatch}) {
+		getModels({ commit, state }) {
 			commit('setLoading', true)
 			let url = '/api/'+generals.methods.routeString(state.model_name)
 			if (state.plural_model_name) {
@@ -191,35 +167,17 @@ export default {
 				} else {
 					url += '/0'
 				}
-			} 
+			}
 			if (state.from_dates) {
 				url += '/'+state.from_date
 			} 
 			if (state.until_date != '') {
 				url += '/'+state.until_date
 			}
-			if (state.use_per_page) {
-				url += '?page='+state.page 
-			}
 			return axios.get(url)
 			.then(res => {
-				if (state.use_per_page) {
-					let loaded_models = res.data.models.data
-					if (res.data.models.current_page == 1) {
-						commit('setTotalPages', res.data.models.last_page)
-					}
-					console.log('se cargo '+state.model_name+' page: '+state.page)
-					commit('incrementPage')
-					commit('addModels', loaded_models)
-					if (loaded_models.length == state.per_page) {
-						dispatch('_getModels')
-					} else {
-						commit('setLoading', false)
-					}
-				} else {
-					commit('setLoading', false)
-					commit('setModels', res.data.models)
-				}
+				commit('setLoading', false)
+				commit('setModels', res.data.models)
 			})
 			.catch(err => {
 				commit('setLoading', false)

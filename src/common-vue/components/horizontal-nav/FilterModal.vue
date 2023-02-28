@@ -176,50 +176,50 @@ export default {
 			this.props.forEach(prop => {
 				if (prop.type == 'number') {
 					this.filters.push({
-						label: prop.text,
+						label: this.propText(prop),
 						type: 'number',
-						text: prop.text,
+						text: this.propText(prop),
 						number_type: 'min',
 						key: prop.key,
 						value: '',
 					})
 					this.filters.push({
 						type: 'number',
-						text: prop.text,
+						text: this.propText(prop),
 						number_type: 'equal',
 						key: prop.key,
 						value: '',
 					})
 					this.filters.push({
 						type: 'number',
-						text: prop.text,
+						text: this.propText(prop),
 						number_type: 'max',
 						key: prop.key,
 						value: '',
 					})
 				} else if (prop.type == 'text' || prop.type == 'textarea') {
 					this.filters.push({
-						label: prop.text,
+						label: this.propText(prop),
 						type: prop.type,
-						text: prop.text,
+						text: this.propText(prop),
 						store: prop.store,
 						key: prop.key,
 						value: '',
 					})
 				} else if (prop.type == 'boolean') {
 					this.filters.push({
-						label: prop.text,
+						label: this.propText(prop),
 						type: prop.type,
-						text: prop.text,
+						text: this.propText(prop),
 						store: prop.store,
 						key: prop.key,
 						value: -1,
 					})
 				} else {
 					this.filters.push({
-						label: prop.text,
+						label: this.propText(prop),
 						type: prop.type,
-						text: prop.text,
+						text: this.propText(prop),
 						store: prop.store,
 						key: prop.key,
 						depends_on: prop.depends_on,

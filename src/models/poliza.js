@@ -6,28 +6,51 @@ export default {
 			type: 'text',
 			value: '',
 			not_show_on_form: true,
-			show: true,
+			// show: true,
 		},
 		{
 			text: 'Asegurado',
 			key: 'asegurado_id',
 			type: 'search',
 			value: '',
-			show: true,
+			// show: true,
 		},
+		{
+			key: 'numero_poliza',
+			type: 'text',
+			use_in_search_modal: true,
+		},
+
+		{
+			text: 'Referencia',
+			key: 'referencia',
+			type: 'text',
+		},
+
+		{
+			text: 'N° asociado',
+			key: 'numero_asociado',
+			type: 'text',
+		},
+
+		{
+			key: 'cuit',
+			type: 'text',
+		},
+
 		{
 			text: 'Tipo producto de seguro',
 			key: 'tipo_producto_de_seguro_id',
 			type: 'search',
 			value: '',
-			show: true,
+			// show: true,
 		},
 		{
 			text: 'Ramo',
 			key: 'ramo_id',
 			type: 'select',
 			value: 0,
-			show: true,
+			// show: true,
 		},
 		{
 			text: 'Coberturas',
