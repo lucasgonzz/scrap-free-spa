@@ -19,10 +19,18 @@
 			</div>
 		</vue-load-image>
 		<div 
-		v-else-if="title"
+		v-else-if="titles.length"
 		class="title">
-			{{ title.title_prefix }}
-			{{ propText(model, title) }}
+			<p
+			v-for="title in titles">
+				<!-- <span
+				class="prop-text"
+				v-if="titles.length >= 2 && propertyText(model, title)">
+					{{ title.text }}
+				</span> -->
+				{{ title.title_prefix }}
+				{{ propertyText(model, title) }}
+			</p>
 		</div>
 		<div
 		class="cont-props">
@@ -31,15 +39,20 @@
 			v-if="showProperty(prop, model, true)">
 				{{ propText(prop) }}
 				<strong>
-					{{ propText(model, prop) }}
+					{{ propertyText(model, prop) }}
 				</strong>
 			</p>
-			<p
-			v-if="show_created_at">
-				Creado:
-				<strong>
-					{{ date(model.created_at) }}
-				</strong>
+			<div
+			v-if="_show_created_at">
+				<p>
+					Creado:
+					<strong>
+						{{ date(model.created_at) }}
+					</strong>
+				</p>
+			</div>
+			<p>
+				{{ since(model.created_at) }}
 			</p>
 		</div>
 		<div
@@ -77,6 +90,12 @@ export default {
 		pivot_model: Object,
 	},
 	computed: {
+		_show_created_at() {
+			if (this.$store.state[this.model_name].from_dates) {
+				return false 
+			}
+			return this.show_created_at
+		},
 		style() {
 			let prop = this.getBorderColorProperty(this.model_name)
 			let color 
@@ -92,25 +111,10 @@ export default {
 			}
 			return ''
 		},
-		title() {
-			let titles = this.properties.filter(prop => {
+		titles() {
+			return this.properties.filter(prop => {
 				return prop.is_title 
 			})
-
-			if (titles.length) {
-				if (titles.length == 1) {
-					return titles[0]
-				} 
-				let title
-				titles.forEach(_title => {
-					console.log(this.propText(this.model, _title))
-					if (this.propText(this.model, _title)) {
-						title = _title
-					} 
-				})
-				return title 
-			}
-			return null
 		}
 	},
 	watch: {
@@ -161,18 +165,26 @@ export default {
 		width: 300px
 	// width: 300px
 	display: flex
-	flex-direction: column 
+	flex-direction: row  
 	margin: 1em 1%
 	background: #FFF
 	border-radius: 12px
 	.title 
 		font-size: 30px 
 		font-weight: bold
-		height: 200px
+		// height: 200px
 		display: flex
-		flex-direction: row
+		flex-direction: column
 		justify-content: center
 		align-items: center
+		padding: 0 10px
+		p 
+			display: flex
+			flex-direction: row
+			line-height: 25px
+			.prop-text
+				font-size: 14px
+				padding-right: 5px
 	img 
 		width: 100%
 		border-radius: 5px 5px 0 0 

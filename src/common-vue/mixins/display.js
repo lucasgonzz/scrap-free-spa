@@ -6,27 +6,46 @@ export default {
 				this.$store.commit(model_name+'/setSelectedModel', selected_model)
 			}
 		},
-		setModel(model, model_name, properties_to_override = []) {
-			let properties = this.getPivotProperties(model, model_name)
+		setModel(model, model_name, properties_to_override = [], show_modal = true) {
+			let properties = this.getSelectProps(model, model_name)
+			properties = properties.concat(this.getPivotProperties(model, model_name))
 			properties = this.overrideProperties(properties, properties_to_override)
 			// console.log(properties)
-			this.$store.commit(model_name+'/setModel', {
-				model, 
-				properties
-			})
-			this.$bvModal.show(model_name)
+			
+			if (show_modal) {
+				this.$store.commit('auth/setMessage', 'Cargando formulario')
+				this.$store.commit('auth/setLoading', true)
+			}			
+			setTimeout(() => {
+				this.$store.commit(model_name+'/setModel', {
+					model, 
+					properties
+				})
+				if (show_modal) {
+					this.$bvModal.show(model_name)
+					setTimeout(() => {
+						this.$store.commit('auth/setLoading', false)
+						this.$store.commit('auth/setMessage', '')
+					}, 100)
+				}
+			}, 100)
+		},
+		getSelectProps(model, model_name) {
+			let properties = []
+			if (!model) {
+				this.modelPropertiesFromName(model_name).forEach(prop => {
+					if (prop.type == 'select' && !prop.value) {
+						properties.push({
+							...prop,
+							value: 0,
+						})
+					}
+				})
+			}
+			return properties 
 		},
 		overrideProperties(properties, properties_to_override) {
 			let index  
-			// console.log('overrideProperties')
-			// console.log('properties:')
-			// properties.forEach(prop => {
-			// 	console.table(prop)
-			// })
-			// console.log('properties_to_override:')
-			// properties_to_override.forEach(prop => {
-			// 	console.table(prop)
-			// })
 			properties_to_override.forEach(prop_to_override => {
 				index = properties.findIndex(prop => {
 					return prop.key == prop_to_override.key 
@@ -38,10 +57,6 @@ export default {
 					properties.push(prop_to_override)
 				}
 			})
-			// console.log('quedo asi:')
-			// properties.forEach(prop => {
-			// 	console.table(prop)
-			// })
 			return properties
 		},
 		getPivotProperties(model, model_name) {

@@ -12,7 +12,7 @@ export default {
 	},
 	computed: {
 		items() {
-			return [
+			let items = [
 				{
 					name: 'general'
 				},
@@ -20,6 +20,12 @@ export default {
 					name: 'contraseña'
 				},
 			]
+			if (this.custom_configuration_page) {
+				items.push({
+					name: 'avanzado'
+				})
+			}
+			return items
 		}
 	}
 }

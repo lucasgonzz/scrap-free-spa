@@ -2,7 +2,7 @@
 import dates from '@/common-vue/mixins/dates'
 import generals from '@/common-vue/mixins/generals'
 import images from '@/common-vue/mixins/images'
-// import update_app from '@/common-vue/mixins/update_app'
+import update_app from '@/common-vue/mixins/update_app'
 import permissions from '@/common-vue/mixins/permissions'
 import display from '@/common-vue/mixins/display'
 import model_functions from '@/common-vue/mixins/model_functions'
@@ -13,7 +13,7 @@ export default {
         generals,
         dates,
         images,
-        // update_app,
+        update_app,
         permissions,
         display,
         model_functions,

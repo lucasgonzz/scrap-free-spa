@@ -10,7 +10,8 @@ export default [
 		text: 'ABM',
 		name: 'abm',
 		params: {
-			view: 'aseguradora',
+			view: 'aseguradoras',
+			model_name: 'aseguradora',
 		},
 	},
 	{

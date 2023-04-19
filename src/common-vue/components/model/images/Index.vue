@@ -3,33 +3,35 @@
 	class="images m-b-15"
 	v-if="model.id">
 
-		<my-upload 
-		field="image_url"
-		@crop-success="cropSuccess"
-		@crop-upload-success="cropUploadSuccess"
-		@crop-upload-fail="cropUploadFail"
-		v-model="show"
-		:params="params"
-		:headers="headers"
-		:width="300"
-		:height="300"
-		:url="url"
-		:langExt="langExt"
-		:withCredentials="true"
-		img-format="jpg"></my-upload>
+		<!-- <image-width 
+		v-if="use_crop"></image-width> -->
+
+		<upload-image 
+		:prop="prop"
+		@setImageUrl="setImageUrl"></upload-image>
+
+		<search-image 
+		@setImageUrl="setImageUrl"></search-image>
+
+		<cropper
+		:has_many_parent_model="has_many_parent_model"
+		:has_many_prop="has_many_prop"
+		:image_url="image_url"
+		:model="model"
+		:model_name="model_name"
+		:prop="prop"></cropper>	
+
 		<div>
 			<one-image
 			v-if="prop.type == 'image'"
 			:has_many_parent_model="has_many_parent_model"
 			:has_many_prop="has_many_prop"
-			@uploadImage="uploadImage"
 			:model="model"
 			:prop="prop"
 			:model_name="model_name"></one-image>
 
 			<carrousel
 			v-else
-			@uploadImage="uploadImage"
 			:model="model"
 			:prop="prop"
 			:model_name="model_name"></carrousel>
@@ -37,72 +39,70 @@
 	</div>
 </template>
 <script>
-import myUpload from 'vue-image-crop-upload/upload-2.vue'
+import Cropper from '@/common-vue/components/model/images/Cropper'
 import OneImage from '@/common-vue/components/model/images/OneImage'
 import Carrousel from '@/common-vue/components/model/images/Carrousel'
 export default {
 	props: ['model', 'model_name', 'prop', 'has_many_parent_model', 'has_many_prop'],
 	components: {
-		myUpload,
-		OneImage,
-		Carrousel,
+		Cropper: () => import('@/common-vue/components/model/images/Cropper'),
+		OneImage: () => import('@/common-vue/components/model/images/OneImage'),
+		Carrousel: () => import('@/common-vue/components/model/images/Carrousel'),
+		SearchImage: () => import('@/common-vue/components/model/images/SearchImage'),
+		UploadImage: () => import('@/common-vue/components/model/images/UploadImage'),
 	},
 	data() {
 		return {
-			show: false,
 			imgDataUrl: '',
+			pre_image_url: null,
+			image_url: '',
 		}
 	},
 	computed: {
-		url() {
-			let url = process.env.VUE_APP_API_URL+'/api/set-image/'
-			if (this.prop.type == 'images') {
-				url += 'has_many'
-			} else {
-				url += this.prop.key 
-			}
-			return url
-		},
-		params() {
-			return {
-				model_name: this.model_name,
-				id: this.model.id,
-			}
-		},
-		headers() {
-			return {
-				'X-XSRF-TOKEN': this.$cookies.get('XSRF-TOKEN')
-			}
-		},
-		langExt() {
-			return {
-			    hint: 'Escoja un archivo o arrastrelo hasta aqui...',
-			    loading: 'Subiendo..',
-			    noSupported: 'Su navegador no tiene soporte, por favor, escoja otro navegador',
-			    success: 'Subida exitosa',
-			    fail: 'Error al subir',
-			    preview: 'Pre-Vista',
-			    btn: {
-			    	off: 'Cancelar',
-			    	close: 'Cerrar',
-			    	back: 'Atras',
-			    	save: 'Guardar'
-			    },
-			    error: {
-			    	onlyImg: 'Image only',
-			    	outOfSize: 'Image exceeds size limit: ',
-			    	lowestPx: 'Image\'s size is too low. Expected at least: '
-			    }
-			}
+		use_crop() {
+			return typeof this.prop.image_cropp == 'undefined' || this.prop.image_cropp
 		},
 	},
 	methods: {
-		uploadImage() {
-			this.show = !this.show;
+		setImageUrl(image_url) {
+			this.image_url = image_url
+			this.$bvModal.show('cropper-'+this.prop.key)
 		},
-        
-		cropSuccess(imgDataUrl, field){
-			this.imgDataUrl = imgDataUrl;
+		async setCropImage(image) {
+			this.uploadImage()
+			this.pre_image_url = image 
+			let div = document.getElementsByClassName('vicp-drop-area')
+			fetch(image, {
+				mode: 'cors'
+			})
+			.then(response => {
+				response.blob()
+				.then(blob => {
+					const file = new File([blob], 'image.jpeg', {type: 'image'})
+					console.log(file)
+
+
+					// setTimeout(() => {
+						let input = div[0].children[3]
+						console.log('input')
+						console.log(input)
+						const dataTransfer = new DataTransfer()
+						dataTransfer.items.add(file)
+						console.log('dataTransfer')
+						console.log(dataTransfer)
+						input.files = dataTransfer.files
+						input.dispatchEvent(new Event('change'))
+					// }, 500)
+				})
+			})
+			.catch(err => {
+				this.$toast.error('No se puede acceder a la imagen, intentelo con otra, por favor')
+				this.uploadImage()
+				this.$bvModal.show('search-image')
+				setTimeout(() => {
+					document.getElementById('search-image-input').focus()
+				}, 200)
+			})
 		},
 		
 		cropUploadSuccess(jsonData, field){
@@ -123,15 +123,6 @@ export default {
 				}
 				this.$toast.success('Imagen actualizada')
 			}
-		},
-		
-		cropUploadFail(status, field){
-			console.log('-------- upload fail --------');
-			console.log(status);
-			console.log('field: ' + field);
-		},
-		upload() {
-			this.$bvModal.show('upload-image')
 		},
 	}
 }

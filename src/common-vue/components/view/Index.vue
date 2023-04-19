@@ -13,6 +13,9 @@
     	:show_btn_delete="show_btn_delete"
     	:size="modal_size"
     	:model_name="model_name">
+    		<template v-slot:model_modal_header="slotProps">
+    			<slot name="model_modal_header" :model="slotProps.model"></slot>
+    		</template>
     		<template v-slot:default="slotProps">
     			<slot name="modal_buttons" :model="slotProps.model"></slot>
     		</template>
@@ -27,6 +30,8 @@
 			:xl="col_xl">
 				<slot name="header"></slot>
 				<horizontal-nav
+				:ask_selectable="ask_selectable"
+				:show_excel_drop_down="show_excel_drop_down"
 				:check_permissions="check_permissions"
 				:show_filter_modal="show_filter_modal"
 				:show_btn_create="_show_btn_create"
@@ -42,6 +47,11 @@
 				</horizontal-nav>
 			</b-col>
 			<b-col
+			cols="12"
+			:xl="col_xl">
+				<slot name="body"></slot>
+			</b-col>
+			<b-col
 			v-if="can_show_list"
 			class="col-full-width-sm"
 			cols="12"
@@ -55,6 +65,9 @@
 				:show_search_nav="show_search_nav"
 				:model_name="model_name"
 				@clicked="clicked">
+					<template v-slot:display_top>
+						<slot name="display_top"></slot>
+					</template>
 					<template v-slot:default="slotProps">
 						<slot :model="slotProps.model"></slot>
 					</template>
@@ -149,6 +162,14 @@ export default {
 		check_auth: {
 			type: Boolean,
 			default: true,
+		},
+		show_excel_drop_down: {
+			type: Boolean,
+			default: false,
+		},
+		ask_selectable: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	computed: {

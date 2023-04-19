@@ -210,7 +210,7 @@ export default {
 		},
 		_models() {
 			if (this.models.length || this.show_models_if_empty) {
-				// console.log('return models que vinieron por props')
+				console.log('return models que vinieron por props')
 				return this.models
 			} else {
 				if (typeof this.is_filtered != 'undefined' && this.is_filtered) {

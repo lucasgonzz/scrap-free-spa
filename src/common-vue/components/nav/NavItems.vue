@@ -9,6 +9,9 @@
 		    class="apretable"
 		    :class="isActiveRoute(route)"
 		    @click="setRoute(route)">
+		    	<i 
+		    	v-if="isActiveRoute(route) == 'active-item'"
+		    	class="icon-right"></i>
 		    	{{ routeText(route) }}
 			</b-nav-item>
 

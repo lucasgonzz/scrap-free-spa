@@ -9,7 +9,7 @@
 			</strong>
 		</p>
 		<div
-		v-for="(filter, index) in filters">
+		v-for="filter in filters">
 
 			<b-form-group
 			v-if="filter.type == 'search'"
@@ -29,6 +29,7 @@
 				<b-form-input
 				@keyup.enter="search"
 				class="m-b-15"
+				:id="'search-modal-'+filter.key"
 				v-model="filter.value"
 				:placeholder="'Ingrese '+filter.text"></b-form-input>
 			</b-form-group>
@@ -87,7 +88,7 @@
 		</div>
 
 		<template #modal-footer>
-			<!-- <div 
+			<div 
 			class="j-start w-100 m-b-15">
 				<b-form-checkbox
 				v-model="clear_filter"
@@ -95,7 +96,7 @@
 				:unchecked-value="0">
 					Limpiar filtro
 				</b-form-checkbox>
-			</div> -->
+			</div>
 
 			<b-button
 			variant="primary"
@@ -141,6 +142,7 @@ export default {
 			this.props = this.propsToFilterInModal(this.model_name)
 		},
 		search() {
+			this.$store.commit(this.model_name+'/setFilters', this.filters)
 			this.$store.commit(this.model_name+'/setLoading', true)
 			this.$store.commit(this.model_name+'/setFromDate', '')
 			this.$bvModal.hide('filter-modal')
@@ -160,21 +162,25 @@ export default {
 			})
 		},
 		clearFilter() {
-			// if (this.clear_filter) {
+			if (this.clear_filter) {
+				let new_filters = []
+				let filter_to_add  
 				this.filters.forEach(filter => {
-					if (filter.type == 'search') {
-						filter.value = 0
-					} else if (filter.type == 'text' || filter.type == 'textarea' || filter.type == 'number') {
-						filter.value = ''
+					filter_to_add = {...filter} 
+					if (filter_to_add.type == 'search') {
+						filter_to_add.value = 0
+					} else if (filter_to_add.type == 'text' || filter_to_add.type == 'textarea' || filter_to_add.type == 'number') {
+						filter_to_add.value = ''
 					}
+					new_filters.push(filter_to_add)
 				})
-			// }
+				this.filters = new_filters
+			}
 		},
 		initFilter() {	
 			this.filters = []
-			let index = 0
 			this.props.forEach(prop => {
-				if (prop.type == 'number') {
+				if ((prop.filter_type && prop.filter_type == 'number') || prop.type == 'number') {
 					this.filters.push({
 						label: this.propText(prop),
 						type: 'number',
@@ -226,8 +232,6 @@ export default {
 						value: 0,
 					})
 				}
-				// this.model_for_pass_to_search[prop.key] = this.filters[index].value 
-				index++
 			})
 		},
 		setSelectOptions() {

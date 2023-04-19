@@ -12,6 +12,7 @@ hide-footer
 			@keydown.enter="enterSelect"
 			@keydown.up="selectUp"
 			@keydown.down="selectDown"
+			class="input-search-modal"
 			v-model="query"
 			:id="_id+'-search-modal-input'"
 			:placeholder="_placeholder"></b-form-input>
@@ -31,17 +32,15 @@ hide-footer
 					Resultados
 				</p>
 				<table-component
-				is_from_search_modal
+				:properties="properties"
 				:selected_index="selected_index"
 				select_mode="single"
 				:loading="loading"
 				:models="results"
 				:model_name="model_name"
-				:set_model_on_click="false"
-				:show_btn_edit="false"
-				emit_selected_on_row
+				:set_model_on_row_selected="false"
 				:striped="false"
-				@clicked="setSelected"></table-component>	
+				@onRowSelected="onRowSelected"></table-component>	
 			</div>
 			<div
 			v-else>
@@ -114,6 +113,9 @@ export default {
 		},
 	},
 	computed: {
+		properties() {
+			return this.propsToShowInSearchModal(this.model_name)
+		},
 		modal_id() {
 			return this._id+'-search-modal'
 		},
@@ -138,8 +140,8 @@ export default {
 				return 'Buscar '+this.propText(this.prop)
 			}
 		},
-		props_to_filter() {
-			return this.propsToFilter(this.model_name)
+		prop_to_filter() {
+			return this.propToFilter(this.model_name)
 		},
 	},
 	methods: {
@@ -162,20 +164,39 @@ export default {
 						} else {
 							this.waiting_time--
 						}		
-					}, 200)
+					}, 500)
 				} else {
 					this.loading = false 
 				}
 			}
 		},
 		search() {
+			console.log('BUSCANDO')
 			this.results = []
 			if (this.query.length >= this.str_limint) {
 				let results = []
 				this.searching = true
-				this.props_to_filter.forEach(prop => {
+
+				if (this.prop.search_depends_on_from_api) {
+					console.log('enviando api')
+					this.$api.post('search-from-modal/'+this.model_name, {
+						prop_to_filter: this.prop_to_filter,
+						depends_on_key: this.prop.depends_on,
+						depends_on_value: this.model[this.prop.depends_on],
+						query_value: this.query,
+					})
+					.then(res => {
+						console.log('llego desde api:')
+						console.log(res.data.models)
+						this.results = res.data.models 
+						this.finishSearch()
+					})
+					.catch(err => {
+						console.log(err)
+					})
+				} else {
 					results = this.models_to_search.filter(model => {
-						let value = ''+model[prop.key]
+						let value = ''+model[this.prop_to_filter.key]
 						return value && value.toLowerCase().includes(this.query.toLowerCase())
 					})
 					results = results.filter(model => {
@@ -184,17 +205,26 @@ export default {
 						})
 						return index == -1
 					})
+
 					this.results = this.results.concat(results)
-				})
-				this.orderAlpabethic()
-				this.searching = false
-				this.interval = null
-				this.loading = false 
-				this.setFirstSelectedRow()
+					this.finishSearch()
+				}
 			}
 		},
+		finishSearch() {
+			console.log('continua')
+			this.orderAlpabethic()
+			this.searching = false
+			this.interval = null
+			this.loading = false 
+			this.setFirstSelectedRow()
+		},
 		orderAlpabethic() {
-			this.results = this.results.sort((a, b) => a.name.localeCompare(b.name))
+			this.results = this.results.sort((a, b) => {
+				console.log(a[this.prop_to_filter.key])
+				console.log(b[this.prop_to_filter.key])
+				return a[this.prop_to_filter.key].localeCompare(b[this.prop_to_filter.key])
+			})
 		},
 		setFirstSelectedRow() {
 			if (this.auto_select) {
@@ -225,21 +255,15 @@ export default {
 		saveIfNotExist() {
 			this.saving_if_not_exist = true
 			let properties_to_set = [] 
-			let property_to_send 
-			if (this.props_to_filter.length == 1) {
-				property_to_send = this.props_to_filter[0].key 
-			} else if (this.idiom == 'es') {
-				property_to_send = 'nombre'
-			} else {
-				property_to_send = 'name'
+			let property_to_send = this.prop_to_filter.key 
+			if (this.prop && this.prop.belongs_to_many && this.prop.belongs_to_many.save_if_not_exist && this.prop.belongs_to_many.save_if_not_exist.properties_to_send) {
+				this.prop.belongs_to_many.save_if_not_exist.properties_to_send.forEach(prop => {
+					properties_to_set.push({
+						key: prop.key,
+						value: prop.value,
+					})
+				})
 			}
-			if (this.prop && this.prop.save_if_not_exist && this.prop.save_if_not_exist.property_to_send) {
-				property_to_send = this.prop.save_if_not_exist.property_to_send
-			}
-			properties_to_set.push({
-				key: property_to_send,
-				value: this.query,
-			})
 			if (this.prop && this.prop.depends_on) {
 				properties_to_set.push({
 					key: this.prop.depends_on,
@@ -257,9 +281,12 @@ export default {
 			})
 			.then(res => {
 				this.saving_if_not_exist = false
-				this.$store.commit(this.model_name+'/add', res.data.model)
 				this.$toast.success(this.singular(this.model_name)+' creado')
 				this.$emit('setSelected', res.data.model)
+				if (this.prop.belongs_to_many && this.prop.belongs_to_many.save_if_not_exist && this.prop.belongs_to_many.save_if_not_exist.not_add_to_store_models) {
+				} else {
+					this.$store.commit(this.model_name+'/add', res.data.model)
+				}
 			})
 			.catch(err => {
 				this.saving_if_not_exist = false
@@ -270,13 +297,19 @@ export default {
 		selectUp() {
 			if (this.selected_index > 0) {
 				this.selected_index--
+			} else {
+				this.selected_index = this.results.length-1
 			}
 		},	
 		selectDown() {
-			if (this.selected_index < this.results.length-1)
-			this.selected_index++
+			if (this.selected_index < this.results.length-1) {
+				this.selected_index++
+			} else {
+				this.selected_index = 0
+			}
 		},	
-		setSelected(model) {
+		onRowSelected(model) {
+			console.log('onRowSelected')
 			this.$emit('setSelected', model)
 			this.results = []
 			this.$bvModal.hide(this.modal_id)

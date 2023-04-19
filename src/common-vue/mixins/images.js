@@ -17,7 +17,7 @@ export default {
 				if (img_prop.type == 'image') {
 					return model[img_prop.key] 
 				} else if (img_prop.type == 'images' && model[img_prop.key].length) {
-					return model[img_prop.key][0].image_url  
+					return model[img_prop.key][0][this.image_url_prop_name]  
 				}
 			}
 			return null 
@@ -25,7 +25,7 @@ export default {
 		imageUrl(model, prop) {
 			if (prop.type == 'images') {
 				if (model[prop.key].length) {
-					return model[prop.key][0].image_url
+					return model[prop.key][0][this.image_url_prop_name]
 				}
 			} else if (prop.type == 'image') {
 				return model[prop.key]

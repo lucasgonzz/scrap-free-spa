@@ -22,7 +22,7 @@ export default {
 	        return has_permission
 		},
 		checkPermissionForCurrentRoute() {
-			if (this.$route.path == '/' || this.$route.path == '/login') {
+			if (this.$route.path == '/' || this.$route.path == '/login' || (this.use_home_page && this.route_name == 'home')) {
 				console.log('estaba en la ruta /')
 				this.redirect()
 			} else {
@@ -43,16 +43,20 @@ export default {
 				route = routes[i]
 				console.log('viendo permiso para la ruta '+route.name+', permission_slug: '+routes[i].can) 
 				if (route.check_is_owner && this.is_owner) {
-					route_to_redirect = route.name
+					route_to_redirect = route
 					break
 				} else if (route.can && this.can(route.can)) {
 					console.log('tiene permiso para '+route.can)
-					route_to_redirect = route.name
+					route_to_redirect = route
 					break
 				} 
 			}
 			if (route_to_redirect) {
-				this.$router.push({name: route_to_redirect})
+				if (route_to_redirect.params) {
+					this.$router.push({name: route.name, params: route_to_redirect.params})
+				} else {
+					this.$router.push({name: route.name})
+				}
 			} else {
 				console.log('NO TIENE PERMISO PARA NINGUNA RUTA')
 			}

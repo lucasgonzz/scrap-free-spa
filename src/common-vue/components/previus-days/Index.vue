@@ -1,5 +1,6 @@
 <template>
-<div>
+<div
+v-if="has_permission">
 	<modal-from-dates
 	:model_name="model_name"></modal-from-dates>
 	<b-row>
@@ -59,6 +60,11 @@ export default {
     		default: true,
     	},
     },
+    computed: {
+    	has_permission() {
+    		return this.can(this.model_name+'.index.previus_days')
+    	}
+    }
 }
 </script>
 <style scoped lang="sass">

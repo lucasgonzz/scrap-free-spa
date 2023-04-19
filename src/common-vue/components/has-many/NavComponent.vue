@@ -12,7 +12,7 @@
 			    v-model="$store.state[model_name].from_date"></b-form-datepicker>
 			</div>
 			<div class="date-picker">
-			    <p>
+			    <p> 
 			    	Hasta
 			    </p>
 			    <b-form-datepicker
@@ -55,7 +55,7 @@ export default {
 			this.$store.dispatch(this.model_name+'/getModels')
 		},
 		print() {
-			let link = process.env.VUE_APP_API_URL+'/'+this.routeString(this.model_name)+'/pdf/'+this.$store.state[this.model_name].selected_model.id+'/'+this.$store.state[this.model_name].from_date+'/'+this.$store.state[this.model_name].until_date
+			let link = process.env.VUE_APP_API_URL+'/'+this.routeString(this.model_name)+'/pdf/'+this.$store.state[this.model_name].from_date+'/'+this.$store.state[this.model_name].until_date+'/'+this.$store.state[this.model_name].selected_model.id
 			console.log(link)
 			window.open(link)
 		}

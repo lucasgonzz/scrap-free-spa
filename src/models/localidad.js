@@ -23,6 +23,7 @@ export default {
 		{
 			text: 'Provincia',
 			key: 'provincia_id',
+			use_store_models: true,
 			type: 'select',
 			value: 0,
 			show: true,

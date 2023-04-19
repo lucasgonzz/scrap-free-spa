@@ -5,6 +5,7 @@ import auth from '@/common-vue/store/auth'
 import employee from '@/common-vue/store/employee'
 import permission from '@/common-vue/store/permission'
 import update_app from '@/common-vue/store/update_app'
+import general from '@/common-vue/store/general'
 import siniestro from '@/store/siniestro'
 import aseguradora from '@/store/aseguradora'
 import causa_siniestro from '@/store/causa_siniestro'
@@ -47,6 +48,7 @@ export default new Vuex.Store({
         employee,
         permission,
         update_app,
+        general,
         siniestro,
         aseguradora,
         causa_siniestro,

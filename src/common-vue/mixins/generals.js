@@ -18,6 +18,12 @@ export default {
         	}
         	return this.user.id
         },
+        owner() {
+        	if (this.is_owner) {
+        		return this.user 
+        	}
+        	return this.user.owner
+        },
 		view() {
 			return this.$route.params.view
 		},
@@ -51,13 +57,79 @@ export default {
 		route_to_redirect_if_unauthenticated() {
             return process.env.VUE_APP_ROUTE_TO_REDIRECT_IF_UNAUTHENTICATED
 		},
+		image_url_prop_name() {
+			if (process.env.VUE_APP_IMAGE_URL_PROP_NAME) {
+				return process.env.VUE_APP_IMAGE_URL_PROP_NAME
+			}
+			return 'image_url'
+		},
+		custom_configuration_page() {
+			if (typeof process.env.VUE_APP_CUSTOM_CONFIGURATION_PAGE != 'undefined' && process.env.VUE_APP_CUSTOM_CONFIGURATION_PAGE) {
+				return true
+			}
+			return false
+		},
+		use_home_page() {
+			if (typeof process.env.VUE_APP_USE_HOME_PAGE != 'undefined' && process.env.VUE_APP_USE_HOME_PAGE) {
+				return true
+			}
+			return false
+		},
+		use_help_dropdown() {
+			if (typeof process.env.VUE_APP_USE_HELP_DROPDOWN != 'undefined' && process.env.VUE_APP_USE_HELP_DROPDOWN) {
+				return true
+			}
+			return false
+		},
 	},
 	methods: {
-		propText(prop) {
-			if (prop.text) {
-				return prop.text 
+		getModelFromId(model_name, model_id) {
+			let model = this.modelsStoreFromName(model_name).find(model => {
+				return model.id == model_id
+			})
+			if (typeof model != 'undefined') {
+				return model 
 			}
-			return prop.key.replaceAll('_', ' ')
+			return null
+		},
+		getImageUploadUrl(prop) {
+			let url = process.env.VUE_APP_API_URL+'/api/set-image/'
+			if (prop.type == 'images') {
+				url += 'has_many'
+			} else {
+				url += prop.key 
+			}
+			return url
+		},
+        scrollBottom(el) {
+            setTimeout(() => {
+                let container = document.getElementById(el)
+                if (container) {
+                    container.scrollTop = container.scrollHeight
+                    console.log('scrollBottom a '+container.scrollTop+' con '+container.scrollHeight)
+                }
+            }, 200)
+        },
+		propertiesToUpdate(model_name) {
+			let props = this.modelPropertiesFromName(model_name).filter(prop => {
+				return prop.use_to_update 
+			})
+			if (props.length) {
+				return props
+			}
+			return this.modelPropertiesFromName(model_name)
+		},
+		propText(prop, capitalize = true) {
+			let text 
+			if (prop.text) {
+				text = prop.text 
+			} else {
+				text = prop.key.replaceAll('_', ' ')
+			}
+			if (capitalize) {
+				return this.capitalize(text) 
+			}
+			return text 
 		},
 		saveIfNotExist(prop) {
 			if (prop.save_if_not_exist == false) {
@@ -88,7 +160,7 @@ export default {
 			return null
 		},
 		loadModel(model_name, id) {
-			this.$api.get(model_name+'-show/'+id)
+			this.$api.get(model_name+'/'+id)
 			.then(res => {
 				this.$store.commit(model_name+'/add', res.data.model)
 				this.$toast.success(this.singular(model_name)+' actualizado')
@@ -130,6 +202,9 @@ export default {
 			if (property.is_image || property.is_images) {
 				return false
 			}
+			if (property.if_has_extencion) {
+				return this.hasExtencion(property.if_has_extencion)
+			}
 			if (property.v_if) {
 				let array = property.v_if[0].split('.')
 				let prop_to_check
@@ -138,12 +213,24 @@ export default {
 				if (array[1]) {
 					sub_prop = array[1]
 				}
-				if (model[prop]) {
-					if (sub_prop && model[prop][sub_prop]) {
-						prop_to_check = model[prop][sub_prop]
-					}  else {
-						prop_to_check = model[prop]
+				if (model[prop] || property.v_if_from_models_store) {
+					// if (sub_prop && model[prop][sub_prop]) {
+					if (property.v_if_from_models_store) {
+						if (sub_prop) {
+							let model_from_store = this.getModelFromId(prop, model[prop+'_id'])
+							if (model_from_store) {
+								prop_to_check =  model_from_store[sub_prop]
+							}
+						} 
+					} else {
+						if (sub_prop) {
+							prop_to_check = model[prop][sub_prop]
+						} else {
+							prop_to_check = model[prop]
+						}
 					}
+					// console.log('prop_to_check en '+prop.text)
+					// console.log(prop_to_check)
 					if (typeof prop_to_check == 'String') {
 						prop_to_check = prop_to_check.toLowerCase()
 					}
@@ -153,6 +240,8 @@ export default {
 						return prop_to_check < property.v_if[2]
 					} else if (property.v_if[1] == '>') {
 						return prop_to_check > property.v_if[2]
+					} else if (property.v_if[1] == '!=') {
+						return prop_to_check != property.v_if[2]
 					}
 				} else {
 					return false
@@ -160,39 +249,45 @@ export default {
 			}
 			return true 
 		},
-		propsToFilter(model_name) {
-			let props = this.modelPropertiesFromName(model_name)
-			let to_filter = props.filter(prop => {
+		propToFilter(model_name) {
+			let prop = this.modelPropertiesFromName(model_name).find(prop => {
 				return prop.use_in_search_modal
 			})
-			if (to_filter.length) {
-				return to_filter
+			if (typeof prop != 'undefined') {
+				return prop
 			} else {
 				if (this.idiom == 'en') {
-					return [
-						{
-							key: 'name',
-							text: 'Nombre',
-						}
-					]
+					return {
+						key: 'name',
+						text: 'Nombre',
+					}
 				} else if (this.idiom == 'es') {
-					return [
-						{
-							key: 'nombre',
-							text: 'Nombre',
-						}
-					]
+					return {
+						key: 'nombre',
+						text: 'Nombre',
+					}
 				}
+			}
+		},
+		propsToShowInSearchModal(model_name) {
+			let props = this.modelPropertiesFromName(model_name)
+			let to_show = props.filter(prop => {
+				return prop.use_to_show_in_search_modal
+			})
+			if (to_show.length) {
+				return to_show
 			}
 			return props
 		},
 		propsToFilterInModal(model_name) {
 			let props = this.modelPropertiesFromName(model_name)
 			let to_filter = props.filter(prop => {
-				return prop.use_to_filter_in_modal
+				return prop.filter_modal_position
 			})
 			if (to_filter.length) {
-				return to_filter
+				return to_filter.sort((a, b) => {
+					return a.filter_modal_position - b.filter_modal_position
+				})
 			}
 			return props
 		},
@@ -260,8 +355,26 @@ export default {
 				} else if (this.idiom == 'es') {
 					prop_name = 'nombre'
 				}
-				if (model[relationship]) {
-					return model[relationship][prop_name] 
+				// console.log('prop:')
+				// console.log(prop)
+				if (model[prop.key]) {
+					if (prop.use_store_models) {
+						// console.log('use_store_models, relationship: '+relationship)
+						let finded_model = this.$store.state[relationship].models.find(_model => {
+							// console.log('comparando '+_model.id+' con '+model[prop.key])
+							return _model.id == model[prop.key]
+						})
+						if (typeof finded_model != 'undefined') {
+							return finded_model[prop_name]	
+						}
+						return null
+					} else {
+						return model[relationship][prop_name] 
+					}
+					// let _model = this.$store.state[relationship].models.find(model_ => {
+					// 	return model_.id == model[prop.key]
+					// })
+					// return _model[prop_name]
 				} else {
 					return 'S/A'
 				}
@@ -284,6 +397,12 @@ export default {
 			if (prop.is_date) {
 				return this.date(model[prop.key] )
 			}
+			// if (prop.button && prop.button.icon) {
+			// 	return '<i class="icon-'+prop.button.icon+'"></i>'
+			// } 
+			if (prop.is_hour) {
+				return this.hour(model[prop.key]) 
+			}
 			if (prop.is_since) {
 				return this.since(model[prop.key] )
 			}
@@ -295,8 +414,8 @@ export default {
 				return this.price(model[prop.key]) 
 			}
 			if (prop.type == 'search') {
-				console.log('typeof de '+prop.key)
-				console.log(typeof model[prop.key])
+				// console.log('typeof de '+prop.key)
+				// console.log(typeof model[prop.key])
 				if (typeof model[prop.key] == 'array') {
 					return model[prop.key].length 
 				} else if (typeof model[prop.key] == 'object' && model[prop.key]) {
@@ -313,16 +432,28 @@ export default {
 			if (prop.has_many) {
 				return model[prop.key].length
 			} 
+			if (prop.key.includes('.')) {
+				let array = prop.key.split('.')
+				if (model[array[0]]) {
+					return model[array[0][1]]
+				} else {
+					return ''
+				}
+			}
 			return model[prop.key] 
 		},
 		isRelationKey(prop) {
-			let last = prop.key.substring(prop.key.length-3, prop.key.length)
+			let last = ''
+			if (prop.key) {
+				last = prop.key.substring(prop.key.length-3, prop.key.length)
+			}
 			return last == '_id'
 		},
 		propertiesToShow(props, with_title_and_images = true) {
 			if (with_title_and_images) {
 				return props.filter(prop => {
-					return this.canProp(prop) && prop.type != 'search' && (typeof prop.not_show == 'undefined' || prop.is_title)
+					return this.canProp(prop) && (typeof prop.not_show == 'undefined' || prop.is_title)
+					// return this.canProp(prop) && prop.type != 'search' && (typeof prop.not_show == 'undefined' || prop.is_title)
 				})
 			} else {
 				return props.filter(prop => {
@@ -347,6 +478,15 @@ export default {
 			}
 			return plural
 		},
+		getPropToUseInSelect(model_name) {
+			let prop = this.modelPropertiesFromName(model_name).find(_prop => {
+				return _prop.use_in_select
+			})
+			if (typeof prop != 'undefined') {
+				return prop 
+			}
+			return null
+		},
 		getOptions(prop, model = null, model_name = null) {
 			let store 
 			if (prop.store) {
@@ -355,8 +495,11 @@ export default {
 				store = prop.key.substring(0, prop.key.length-3)
 			}
 			let models = this.$store.state[store].models
-			let prop_name = 'name'
-			if (this.idiom == 'en') {
+			let prop_name
+			let prop_to_use_in_select = this.getPropToUseInSelect(store)
+			if (prop_to_use_in_select) {
+				prop_name = prop_to_use_in_select.key 
+			} else if (this.idiom == 'en') {
 				prop_name = 'name'
 			} else {
 				prop_name = 'nombre'

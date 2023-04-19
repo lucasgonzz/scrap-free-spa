@@ -35,6 +35,7 @@
 					class="input-search"
 					:id="id"
 					@click="callSearchModal"
+					@keyup="callSearchModal"
 					v-model="query"
 					:placeholder="_placeholder"></b-form-input>
 				</div>
@@ -51,12 +52,10 @@
 </template>
 <script>
 import SearchModal from '@/common-vue/components/search/Modal'
-import TableComponent from '@/common-vue/components/display/TableComponent'
 
 export default {
 	components: {
 		SearchModal,
-		TableComponent,
 		SelectedInfo: () => import('@/common-vue/components/search/SelectedInfo'),
 		Model: () => import('@/common-vue/components/model/Index'),
 	},
@@ -126,7 +125,7 @@ export default {
 			return 'Buscar '+this.singular(this.model_name)
 		},
 		is_disabled() {
-			if (this.prop && this.prop.can_not_modify) {
+			if (this.prop && this.prop.only_show) {
 				return true 
 			}
 			return false
@@ -138,20 +137,37 @@ export default {
 	methods: {
 		modelSaved(model) {
 			if (this.prop.is_between) {
-				let index = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].findIndex(_model => {
-					return _model.id == model.id 
-				})
-				if (index == -1) {
-					this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].concat([model]))
-					console.log('se agrego')
-				} else {
-					let models = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop]
-					models.splice(index, 1, model)
-					this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, models)
-					console.log('se actualizo')
+				if (this.prop.is_between.parent_model_prop) {
+					let index = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].findIndex(_model => {
+						return _model.id == model.id 
+					})
+					if (index == -1) {
+						this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].concat([model]))
+						console.log('se agrego')
+					} else {
+						let models = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop]
+						models.splice(index, 1, model)
+						this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, models)
+						console.log('se actualizo')
+					}
+				} else if (this.prop.is_between.store) {
+					let index = this.$store.state[this.prop.is_between.store].models.findIndex(_model => {
+						return _model.id == this.model[this.prop.is_between.store+'_id'] 
+					})
+					if (index == -1) {
+						this.$set(this.$store.state[this.prop.is_between.store].models[index], this.prop.is_between.model_prop, this.$store.state[this.prop.is_between.store].models[index][this.prop.is_between.model_prop].concat([model]))
+						console.log('se agrego')
+					} else {
+						let models = this.$store.state[this.prop.is_between.store].models[index][this.prop.is_between.model_prop].splice(index, 1, model)
+						this.$set(this.model[this.prop.is_between.parent_model_prop], this.prop.is_between.model_prop, models)
+						console.log('se actualizo')
+					}
 				}
-				this.callSearchModal()
 			}
+			this.callSearchModal()
+			setTimeout(() => {
+				document.getElementsByClassName('input-search-modal')[0].focus()
+			}, 200)
 		},
 		clearSelected() {
 			if (this.model) {
@@ -160,6 +176,7 @@ export default {
 			}
 			this.selected_model = null
 			this.query = ''
+			this.$emit('clearSelected')
 		},
 		setPreviewResults() {
 			if (this.show_preview_results) {
@@ -167,22 +184,33 @@ export default {
 			}
 		},
 		setModelsToSearch() {
+			console.log('setModelsToSearch') 
 			let models = []
 			if (this.prop && this.prop.depends_on && this.model) {
-			 	models = this.modelsStoreFromName(this.model_name)
-				models = models.filter(_model => {
-					console.log('model')
-					console.log(this.model)
-					console.log('comparado '+_model[this.prop.depends_on]+' con '+this.model[this.prop.depends_on])
-					return _model[this.prop.depends_on] == this.model[this.prop.depends_on]
-				})
+				if (!this.prop.search_depends_on_from_api) {
+				 	models = this.modelsStoreFromName(this.model_name)
+					models = models.filter(_model => {
+						console.log('model')
+						console.log(this.model)
+						console.log('comparado '+_model[this.prop.depends_on]+' con '+this.model[this.prop.depends_on])
+						return _model[this.prop.depends_on] == this.model[this.prop.depends_on]
+					})
+				}
 			} else if (this.prop && this.prop.is_between) {
-				console.log('parent_model_prop')
-				console.log(this.model[this.prop.is_between.parent_model_prop])
-				if (this.model[this.prop.is_between.parent_model_prop] && this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].length) {
-					console.log(this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop])
-					models = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop]
-				} 
+				if (this.prop.is_between.parent_model_prop) {
+					if (this.model[this.prop.is_between.parent_model_prop] && this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop].length) {
+						models = this.model[this.prop.is_between.parent_model_prop][this.prop.is_between.model_prop]
+					} 
+				} else if (this.prop.is_between.store && this.model[this.prop.is_between.store+'_id']) {
+					let model = this.$store.state[this.prop.is_between.store].models.find(_model => {
+						console.log('comparado '+_model.id+' con '+this.model[this.prop.is_between.store+'_id'])
+						return _model.id == this.model[this.prop.is_between.store+'_id']
+					})
+					console.log('is_between.store')
+					console.log(model)
+					console.log(model[this.prop.is_between.model_prop])
+					models = model[this.prop.is_between.model_prop]
+				}
 			} else if (this.prop && this.prop.has_many && this.prop.has_many.models_from_parent_prop) {
 				let model = this.$store.state[this.prop.has_many.models_from_parent_prop.parent_model_name].model 
 				models = model[this.prop.has_many.models_from_parent_prop.models_prop_name]
@@ -194,8 +222,18 @@ export default {
 		},
 		setSelectedModelProp() {
 			if (this.show_selected) {
-				if (this.model && this.model[this.modelNameFromRelationKey(this.prop)]) {
-					this.selected_model = this.model[this.modelNameFromRelationKey(this.prop)]
+				if (this.model && this.model[this.prop.key]) {
+					if (this.prop.use_store_models) {
+						console.log('entrooo')
+						let model = this.$store.state[this.modelNameFromRelationKey(this.prop)].models.find(_model => {
+							return _model.id == this.model[this.prop.key]
+						})
+						console.log(model)
+						this.selected_model = model
+					} else {
+						this.selected_model = this.model[this.modelNameFromRelationKey(this.prop)]
+					}
+					// this.selected_model = this.model[this.modelNameFromRelationKey(this.prop)]
 					// if (this.idiom == 'es') {
 					// 	this.query = this.model[this.modelNameFromRelationKey(this.prop)].nombre
 					// } else {

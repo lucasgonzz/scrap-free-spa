@@ -4,7 +4,7 @@ export default [
     'causa_siniestro',
     'estado_general_siniestro',
     'estado_siniestro',
-    'localidad',
+    // 'localidad',
     'provincia',
     'tipo_orden_de_servicio',
     'gestor_scrap_free',

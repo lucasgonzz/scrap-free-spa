@@ -12,7 +12,7 @@ export default {
 		{
 			text: 'Dias',
 			key: 'dias_en_estado_siniestro',
-			can_not_modify: true,
+			only_show: true,
 		},
 
 		{
@@ -34,7 +34,7 @@ export default {
 			text: 'Estado siniestro',
 			key: 'estado_siniestro_id',
 			type: 'select',
-			value: 0,
+			value: 1,
 			show: true,
 		},
 
@@ -49,7 +49,7 @@ export default {
 		{
 			text: 'Notas importantes',
 			key: 'notas_importantes',
-			type: 'text',
+			type: 'textarea',
 			show: true,
 		},
 
@@ -72,7 +72,7 @@ export default {
 		{
 			text: 'Gestor Aseguradora',
 			key: 'gestor_aseguradora_id',
-			type: 'select',
+			type: 'search',
 			value: 0,
 			show: true,
 		},
@@ -80,7 +80,7 @@ export default {
 		{
 			text: 'Gestor Scrap Free',
 			key: 'gestor_scrap_free_id',
-			type: 'select',
+			type: 'search',
 			value: 0,
 			show: true,
 		},
@@ -98,22 +98,6 @@ export default {
 			key: 'asegurado_id',
 			type: 'search',
 			value: '',
-		},
-
-		{
-			text: 'Domicilio completo Google',
-			key: 'domicilio_completo_google',
-			type: 'text',
-			value: '',
-			show: true,
-		},
-
-		{
-			text: 'Entre calles',
-			key: 'entre_calles',
-			type: 'text',
-			value: '',
-			show: true,
 		},
 
 		{
@@ -146,6 +130,29 @@ export default {
 		},
 
 		{
+			text: 'Descripcion del bien',
+			key: 'descripcion_bien',
+			type: 'textarea',
+			value: '',
+		},
+
+		{
+			text: 'Domicilio completo Google',
+			key: 'domicilio_completo_google',
+			type: 'google_geocoder',
+			value: '',
+			show: true,
+		},
+
+		{
+			text: 'Entre calles',
+			key: 'entre_calles',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+
+		{
 			text: 'Provincia',
 			key: 'provincia_id',
 			type: 'search',
@@ -157,6 +164,7 @@ export default {
 			text: 'Localidad',
 			key: 'localidad_id',
 			depends_on: 'provincia_id',
+			search_depends_on_from_api: true,
 			type: 'search',
 			value: 0,
 			show: true,

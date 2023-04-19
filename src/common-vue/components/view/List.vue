@@ -5,6 +5,8 @@
 		v-if="show_previus_days"
 		:model_name="model_name"></previus-days>
 
+		<slot name="display_top"></slot>
+
 		<display
 		:order_list_by="order_list_by"
 		:check_permissions="check_permissions"

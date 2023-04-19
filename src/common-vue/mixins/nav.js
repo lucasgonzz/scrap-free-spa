@@ -4,11 +4,25 @@ export default {
 	methods: {
 		showRoute(route) {
 			let show = true 
-			if (route.can) {
-				show = this.can(route.can)
-			}
 			if (route.check_is_owner) {
 				show = this.is_owner 
+			}
+			if (show && route.can) {
+				// console.log('typeof route.can de '+this.getRouteName(route))
+				// console.log(typeof route.can)
+				if (typeof route.can == 'object') {
+					show = false 
+					route.can.forEach(_can => {
+						if (!show) {
+							show = this.can(_can)
+						}
+					})
+				} else {
+					show = this.can(route.can)
+				}
+			}
+			if (show && route.if_has_extencion) {
+				show = this.hasExtencion(route.if_has_extencion)
 			}
 			return show 
 		},
@@ -41,6 +55,9 @@ export default {
 		toRoute(route) {
 			console.log(route)
 			let route_name = this.getRouteName(route)
+			if (route_name == this.route_name) {
+				return
+			}
 			if (route.params) {
 				this.$router.push({name: route_name, params: route.params})
 			} else {

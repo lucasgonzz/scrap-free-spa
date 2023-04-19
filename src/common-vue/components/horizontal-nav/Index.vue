@@ -32,7 +32,7 @@
 					<b-button
 					v-if="can_filter_modal"
 					variant="outline-primary"
-					v-b-modal="'filter-modal'">
+					@click="filterModal">
 						<i class="icon-search"></i>
 						Buscar
 					</b-button>
@@ -47,10 +47,11 @@
 			</div>
 			<div
 			class="cont-buttons">
-
 				<slot name="btn_create">
 					<excel-drop-down
 					v-if="show_excel_drop_down"
+					:check_permissions="check_permissions"
+					:can_create="can_create"
 					:model_name="model_name"></excel-drop-down>
 
 					<btn-create
@@ -62,6 +63,19 @@
 
 				<slot name="buttons"></slot>
 			</div>
+			<div
+			class="align-center m-l-15 m-t-15 m-lg-t-0"
+			v-if="ask_selectable">
+				<b-form-checkbox
+				:unchecked-value="false"
+				:value="true"
+				v-model="is_selectable">
+					Seleccion multiple
+				</b-form-checkbox>
+			</div>
+			<options-dropdown
+			v-if="show_filter_modal"
+			:model_name="model_name"></options-dropdown>
 		</div>
 		<display-nav
 		v-if="show_display"
@@ -83,6 +97,7 @@ export default {
 		FilterModal,
 		ExcelDropDown,
 		DisplayNav,
+		OptionsDropdown: () => import('@/common-vue/components/horizontal-nav/options-dropdown/Index'),
 	},
 	props: {
 		items: Array,
@@ -122,6 +137,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		ask_selectable: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	created() {
 		if (!this.set_view && !this.set_sub_view) {
@@ -136,6 +155,14 @@ export default {
 		}
 	},
 	computed: {
+		is_selectable: {
+			get() {
+				return this.$store.state[this.model_name].is_selectable
+			},
+			set(value) {
+				this.$store.commit(this.model_name+'/setIsSelecteable', value)
+			},
+		},
 		can_filter_modal() {
 			if (this.show_filter_modal) {
 				if (this.check_permissions) {
@@ -165,6 +192,12 @@ export default {
 		},
 	},
 	methods: {
+		filterModal() {
+			this.$bvModal.show('filter-modal')
+			setTimeout(() => {
+				document.getElementById('search-modal-name').focus()
+			}, 300)
+		},
 		restartSearch() {
 			this.$store.commit(this.model_name+'/setIsFiltered', false)
 			this.$store.commit(this.model_name+'/setFiltered', [])
@@ -176,7 +209,6 @@ export default {
 			return this.capitalize(this.value(item))
 		},
 		select(item) {
-			console.log(item)
 			if (item.is_for_create) {
 				this.setModel(null, item.is_for_create, this.modelPropertiesFromName(item.is_for_create))
 				return
@@ -190,46 +222,56 @@ export default {
 				return
 			}
 			if (this.set_view) {
-				if (this.view != this.routeString(this.value(item))) {
-					this.$router.push({params: {view: this.routeString(this.value(item))}})
-				} else if (item.action) {
-					this.$store.dispatch(item.action)
-				} else if (item.call_models) {
-					this.$store.dispatch(item.name.replaceAll(' ', '_')+'/getModels')
-				}
-				if (item.commit) {
-					item.commit.forEach(commit => {
-						this.$store.commit(commit)
-					})
-				}
-				if (item.view) {
-					this.$store.commit(this.model_name+'/setView', item.view)
-					this.$store.dispatch(this.model_name+'/getModels')
+				if (this.view != this.routeString(this.routeValue(item))) {
+					this.$router.push({params: {view: this.routeString(this.routeValue(item))}})
+					this.callMethods(item, true)
+				} else {
+					this.callMethods(item)
 				}
 			}  
 			if (this.set_sub_view) {
-				if (this.sub_view != this.routeString(this.value(item))) {
-					this.$router.push({params: {method: this.method, sub_view: this.routeString(this.value(item))}})
-				} else if (item.call_models) {
-					this.$store.dispatch(item.name.replaceAll(' ', '_')+'/getModels')
-				} else if (item.action) {
-					this.$store.dispatch(item.action)
-				} else if (item.commit) {
-					this.$store.commit(item.commit)
+				if (this.sub_view != this.routeString(this.routeValue(item))) {
+					this.$router.push({params: {method: this.method, sub_view: this.routeString(this.routeValue(item))}})
+					this.callMethods(item, true)
+				} else {
+					this.callMethods(item)
 				}
 			} 
 			this.selected_item = item.name
 			this.$emit('setSelected', item)
 		},
+		callMethods(item, only_if_empty = false) {
+			if (item.action) {
+				this.$store.dispatch(item.action)
+			}  
+			if (item.call_models && (!only_if_empty || !this.$store.state[item.call_models].models.length)) {
+				this.$store.dispatch(item.call_models+'/getModels')
+			} 
+			if (item.commit) {
+				item.commit.forEach(commit => {
+					this.$store.commit(commit)
+				})
+			}
+			if (item.view) {
+				this.$store.commit(this.model_name+'/setView', item.view)
+				this.$store.dispatch(this.model_name+'/getModels')
+			}
+		},
 		value(item) {
+			return item[this.prop_name]
+		},
+		routeValue(item) {
+			if (item.route_value) {
+				return item.route_value
+			}
 			return item[this.prop_name]
 		},
 		isActive(item) {
 			if (this.selected) {
-				if (this.selected.toLowerCase() == this.routeString(this.value(item))) {
+				if (this.selected.toLowerCase() == this.routeString(this.routeValue(item))) {
 					return 'active'
 				}
-			}
+			} 
 		},
 	}
 }
@@ -278,7 +320,7 @@ export default {
 
 	.item
 		border-bottom: 3px solid lighten($blue, 30)
-		padding: 5px 8px
+		padding: 5px 15px
 		cursor: pointer
 		border-radius: 4px 4px 0 0
 		transition: all .2s

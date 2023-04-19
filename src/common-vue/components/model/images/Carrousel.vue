@@ -25,8 +25,8 @@
 			<vue-load-image>
 				<img
 				slot="image"
-				class="slide-img s-2 b-r-1" 
-				:src="image.image_url">
+				class="s-2 b-r-1" 
+				:src="image[image_url_prop_name]">
 				
 		        <b-spinner
 				slot="preloader"
@@ -50,13 +50,20 @@
 		<i class="icon-eye-slash"></i>
 		No hay imagenes
 	</p>
-	<b-button
-	size="sm"
-	block 
-	variant="outline-primary"
-	@click="uploadImage">
-		Agregar imagen
-	</b-button>
+	<b-button-group>
+		<b-button
+		size="sm"
+		variant="outline-primary"
+		@click="searchImage">
+			Buscar imagen en Google
+		</b-button>
+		<b-button
+		size="sm"
+		variant="outline-primary"
+		@click="uploadImage">
+			Buscar imagen en este equipo 
+		</b-button>
+	</b-button-group>
 </div>
 </template>
 <script>
@@ -73,21 +80,31 @@ export default {
 	},
 	methods: {
 		uploadImage() {
-			this.$emit('uploadImage')
+			this.$bvModal.show('upload-image-'+this.prop.key)
 		},
 		setDelete(image) {
 			this.$store.commit(this.model_name+'/setDeleteImageModel', image)
 			this.$bvModal.show('delete-'+this.model_name+'-images')
-		}
+		},
+		searchImage() {
+			this.$bvModal.show('search-image')
+			setTimeout(() => {
+				document.getElementById('search-image-input').focus()
+			}, 200)
+		},
 	}
 }
 </script>
 <style scoped lang="sass">
+.VueCarousel-inner
+	height: 50vh !important
 .VueCarousel-slide
 	position: relative
 	display: flex
 	align-items: center
 	justify-content: center
+	height: 50vh !important
+	padding: 20px 0
 	&:hover > .btn-delete 
 		display: block
 	.btn-delete 
@@ -98,10 +115,12 @@ export default {
 		transform: translateX(-50%)
 		display: none 
 
-.slide-img
-	max-width: 100%
-	@media screen and (max-width: 992px)
-		max-height: 70vh
-	@media screen and (min-width: 992px)
-		max-height: calc(100vh - 150px)
+	img 
+		max-width: 100%
+		@media screen and (max-width: 992px)
+			max-height: 70vh
+		@media screen and (min-width: 992px)
+			max-height: 50vh
+			// max-height: 50vh
+			// max-height: calc(100vh - 150px)
 </style>
