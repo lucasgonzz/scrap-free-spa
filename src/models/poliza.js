@@ -13,6 +13,7 @@ export default {
 			key: 'asegurado_id',
 			type: 'search',
 			value: '',
+			use_store_models: true,
 			// show: true,
 		},
 		{
@@ -34,7 +35,14 @@ export default {
 		},
 
 		{
-			key: 'cuit',
+			text: 'Tipo documento',
+			key: 'tipo_documento_id',
+			type: 'select',
+			use_store_models: true,
+		},
+
+		{
+			key: 'numero_documento',
 			type: 'text',
 		},
 
@@ -43,6 +51,7 @@ export default {
 			key: 'tipo_producto_de_seguro_id',
 			type: 'search',
 			value: '',
+			use_store_models: true,
 			// show: true,
 		},
 		{
@@ -50,6 +59,7 @@ export default {
 			key: 'ramo_id',
 			type: 'select',
 			value: 0,
+			use_store_models: true,
 			// show: true,
 		},
 		{
@@ -68,25 +78,30 @@ export default {
 				],
 				properties_to_set: [
 					{
+						text: 'Cobertura',
+						key: 'cobertura',
+						type: 'number',
+					},
+					{
 						text: 'Deducible',
 						key: 'deducible',
 						type: 'number',
 					},
-					{
-						text: 'Deducible en pesos',
-						key: 'deducible_en_pesos',
-						type: 'number',
-					},
-					{
-						text: 'Monto minimo',
-						key: 'monto_minimo',
-						type: 'number',
-					},
-					{
-						text: 'Suma asegurada',
-						key: 'suma_asegurada',
-						type: 'number',
-					},
+					// {
+					// 	text: 'Deducible en pesos',
+					// 	key: 'deducible_en_pesos',
+					// 	type: 'number',
+					// },
+					// {
+					// 	text: 'Monto minimo',
+					// 	key: 'monto_minimo',
+					// 	type: 'number',
+					// },
+					// {
+					// 	text: 'Suma asegurada',
+					// 	key: 'suma_asegurada',
+					// 	type: 'number',
+					// },
 				]
 			}
 		},

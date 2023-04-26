@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^1.2.1",
     "bootstrap-vue": "^2.23.1",
+    "@undecaf/vue-barcode-scanner": "^0.9.3",
     "core-js": "^3.23.3",
     "laravel-echo": "^1.8.1",
     "moment": "^2.29.4",
