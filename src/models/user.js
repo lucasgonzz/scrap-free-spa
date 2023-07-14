@@ -1,6 +1,11 @@
 export default {
 	properties: [
 		{
+			text: 'Imagen',
+			key: 'image_url',
+			type: 'image',
+		},
+		{
 			text: 'Nombre',
 			key: 'name',
 			type: 'text',

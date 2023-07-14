@@ -8,11 +8,17 @@
     	v-if="show_modal"
     	:show_btn_remove_belongs_to_many="show_btn_remove_belongs_to_many"
     	@modelSaved="modelSaved"
+    	@modelDeleted="modelDeleted"
     	:check_permissions="check_permissions"
     	:show_btn_pdf="show_btn_pdf"
     	:show_btn_delete="show_btn_delete"
+    	:show_btn_save="show_btn_save"
     	:size="modal_size"
-    	:model_name="model_name">
+    	:model_name="model_name"
+    	:prop_to_send_on_save="prop_to_send_on_save"
+    	:emit_on_saved_instead_continue="emit_on_saved_instead_continue"
+    	:not_show_delete_text="not_show_delete_text"
+    	:delete_text="delete_text">
     		<template v-slot:model_modal_header="slotProps">
     			<slot name="model_modal_header" :model="slotProps.model"></slot>
     		</template>
@@ -21,6 +27,12 @@
     		</template>
     		<template v-slot:belongs="slotProps">
     			<slot name="belongs" :model="slotProps.model"></slot>
+    		</template>
+    		<template
+    		v-for="prop in properties"
+			v-slot:[prop.key]>
+				<slot :name="prop.key">
+				</slot>
     		</template>
     	</model>
 
@@ -33,6 +45,9 @@
 		:show_btn_create="_show_btn_create"
 		:show_plus_dropdown="show_plus_dropdown"
 		:show_display="show_display"
+		:items="horizontal_nav_items" 
+		:set_view="horizontal_nav_set_view"
+		:set_sub_view="horizontal_nav_set_sub_view"
 		:model_name="model_name">
 			<template v-slot:btn_create>
 				<slot name="horizontal_nav_btn_create"></slot>
@@ -86,6 +101,10 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		show_btn_save: {
+			type: Boolean,
+			default: true,
+		},
 		show_plus_dropdown: {
 			type: Boolean,
 			default: false,
@@ -122,6 +141,18 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		horizontal_nav_items: {
+			type: Array,
+			default: null,
+		},
+		horizontal_nav_set_view: {
+			type: Boolean,
+			default: false,
+		},
+		horizontal_nav_set_sub_view: {
+			type: Boolean,
+			default: false,
+		},
 		col_xl: {
 			type: String,
 			default: '12'
@@ -156,6 +187,22 @@ export default {
 		ask_selectable: {
 			type: Boolean,
 			default: false,
+		},
+		prop_to_send_on_save: {
+			type: Object,
+		 	default: null,
+		},
+		emit_on_saved_instead_continue: {
+			type: Boolean,
+			default: false,
+		},
+		not_show_delete_text: {
+			type: Boolean,
+			default: false,
+		},
+		delete_text: {
+			type: String,
+			default: null,
 		},
 	},
 	computed: {
@@ -193,10 +240,14 @@ export default {
 	},
 	methods: {
 		modelSaved(model) {
+			console.log('22222')
 			this.$emit('modelSaved', model)
 		},
+		modelDeleted(model) {
+			console.log('modelo eliminado')
+			this.$emit('modelDeleted')
+		},
 		clicked(model) {
-			console.log('22222')
 			this.$emit('clicked', model)
 		}
 	}

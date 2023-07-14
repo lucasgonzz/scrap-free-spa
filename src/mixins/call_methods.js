@@ -1,4 +1,6 @@
 export default [
+    'siniestro',
+    'color_siniestro',
     'aseguradora',
     'asegurado',
     'causa_siniestro',
@@ -23,5 +25,4 @@ export default [
     'permission',
     'tipo_documento',
     'centro_reparacion',
-    'siniestro',
 ]

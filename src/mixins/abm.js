@@ -6,6 +6,7 @@ export default {
 				'asegurado',
 				'poliza',
 				'cobertura',
+				'color_siniestro',
 				'tipo_producto_de_seguro',
 				'ramo',
 				'gestor_scrap_free',

@@ -64,7 +64,7 @@
 				<slot name="buttons"></slot>
 			</div>
 			<div
-			class="align-center m-l-15 m-t-15 m-lg-t-0"
+			class="align-center m-l-15 m-t-15 m-sm-t-0"
 			v-if="ask_selectable">
 				<b-form-checkbox
 				:unchecked-value="false"
@@ -74,6 +74,7 @@
 				</b-form-checkbox>
 			</div>
 			<options-dropdown
+			class="m-t-15 m-lg-t-0"
 			v-if="show_filter_modal"
 			:model_name="model_name"></options-dropdown>
 		</div>
@@ -107,7 +108,7 @@ export default {
 		},
 		prop_name: {
 			type: String,
-			default: 'name',
+			default: null,
 		},
 		model_name: {
 			type: String,
@@ -161,6 +162,9 @@ export default {
 			},
 			set(value) {
 				this.$store.commit(this.model_name+'/setIsSelecteable', value)
+				if (!this.is_selectable) {
+					this.$store.commit(this.model_name+'/setSelected', [])
+				}
 			},
 		},
 		can_filter_modal() {
@@ -190,12 +194,21 @@ export default {
 		is_filtered() {
 			return this.$store.state[this.model_name].is_filtered 
 		},
+		_prop_name() {
+			if (this.prop_name) {
+				return this.prop_name
+			}
+			if (this.idiom == 'es') {
+				return 'nombre'
+			}
+			return 'name'
+		}
 	},
 	methods: {
 		filterModal() {
 			this.$bvModal.show('filter-modal')
 			setTimeout(() => {
-				document.getElementById('search-modal-name').focus()
+				document.getElementById('search-modal-'+this.propsToFilterInModal(this.model_name)[0].key).focus()
 			}, 300)
 		},
 		restartSearch() {
@@ -221,6 +234,7 @@ export default {
 				this.$bvModal.show(item.is_for_modal)
 				return
 			}
+			console.log('this.set_view: '+this.set_view)
 			if (this.set_view) {
 				if (this.view != this.routeString(this.routeValue(item))) {
 					this.$router.push({params: {view: this.routeString(this.routeValue(item))}})
@@ -258,13 +272,13 @@ export default {
 			}
 		},
 		value(item) {
-			return item[this.prop_name]
+			return item[this._prop_name]
 		},
 		routeValue(item) {
 			if (item.route_value) {
 				return item.route_value
 			}
-			return item[this.prop_name]
+			return item[this._prop_name]
 		},
 		isActive(item) {
 			if (this.selected) {
@@ -310,6 +324,7 @@ export default {
 	display: flex
 	overflow-x: scroll
 	overflow-y: hidden
+	padding-bottom: 5px
 	@media screen and (max-width: 576px)
 		&::-webkit-scrollbar 
 			-ms-overflow-style: none
@@ -326,13 +341,16 @@ export default {
 		transition: all .2s
 		font-size: 1em
 		white-space: nowrap 
-		color: rgba(0, 0, 0, .6) !important
+		@if ($theme == 'dark') 
+			color: rgba(255, 255, 255, .8) !important
+		@else 
+			color: rgba(0, 0, 0, .6) !important
+
 	.active 
 		font-weight: bold
-		// transform: scale(1.1)
-		color: #000 !important
 		border-bottom: 3px solid $blue
-		// box-shadow: 0px 3px 7px rgb(0 0 0 / 15%) !important
-		// webkit-box-shadow: 0px -2px 4px -1px rgba(0,0,0,.7)
-		// box-shadow: 0px -2px 4px -1px rgba(0,0,0,.7)
+		@if ($theme == 'dark') 
+			color: #fff !important
+		@else 
+			color: #000 !important
 </style>

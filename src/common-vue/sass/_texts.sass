@@ -26,12 +26,20 @@
 	display: block
 	font-weight: bold
 	text-align: center !important
-	// @media screen and (max-width: 768px)
-	// 	text-align: center !important
-	// @media screen and (min-width: 768px)
-	// 	text-align: left !important
+
+.title-left
+	color: rgba(0, 0, 0, .6)
+	font-size: 1.3em 
+	margin: 1em 0
+	display: block
+	// font-weight: bold
+	text-align: left !important
 
 .sub-title
 	font-size: 1.2em 
 	margin: 1em 0
 	display: block
+
+@if ($theme == 'dark') 
+	p, h1, h2, h3, h4, h5, h6, button.close
+		color: #FFF !important

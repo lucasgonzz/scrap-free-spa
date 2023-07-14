@@ -5,6 +5,10 @@ $background: 	#F3F3F3;
 $nav_theme: dark;
 // $nav_theme: ligth
 
+$theme: dark;
+
+$table_font_small: true;
+
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 @import 'node_modules/bootstrap-vue/src/index.scss';

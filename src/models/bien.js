@@ -79,6 +79,20 @@ export default {
 			show: true,
 		},
 		{
+			text: 'Foto etiqueta',
+			key: 'foto_etiqueta',
+			type: 'image',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Foto captura de pantalla',
+			key: 'foto_captura_de_pantalla',
+			type: 'image',
+			value: '',
+			show: true,
+		},
+		{
 			text: 'Causa bien',
 			key: 'causa_bien_id',
 			type: 'select',

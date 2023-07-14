@@ -6,59 +6,22 @@ export default {
 			type: 'text',
 			value: '',
 			not_show_on_form: true,
-			show: true,
+			not_show: true,
 		},
 
 		{
 			text: 'Dias',
+			key: 'dias_desde_alta',
+			function: 'getDiasDesdeAlta',
+			show_only_if_is_created: true,
+		},
+
+		{
+			text: 'Dias E.',
 			key: 'dias_en_estado_siniestro',
 			only_show: true,
-		},
-
-		{
-			text: 'Aseguradora',
-			key: 'aseguradora_id',
-			type: 'select',
-			value: 0,
-		},
-
-		{
-			text: 'Tipo de orden de Servicio',
-			key: 'tipo_orden_de_servicio_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
-
-		{
-			text: 'Estado siniestro',
-			key: 'estado_siniestro_id',
-			type: 'select',
-			value: 1,
-			show: true,
-		},
-
-		{
-			text: 'Estado general del siniestro',
-			key: 'estado_general_siniestro_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
-
-		{
-			text: 'Notas importantes',
-			key: 'notas_importantes',
-			type: 'textarea',
-			show: true,
-		},
-
-		{
-			text: 'Centro reparacion',
-			key: 'centro_reparacion_id',
-			type: 'select',
-			value: 0,
-			show: true,
+			filter_modal_position: 2,
+			show_only_if_is_created: true,
 		},
 
 		{
@@ -67,6 +30,57 @@ export default {
 			type: 'text',
 			value: '',
 			is_title: true,
+			filter_modal_position: 1,
+		},
+
+		{
+			text: 'Aseguradora',
+			key: 'aseguradora_id',
+			type: 'select',
+			value: 0,
+			filter_modal_position: 3,
+		},
+
+		{
+			text: 'Tipo de orden de Servicio',
+			key: 'tipo_orden_de_servicio_id',
+			type: 'select',
+			value: 0,
+		},
+
+		{
+			text: 'Estado siniestro',
+			key: 'estado_siniestro_id',
+			type: 'select',
+			value: 1,
+			show: true,
+			filter_modal_position: 4,
+		},
+
+		{
+			text: 'Estado general del siniestro',
+			key: 'estado_general_siniestro_id',
+			type: 'select',
+			value: 0,
+			not_show: true,
+		},
+
+		{
+			text: 'Notas importantes',
+			key: 'nota_importantes',
+			has_many: {
+				text: 'Nota importante',
+				model_name: 'nota_importante'
+			},
+			not_show: true,
+		},
+
+		{
+			text: 'Centro reparacion',
+			key: 'centro_reparacion_id',
+			type: 'select',
+			value: 0,
+			not_show: true,
 		},
 
 		{
@@ -90,7 +104,7 @@ export default {
 			key: 'orden_servicio',
 			type: 'text',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -98,6 +112,7 @@ export default {
 			key: 'asegurado_id',
 			type: 'search',
 			value: '',
+			filter_modal_position: 5,
 		},
 
 		{
@@ -106,6 +121,7 @@ export default {
 			type: 'date',
 			is_date: true,
 			value: '',
+			not_show: true,
 		},
 
 		{
@@ -114,6 +130,7 @@ export default {
 			type: 'date',
 			is_date: true,
 			value: '',
+			not_show: true,
 		},
 
 		{
@@ -121,6 +138,7 @@ export default {
 			key: 'descripcion_del_hecho',
 			type: 'text',
 			value: '',
+			not_show: true,
 		},
 
 		{
@@ -128,7 +146,6 @@ export default {
 			key: 'causa_siniestro_id',
 			type: 'select',
 			value: 0,
-			show: true,
 		},
 
 		{
@@ -143,7 +160,7 @@ export default {
 			key: 'domicilio_completo_google',
 			type: 'google_geocoder',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -151,7 +168,7 @@ export default {
 			key: 'entre_calles',
 			type: 'text',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -169,7 +186,6 @@ export default {
 			search_depends_on_from_api: true,
 			type: 'search',
 			value: 0,
-			show: true,
 		},
 
 		// {
@@ -215,7 +231,7 @@ export default {
 				],
 				can_not_modify: true,
 			},
-
+			not_show: true,
 		},	
 
 		{
@@ -223,7 +239,8 @@ export default {
 			key: 'logisticas',
 			has_many: {
 				model_name: 'logistica',
-			}
+			},
+			not_show: true,
 		},
 
 		{
@@ -241,7 +258,7 @@ export default {
 			key: 'comentarios_seguro',
 			type: 'textarea',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -249,7 +266,7 @@ export default {
 			key: 'costo_reporte',
 			type: 'number',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -257,7 +274,7 @@ export default {
 			key: 'denunciante',
 			type: 'text',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -265,7 +282,8 @@ export default {
 			key: 'foto_deposito_deducible',
 			type: 'image',
 			value: '',
-			show: true,
+			crop_aspect_ratio: null,
+			not_show: true,
 		},
 
 		{
@@ -274,7 +292,7 @@ export default {
 			type: 'date',
 			is_date: true,
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -283,7 +301,7 @@ export default {
 			type: 'date',
 			is_date: true,
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -292,7 +310,7 @@ export default {
 			type: 'date',
 			is_date: true,
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -301,7 +319,7 @@ export default {
 			type: 'date',
 			is_date: true,
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -310,7 +328,7 @@ export default {
 			type: 'number',
 			value: '',
 			is_price: true,
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -319,7 +337,7 @@ export default {
 			type: 'number',
 			value: '',
 			is_price: true,
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -327,7 +345,7 @@ export default {
 			key: 'notas_domicilio',
 			type: 'text',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -335,7 +353,7 @@ export default {
 			key: 'recomendacion',
 			type: 'textarea',
 			value: '',
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -344,7 +362,7 @@ export default {
 			type: 'number',
 			value: '',
 			is_price: true,
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -353,7 +371,7 @@ export default {
 			type: 'number',
 			value: '',
 			is_price: true,
-			show: true,
+			not_show: true,
 		},
 
 		{
@@ -362,7 +380,7 @@ export default {
 			type: 'number',
 			value: '',
 			is_price: true,
-			show: true,
+			not_show: true,
 		},
 
 	],
@@ -370,4 +388,5 @@ export default {
 	plural_model_name_spanish: 'Siniestros',
 	create_model_name_spanish: 'Nuevo',
 	text_delete: 'el',
+	color_display_function: true,
 }

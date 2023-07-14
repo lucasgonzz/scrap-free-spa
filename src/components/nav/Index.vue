@@ -1,5 +1,7 @@
 <template>
-	<nav-component></nav-component>
+	<div>
+		<nav-component></nav-component>
+	</div>
 </template>
 <script>
 export default {

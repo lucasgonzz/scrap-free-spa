@@ -160,6 +160,7 @@ export default {
 }
 </script>
 <style lang="sass">
+@import '@/sass/_custom.scss'
 .card-component
 	@media screen and (max-width: 576px)
 		width: 98%
@@ -173,8 +174,11 @@ export default {
 	display: flex
 	flex-direction: row  
 	margin: 1em 1%
-	background: #FFF
 	border-radius: 12px
+	@if ($theme == 'dark') 
+		background: #333
+	@else 
+		background: #FFF
 	.title 
 		font-size: 30px 
 		font-weight: bold

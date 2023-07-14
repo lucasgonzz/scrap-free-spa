@@ -37,6 +37,11 @@ export default {
 	},
 	computed: {
 		stencil_props() {
+			if (this.aspect_ratio_disabled) {
+				return {
+					aspectRatio: 0,
+				}
+			}
 			if (this.prop.crop_aspect_ratio) {
 				return {
 					aspectRatio: this.prop.crop_aspect_ratio
@@ -59,6 +64,16 @@ export default {
 			console.log(this.coordinates)
 		},
 		uploadImage() {
+
+			// let cropData = this.$refs.cropper.getCropData()
+			// cropData.x = Math.round(cropData.x * 100) / 100
+			// cropData.y = Math.round(cropData.y * 100) / 100
+			// cropData.width = Math.round(cropData.width * 100) / 100
+			// cropData.height = Math.round(cropData.height * 100) / 100
+
+			// console.log('cropData')
+			// console.log(cropData)
+
 			this.loading = true
 			this.$api.post(this.getImageUploadUrl(this.prop), {
 				...this.coordinates,
@@ -70,6 +85,8 @@ export default {
 				this.loading = false
 				if (this.model_name == 'user') {
 					this.$store.commit('auth/setUser', res.data.model)
+					this.$toast.success('Imagen actualizada')
+					this.$bvModal.hide('cropper-'+this.prop.key)
 				} else {
 					this.$bvModal.hide('cropper-'+this.prop.key)
 					if (res.data.model) {

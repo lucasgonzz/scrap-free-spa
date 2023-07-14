@@ -31,7 +31,7 @@ const routes = [
     },
     
     {
-        path: '/siniestros',
+        path: '/siniestros/:view?',
         name: 'siniestro',
         component: () => import('@/views/Siniestro')
     },

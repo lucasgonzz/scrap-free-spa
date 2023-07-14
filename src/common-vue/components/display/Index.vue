@@ -189,7 +189,7 @@ export default {
 	data() {
 		return {
 			index_to_show: 1,
-			cant_models_to_show: 20,
+			cant_models_to_show: 40,
 		}
 	},
 	computed: {
@@ -209,6 +209,9 @@ export default {
 			return this.$store.state[this.model_name].loading
 		},
 		_models() {
+			console.log('ACAAAAAAA') 
+			console.log('models:')
+			console.log(this.models)
 			if (this.models.length || this.show_models_if_empty) {
 				console.log('return models que vinieron por props')
 				return this.models
@@ -218,11 +221,13 @@ export default {
 					// console.log('return filtered_models')
 					return filtered
 				}  
-				// console.log('return store_models')
+				console.log('return store_models')
 				return this.$store.state[this.model_name].models 
 			}
 		},
 		models_to_show() {
+			console.log('_models')
+			console.log(this._models)
 			return this._models.slice(0, (this.cant_models_to_show * this.index_to_show))
 		},
 		lists() {
@@ -264,6 +269,7 @@ export default {
 }
 </script>
 <style lang="sass">
+@import '@/sass/_custom.scss'
 .display
 	table 
 		@media screen and (max-width: 768px)
@@ -272,6 +278,8 @@ export default {
 		text-align: left
 		font-weight: bold
 		margin-top: 15px
+		@if ($theme == 'dark') 
+			color: rgba(255,255,255,.9)
 		@media screen and (max-width: 768px)
 			padding-left: 15px	
 </style>

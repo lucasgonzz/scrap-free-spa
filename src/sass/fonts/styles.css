@@ -83,3 +83,33 @@
 .icon-check:before {
   content: "\6f";
 }
+.icon-download:before {
+  content: "\70";
+}
+.icon-mail:before {
+  content: "\71";
+}
+.icon-truck-0:before {
+  content: "\72";
+}
+.icon-truck-2:before {
+  content: "\73";
+}
+.icon-heart:before {
+  content: "\74";
+}
+.icon-heart-o:before {
+  content: "\75";
+}
+.icon-cancel:before {
+  content: "\76";
+}
+.icon-file-text:before {
+  content: "\77";
+}
+.icon-top:before {
+  content: "\78";
+}
+.icon-down:before {
+  content: "\79";
+}

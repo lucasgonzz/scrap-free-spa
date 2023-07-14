@@ -30,9 +30,9 @@ module.exports = {
             skipWaiting: true,
             exclude: ['.htaccess'],
         },
-		themeColor: "#42b883",
-		msTileColor: "#42b883",
-		name: "TransporteAgil",
+		themeColor: "#389c6f",
+		msTileColor: "#389c6f",
+		name: "ScrapFree",
 		manifestOptions: {
 		  icons: [
 		    {

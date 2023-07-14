@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <error-modal></error-modal>
         <logo-loading></logo-loading>
         <nav-component></nav-component>
         <b-container
@@ -9,19 +10,20 @@
     </div>
 </template>
 <script>
+import ErrorModal from '@/common-vue/components/error/Index'
 import LogoLoading from '@/common-vue/components/LogoLoading'
 import NavComponent from '@/components/nav/Index'
 
 import app from '@/common-vue/mixins/app'
-import call_methods from '@/mixins/call_methods'
 export default {
-    mixins: [app], 
+    mixins: [app],
     components: {
+        ErrorModal,
         LogoLoading, 
         NavComponent,
     },
     created() {
-        this.$store.dispatch('auth/me') 
+        this.$store.dispatch('auth/me')
         .then(() => {
             if (!this.authenticated) {
                 if (this.route_name != 'login' && !this.use_home_page) {
@@ -34,14 +36,17 @@ export default {
     },
     watch: {
         authenticated() {
+            console.log('watch de authenticated')
             if (!this.authenticated) {
                 if (this.route_name != 'passwordReset' && this.route_name != 'login') {
                     this.$router.replace({name: 'login'})
                 } 
             } else {
                 this.checkPermissionForCurrentRoute()
-                this.callMethods(call_methods)
+                this.callMethods()
                 this.listenChannels()
+                // this.listenChannelsLocal()
+                // this.startMethods()
             }
         }
     },
@@ -51,5 +56,6 @@ export default {
 @import "./sass/fonts/styles.css"
 @import '@/common-vue/sass/app.sass'
 @import '@/sass/_custom.scss'
+@import '@/sass/app.sass'
 
 </style>

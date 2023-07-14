@@ -17,8 +17,10 @@
 		:models_to_search="models_to_search"
 		:save_if_not_exist="save_if_not_exist"
 		:show_btn_create="show_btn_create"
+		:search_from_api="search_from_api"
 		@callSearchModal="callSearchModal"
 		@setQuery="setQuery"
+		@setNotShowModel="setNotShowModel"
 		@setSelected="setSelected"></search-modal>
 
 		<div
@@ -92,6 +94,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		search_from_api: {
+			type: Boolean,
+			default: false,
+		},
 		show_selected: {
 			type: Boolean,
 			default: true,
@@ -108,6 +114,10 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		clear_query_on_model_change: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -115,6 +125,7 @@ export default {
 			models_to_search: [],
 			preview_results: [],
 			selected_model: null,
+			not_show_modal: false,
 		}
 	},
 	computed: {
@@ -141,6 +152,10 @@ export default {
 		this.setSelectedModelProp()
 	},
 	methods: {
+		setNotShowModel(value) {
+			console.log('SETEANDO not_show_modal con '+value)
+			this.not_show_modal = value
+		},
 		modelSaved(model) {
 			if (this.prop.is_between) {
 				if (this.prop.is_between.parent_model_prop) {
@@ -190,8 +205,8 @@ export default {
 			}
 		},
 		setModelsToSearch() {
-			console.log('setModelsToSearch') 
-			let models = []
+			// console.log('setModelsToSearch') 
+			let models = []		
 			if (this.prop && this.prop.depends_on && this.model) {
 				if (!this.prop.search_depends_on_from_api) {
 				 	models = this.modelsStoreFromName(this.model_name)
@@ -224,17 +239,16 @@ export default {
 				models = this.modelsStoreFromName(this.model_name)
 			}
 			this.models_to_search = models 
-			console.log(this.models_to_search) 
 		},
 		setSelectedModelProp() {
+			console.log('watch de MDOEL')
 			if (this.show_selected) {
-				if (this.prop.set_model_on_click_or_prop_with_query_if_null) {
+				if (this.prop && this.prop.set_model_on_click_or_prop_with_query_if_null) {
 					this.query = this.model[this.prop.key]
 					this.selected_model = null
-					console.log('ENTRO PAPA: '+this.query)
+					console.log('entro aca')
 				} else if (this.model && this.model[this.prop.key]) {
 					if (this.prop.use_store_models) {
-						console.log('entrooo')
 						let model = this.$store.state[this.modelNameFromRelationKey(this.prop)].models.find(_model => {
 							return _model.id == this.model[this.prop.key]
 						})
@@ -245,17 +259,23 @@ export default {
 					}
 				} 
 			} 
+			if (this.clear_query_on_model_change) {
+				console.log('clear_query_on_model_change')
+				this.query = ''
+			}
 		},
 		setQuery(value) {
 			this.query = value 
 		},
 		callSearchModal() {
-			this.setModelsToSearch()
-			this.setPreviewResults()
-			this.$bvModal.show(this.id+'-search-modal')
-			setTimeout(() => {
-				document.getElementById(this.id+'-search-modal-input').focus()
-			}, 100)
+			if (!this.not_show_modal) {
+				this.setModelsToSearch()
+				this.setPreviewResults()
+				this.$bvModal.show(this.id+'-search-modal')
+				setTimeout(() => {
+					document.getElementById(this.id+'-search-modal-input').focus()
+				}, 100)
+			}
 		},
 		setSelected(model) {
 			this.selected_model = model 
@@ -266,7 +286,7 @@ export default {
 			})
 			if (this.clear_query) {
 				this.query = ''
-				console.log('se limpio')
+				console.log('se limpio query')
 			}
 		},
 	}
@@ -299,6 +319,10 @@ export default {
 		border-radius: 0.25rem 0 0 0.25rem
 		i
 			color: rgba(0, 0, 0, .6)
+		@if ($theme == 'dark') 
+			background: #333 !important
+			i
+				color: #FFF
 	.bg-gray 
 		background: #e9ecef !important
 	.input-search

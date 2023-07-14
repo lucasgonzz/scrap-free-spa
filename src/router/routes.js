@@ -3,6 +3,9 @@ export default [
 		model_name: 'siniestro',
 		path: '/siniestros',
 		name: 'siniestro',
+		params: {
+			view: 'todos',
+		},
 		component: '@/views/Siniestro',
 		can: 'siniestro.index',
 	},

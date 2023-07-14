@@ -1,9 +1,13 @@
+import moment from 'moment'
 export default {
 	computed: {
 	},
 	methods: {
 		showRoute(route) {
 			let show = true 
+			if (route.not_show) {
+				return false
+			}
 			if (route.check_is_owner) {
 				show = this.is_owner 
 			}
@@ -22,7 +26,16 @@ export default {
 				}
 			}
 			if (show && route.if_has_extencion) {
-				show = this.hasExtencion(route.if_has_extencion)
+				if (typeof route.if_has_extencion == 'string') {
+					show = this.hasExtencion(route.if_has_extencion)
+				} else {
+					console.log('if_has_extencion array en '+route.name)
+					route.if_has_extencion.forEach(extencion => {
+						if (!this.hasExtencion(extencion)) {
+							show = false
+						}
+					})
+				}
 			}
 			return show 
 		},
@@ -35,12 +48,16 @@ export default {
 		setRoute(route) {
 			if (route.model_name) {
 				let models = this.$store.state[route.model_name].models 
-				if (!models.length) {
+				if (!models.length && (!this.is_mobile || this.downloadOnMobile(route.model_name)) && (route.model_name != 'article' || this.download_articles)) {
 					this.$store.dispatch(route.model_name+'/getModels')
 					console.log('No tiene models, llamando getModels')
 				} 
 				if (this.route_name == route.model_name) {
 					this.$store.dispatch(route.model_name+'/getModels')
+					if (this.$store.state[route.model_name].from_dates) {
+						this.$store.commit(route.model_name+'/setFromDate', moment().format('YYYY-MM-DD'))
+						this.$store.commit(route.model_name+'/setUntilDate', '')
+					}
 					console.log('Ya estaba en la ruta, llamando getModels')
 				} 
 				if (this.route_name != route.model_name) {
@@ -72,13 +89,18 @@ export default {
 			return ''
 		},
 		getRouteName(route) {
-			if (route.model_name) {
+			if (route.model_name && typeof route.name == 'undefined') {
 				return route.model_name
 			} 
 			return route.name
 		},
 		logout() {
 			this.$store.dispatch('auth/logout')
+			.then(() => {
+				require('@/mixins/call_methods').default.forEach(model_name => {
+					this.$store.commit(model_name+'/setModels', [])
+				}) 
+			})
 		},
 		toLogin() {
 			this.$router.push({name: 'Login'})

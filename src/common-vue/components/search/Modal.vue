@@ -23,7 +23,8 @@ hide-footer
 			:prop="prop"
 			:model_name="model_name"></btn-create-model>
 		</div>
-		<div>
+		<div
+		v-if="!saving_if_not_exist">
 			<div
 			v-if="loading || results.length">
 				<p
@@ -38,15 +39,15 @@ hide-footer
 				:loading="loading"
 				:models="results"
 				:model_name="model_name"
-				:set_model_on_row_selected="false"
 				:striped="false"
+				:set_model_on_row_selected="false"
 				@onRowSelected="onRowSelected"></table-component>	
 			</div>
 			<div
 			v-else>
 				<div class="text-with-icon">
 					<i class="icon-search"></i>
-					No se encontraron resultados
+					No se encontraron resultados. Precione ENTER
 				</div>
 				<div 
 				v-if="prop && save_if_not_exist && query.length"
@@ -57,8 +58,14 @@ hide-footer
 			</div>
 		</div>
 		<div
+		class="all-center-md"
 		v-if="saving_if_not_exist">
-			Guardando
+			<b-spinner
+			variant="primary"></b-spinner>
+			<span
+			class="p-l-15">
+				Guardando {{ singular(model_name) }}
+			</span>
 		</div>
 	</div>
 </b-modal>
@@ -93,6 +100,7 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		search_from_api: Boolean,
 	},
 	data() {
 		return {
@@ -149,7 +157,7 @@ export default {
 			this.$emit('callSearchModal')
 		},
 		callSearch(e) {
-			if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
+			if (e.key != 'ArrowDown' && e.key != 'ArrowUp' && e.key != 'Enter') {
 				this.loading = true 
 				if (this.interval) {
 		            window.clearInterval(this.interval)
@@ -177,14 +185,17 @@ export default {
 				let results = []
 				this.searching = true
 
-				if (this.prop.search_depends_on_from_api) {
+				if (this.searchFromApi()) {
 					console.log('enviando api')
-					this.$api.post('search-from-modal/'+this.model_name, {
+					let info = {
 						prop_to_filter: this.prop_to_filter,
-						depends_on_key: this.prop.depends_on,
-						depends_on_value: this.model[this.prop.depends_on],
 						query_value: this.query,
-					})
+					}
+					if (this.prop.depends_on) {
+						info.depends_on_key = this.prop.depends_on
+						info.depends_on_value = this.model[this.prop.depends_on]
+					}
+					this.$api.post('search-from-modal/'+this.model_name, info)
 					.then(res => {
 						console.log('llego desde api:')
 						console.log(res.data.models)
@@ -211,6 +222,21 @@ export default {
 				}
 			}
 		},
+		searchFromApi() {
+			if (this.search_from_api) {
+				return true
+			}
+			if (this.prop && this.prop.search_from_api || this.prop.search_depends_on_from_api) {
+				return true 
+			}
+			if (this.is_mobile && !this.downloadOnMobile(this.model_name) && !this.$store.state[this.model_name].models.length) {
+				return true 
+			}
+			if (this.$store.state[this.model_name].loading) {
+				return true 
+			}
+			return false
+		},
 		finishSearch() {
 			console.log('continua')
 			this.orderAlpabethic()
@@ -221,8 +247,6 @@ export default {
 		},
 		orderAlpabethic() {
 			this.results = this.results.sort((a, b) => {
-				console.log(a[this.prop_to_filter.key])
-				console.log(b[this.prop_to_filter.key])
 				return a[this.prop_to_filter.key].localeCompare(b[this.prop_to_filter.key])
 			})
 		},
@@ -240,14 +264,16 @@ export default {
 		enterSelect() { 
 			if (!this.loading) {
 				if (this.selected_index != -1 && this.results.length) {
-					this.$emit('setSelected', this.results[this.selected_index])
+					// this.$emit('setSelected', this.results[this.selected_index])
+					this.emitSetSelected(this.results[this.selected_index])
 				} else if (this.save_if_not_exist) {
 					this.saveIfNotExist()
 				} else {
-					this.$emit('setSelected', null)
+					this.emitSetSelected(null)
+					// this.$emit('setSelected', null)
 				}
-				this.results = []
-				this.$bvModal.hide(this.modal_id)
+				// this.results = []
+				// this.$bvModal.hide(this.modal_id)
 			} else {
 				this.$toast.error('Espere a que termine la busqueda, por favor')
 			}
@@ -287,6 +313,7 @@ export default {
 				} else {
 					this.$store.commit(this.model_name+'/add', res.data.model)
 				}
+				this.$bvModal.hide(this.modal_id)
 			})
 			.catch(err => {
 				this.saving_if_not_exist = false
@@ -310,10 +337,21 @@ export default {
 		},	
 		onRowSelected(model) {
 			console.log('onRowSelected')
+			this.emitSetSelected(model)
+			// this.$emit('setNotShowModel', true)
+			// this.$emit('setSelected', model)
+			// this.results = []
+			// this.$bvModal.hide(this.modal_id)
+		},
+		emitSetSelected(model) {
+			this.$emit('setNotShowModel', true)
 			this.$emit('setSelected', model)
 			this.results = []
 			this.$bvModal.hide(this.modal_id)
-		}
+			setTimeout(() => {
+				this.$emit('setNotShowModel', false)
+			}, 500)
+		},
 	}
 }
 </script>

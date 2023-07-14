@@ -55,6 +55,10 @@ export default {
 		padding: 0 .5em
 		font-size: 1.2em
 		cursor: pointer
+		@if ($theme == 'dark') 
+			color: rgba(255, 255, 255, .9)
+		@else 
+			color: #333 
 	[class^='icon-']:before
 		margin-right: 0
 	.selected-display

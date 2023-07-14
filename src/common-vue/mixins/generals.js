@@ -1,7 +1,9 @@
 import moment from 'moment'
 moment.locale('es')
 import numeral from 'numeral'
+import VueScreenSize from 'vue-screen-size'
 export default {
+	mixins: [VueScreenSize.VueScreenSizeMixin],
 	computed: {
 		user() {
 			return this.$store.state.auth.user
@@ -57,6 +59,21 @@ export default {
 		route_to_redirect_if_unauthenticated() {
             return process.env.VUE_APP_ROUTE_TO_REDIRECT_IF_UNAUTHENTICATED
 		},
+		inputs_full_size() {
+            return typeof process.env.VUE_APP_INPUTS_FULL_SIZE != 'undefined' && process.env.VUE_APP_INPUTS_FULL_SIZE
+		},
+		aspect_ratio_disabled() {
+            return typeof process.env.VUE_APP_ASPECT_RATIO_DISABLED != 'undefined' && process.env.VUE_APP_ASPECT_RATIO_DISABLED
+		},
+		theme_dark() {
+            return typeof process.env.VUE_APP_THEME_DARK != 'undefined' && process.env.VUE_APP_THEME_DARK
+		},
+		app_theme() {
+			if (typeof process.env.VUE_APP_APP_THEME != 'undefined') {
+				return process.env.VUE_APP_APP_THEME
+			}
+			return 'light'
+		},
 		image_url_prop_name() {
 			if (process.env.VUE_APP_IMAGE_URL_PROP_NAME) {
 				return process.env.VUE_APP_IMAGE_URL_PROP_NAME
@@ -81,8 +98,46 @@ export default {
 			}
 			return false
 		},
+		has_extra_config() {
+			if (typeof process.env.VUE_APP_HAS_EXTRA_CONFIG != 'undefined' && process.env.VUE_APP_HAS_EXTRA_CONFIG) {
+				return true
+			}
+			return false
+		},
+		is_mobile() {
+			if (this.$vssWidth < '992') {
+				return true
+			}
+			return false
+		},
+		// extra_config() {
+		// 	if (this.has_extra_config) {
+		// 		return require('@/mixins/extra_config').default
+		// 	}
+		// }, 
 	},
 	methods: {
+		hasColor(model_name) {
+			return typeof require('@/models/'+model_name).default.color_display_function != 'undefined'
+		},
+		downloadOnMobile(model_name) {
+			return typeof this.$store.state[model_name].not_download_on_mobile == 'undefined' || !this.$store.state[model_name].not_download_on_mobile
+		},
+		getInputSize(prop) {
+			let _class = 'input-'
+			if (prop.size) {
+				if (prop.size == 'sm') {
+					_class += 'sm'
+				} else if (prop.size == 'md') {
+					_class += 'md'
+				} else if (prop.size == 'lg') {
+					_class += 'lg'
+				}
+			} else {
+				_class += 'md'
+			}
+			return _class
+		},
 		propType(prop, model) {
 			if (prop.type_if) {
 				let array = prop.type_if.condition.split('.')
@@ -183,8 +238,11 @@ export default {
 			}
 			return this.modelPropertiesFromName(model_name)
 		},
-		propText(prop, capitalize = true) {
+		propText(prop, capitalize = true, from_table = false) {
 			let text 
+			if (from_table && prop.table_text) {
+				return prop.table_text
+			}
 			if (prop.text) {
 				text = prop.text 
 			} else {
@@ -215,7 +273,7 @@ export default {
 		},
 		getCol(prop, size, input_full_width = false) {
 			// if (this.input_full_width || this.useSearch(prop) || prop.has_many || (prop.belongs_to_many && prop.belongs_to_many.can_not_modify) || prop.type == 'image' || prop.type == 'images') {
-			if (input_full_width || prop.has_many || prop.belongs_to_many || prop.type == 'images') {
+			if (this.inputs_full_size || input_full_width || prop.has_many || prop.belongs_to_many || prop.type == 'images') {
 				return 12
 			} 
 			return size
@@ -272,6 +330,9 @@ export default {
 			if (check_show_on_form && property.not_show_on_form) {
 				return false
 			}
+			if (property.show_only_if_is_created && !model.id) {
+				return false
+			}
 			if (check_if_is_empty && ((!model[property.key] || model[property.key] == '') && !property.function )) {
 				return false
 			}
@@ -290,8 +351,6 @@ export default {
 					sub_prop = array[1]
 				}
 				console.log('prop_to_check en '+property.text)
-				console.log(property)
-				console.log('v_if_not_check_if_null en '+property.v_if_not_check_if_null)
 				if (property.v_if_not_check_if_null || model[prop] || property.v_if_from_models_store) {
 					// if (sub_prop && model[prop][sub_prop]) {
 					if (property.v_if_from_models_store) {
@@ -447,7 +506,7 @@ export default {
 							return finded_model[prop_name]	
 						}
 						return null
-					} else {
+					} else if (model[relationship] && model[relationship][prop_name]) {
 						return model[relationship][prop_name] 
 					}
 					// let _model = this.$store.state[relationship].models.find(model_ => {
@@ -614,7 +673,6 @@ export default {
 				})
 			} 
 			models.forEach(item => {
-				
 				let text = item[prop_name] 
 				if (prop.select_text_to_add) {
 					text += prop.select_text_to_add
@@ -624,6 +682,12 @@ export default {
 				}
 				options.push({value: item.id, text})
 			})
+			if (model_name) {
+				options.push({
+					value: -10,
+					text: this.create_spanish(this.modelNameFromRelationKey(prop))
+				})
+			}
 			return options
 		},
 		booleanOptions(prop, model = null) {

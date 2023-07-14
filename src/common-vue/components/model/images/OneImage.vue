@@ -24,7 +24,10 @@
 			        variant="success"></b-spinner>
 
 					<div slot="error">
-						Imagen no encontrada
+						<p
+						class="m-b-0">
+							Imagen no encontrada
+						</p>
 					</div>
 				</vue-load-image>
 			</div>
@@ -89,7 +92,7 @@ export default {
 	},
 	methods: {
 		uploadImage() {
-			this.$bvModal.show('upload-image-'+this.prop.key)
+			this.$emit('uploadImage')
 		},
 		setDelete() {
 			this.$store.commit(this.model_name+'/setDeleteImageProp', this.prop.key)

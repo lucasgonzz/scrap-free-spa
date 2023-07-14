@@ -27,7 +27,7 @@ hide-footer>
 		:models="results"
 		:set_model_on_row_selected="false"
 		:striped="false"
-		@clicked="setSelected"></table-component>	
+		@onRowSelected="setSelected"></table-component>	
 	</div>
 	<div
 	v-else>
@@ -150,6 +150,7 @@ export default {
 			this.model[this.prop.key] = result.address 
 			this.model[this.prop.key+'_lat'] = result.geometry.location.lat()
 			this.model[this.prop.key+'_lng'] = result.geometry.location.lng()
+			this.$bvModal.hide(this.id)
 		}
 	}
 }

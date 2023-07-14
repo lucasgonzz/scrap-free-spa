@@ -11,7 +11,7 @@ export default {
 		from_dates: false,
 		is_selecteable: false,
 
-		use_per_page: true,
+		use_per_page: false,
 		// Se usa cuando es belongs_to_many_from_dates. Por ejemplo para ver los pagos de un cliente
 		// plural_model_name: '',
 		// selected_model: null,

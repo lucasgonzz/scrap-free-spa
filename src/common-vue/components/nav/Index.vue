@@ -2,16 +2,28 @@
     <div
     v-if="show"
     class="nav-component">
+        <btn-scroll-top></btn-scroll-top>
         <b-navbar 
-        toggleable="md">
-            <b-navbar-brand
-            :to="{name: route_index}">
-                <img src="@/assets/logo.png" alt="">
-            </b-navbar-brand>
+        toggleable="lg">
+            <div>
+                <b-navbar-brand
+                :to="{name: route_index}">
+                    <img src="@/assets/logo.png" alt="">
+                </b-navbar-brand>
+
+                <b-button
+                class="m-r-10"
+                size="sm"
+                variant="outline-primary"
+                v-b-toggle.download-resources>
+                    <i class="icon-download"></i>
+                </b-button>
+            </div>
 
             <div
             class="cont-bars d-lg-none">
                 <help-dropdown></help-dropdown>
+                <slot name="right_dropdown"></slot>
 
                 <b-navbar-toggle target="nav-mobile">
                     <i class="icon-bars"></i>
@@ -36,12 +48,19 @@
                         <template #button-content>
                             {{ user.name }}
                         </template>
-                        <b-dropdown-item 
+                        <configuration-dropdown></configuration-dropdown>
+                        <!-- <b-dropdown-item 
                         v-if="is_owner"
-                        @click="toConfiguration">
+                        v-b-modal="'user'">
                             <i class="icon-configuration"></i>
                             Configuracion
-                        </b-dropdown-item>
+                        </b-dropdown-item> -->
+
+                        <b-dropdown-divider
+                        v-if="is_owner"></b-dropdown-divider>
+
+                        <slot name="nav_dropdown"></slot>
+
                         <b-dropdown-item 
                         @click="logout">
                             <i class="icon-logout"></i>
@@ -60,7 +79,13 @@
         </b-navbar>
         <mobile></mobile>
 
+        <download-resources></download-resources>
+
         <update-models></update-models>
+
+        <user-config></user-config>
+
+        <update-password></update-password>
 
     </div>
 </template>
@@ -70,9 +95,14 @@ export default {
     mixins: [nav],
     components: {
         Mobile: () => import('@/common-vue/components/nav/Mobile'),
+        DownloadResources: () => import('@/common-vue/components/download-resources/Index'),
         NavItems: () => import('@/common-vue/components/nav/NavItems'),
         UpdateModels: () => import('@/common-vue/components/UpdateModels'),
         HelpDropdown: () => import('@/common-vue/components/nav/HelpDropdown'),
+        UserConfig: () => import('@/common-vue/components/nav/UserConfig'),
+        ConfigurationDropdown: () => import('@/common-vue/components/nav/ConfigurationDropdown'),
+        UpdatePassword: () => import('@/common-vue/components/nav/UpdatePassword'),
+        BtnScrollTop: () => import('@/common-vue/components/nav/BtnScrollTop'),
     },
     computed: {
         show() {
@@ -96,7 +126,8 @@ $color: ''
     .cont-bars
         display: flex
         .help-dropdown 
-            margin-top: -26px
+            // margin-top: -23px
+            list-style: none
     .navbar 
         background: #FFF
         height: 60px
@@ -127,6 +158,10 @@ $color: ''
                 @media screen and (max-width: 768px)
                     text-align: left !important
                     padding: .5em 1.5em
+                @media screen and (max-width: 1200px)
+                    font-size: 12px
+                @media screen and (min-width: 1200px)
+                    font-size: 14px
             &:hover
                 .nav-link 
                     font-weight: bold
@@ -137,7 +172,7 @@ $color: ''
                     background: $blue !important
                 @media screen and (min-width: 768px)
                     color: $blue !important
-                    font-size: 1.2em
+                    // font-size: 1.2em
                     font-weight: bold
         .dropdown 
             a 
