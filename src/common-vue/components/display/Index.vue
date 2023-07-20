@@ -5,136 +5,46 @@
 		:model_name="model_name"></load-pages-info>
 		<color-info
 		:model_name="model_name"></color-info>
-		<div
-		v-if="order_list_by === null || is_filtered">
-			<table-component
-			:show_created_at="show_created_at"
-			:show_btn_edit="show_btn_edit"
-			:properties="properties"
-			:loading="loading_prop"
-			:models="models_to_show"
-			:model_name="model_name"
-			:set_model_on_click="set_model_on_click"
-			:on_click_set_property="on_click_set_property"
-			@clicked="clicked"
-			v-if="_display == 'table'">
-				<template v-slot:btn-edit="slotProps">
-					<slot name="buttons" :model="slotProps.model"></slot>
-				</template>  
-				<template v-slot:default="slotProps">
-					<slot :model="slotProps.model"></slot>
-				</template>
-			</table-component>
+		<table-component
+		:order_list_by="order_list_by"
+		:properties="properties"
+		:loading="loading_prop"
+		:models="models_to_show"
+		:model_name="model_name"
+		:set_model_on_click="set_model_on_click"
+		:on_click_set_property="on_click_set_property"
+		v-if="_display == 'table'">
+			<template v-slot:btn-edit="slotProps">
+				<slot name="buttons" :model="slotProps.model"></slot>
+			</template>  
+			<template v-slot:table_right_options="slotProps">
+				<slot name="table_right_options" :model="slotProps.model"></slot>
+			</template>
+		</table-component>
 
-			<cards-component
-			:show_created_at="show_created_at"
-			:properties="properties"
-			:loading="loading_prop"
-			:models="models_to_show"
-			:model_name="model_name"
-			:set_model_on_click="set_model_on_click"
-			:on_click_set_property="on_click_set_property"
-			@clicked="clicked"
-			v-if="_display == 'cards'">
-				<template v-slot:default="slotProps">
-					<slot :model="slotProps.model"></slot>
-				</template>
-			</cards-component>
+		<cards-component
+		:show_created_at="show_created_at"
+		:properties="properties"
+		:loading="loading_prop"
+		:models="models_to_show"
+		:model_name="model_name"
+		:set_model_on_click="set_model_on_click"
+		:on_click_set_property="on_click_set_property"
+		@clicked="clicked"
+		v-if="_display == 'cards'">
+			<template v-slot:table_right_options="slotProps">
+				<slot name="table_right_options" :model="slotProps.model"></slot>
+			</template>
+		</cards-component>
 
-			<btn-add-to-show
-			@add="add"
-			:models="_models"
-			:models_to_show="models_to_show"></btn-add-to-show>
-		</div>
-		<div
-		v-else>
-			<div
-			v-if="loading_prop">
-				<table-component
-				:show_created_at="show_created_at"
-				:show_btn_edit="show_btn_edit"
-				:properties="properties"
-				:loading="loading_prop"
-				:models="[]"
-				:model_name="model_name"
-				:set_model_on_click="set_model_on_click"
-				:on_click_set_property="on_click_set_property"
-				@clicked="clicked"
-				v-if="_display == 'table'">
-					<template v-slot:btn-edit="slotProps">
-						<slot name="buttons" :model="slotProps.model"></slot>
-					</template>  
-					<template v-slot:default="slotProps">
-						<slot :model="slotProps.model"></slot>
-					</template>
-				</table-component>
-
-				<cards-component
-				:show_created_at="show_created_at"
-				:properties="properties"
-				:loading="loading_prop"
-				:models="[]"
-				:model_name="model_name"
-				:set_model_on_click="set_model_on_click"
-				:on_click_set_property="on_click_set_property"
-				@clicked="clicked"
-				v-if="_display == 'cards'">
-					<template v-slot:default="slotProps">
-						<slot :model="slotProps.model"></slot>
-					</template>
-				</cards-component>
-			</div>
-			<div
-			v-else>
-				<div
-				v-for="list in lists">
-					<p
-					class="list-title">
-						{{ list.name }}
-					</p>
-					<table-component
-					:show_created_at="show_created_at"
-					:show_btn_edit="show_btn_edit"
-					:properties="properties"
-					:loading="loading_prop"
-					:models="list.models"
-					:model_name="model_name"
-					:set_model_on_click="set_model_on_click"
-					:on_click_set_property="on_click_set_property"
-					@clicked="clicked"
-					v-if="_display == 'table'">
-						<template v-slot:btn-edit="slotProps">
-							<slot name="buttons" :model="slotProps.model"></slot>
-						</template>  
-						<template v-slot:default="slotProps">
-							<slot :model="slotProps.model"></slot>
-						</template>
-					</table-component>
-
-					<cards-component
-					:show_created_at="show_created_at"
-					:properties="properties"
-					:loading="loading_prop"
-					:models="list.models"
-					:model_name="model_name"
-					:set_model_on_click="set_model_on_click"
-					:on_click_set_property="on_click_set_property"
-					@clicked="clicked"
-					v-if="_display == 'cards'">
-						<template v-slot:default="slotProps">
-							<slot :model="slotProps.model"></slot>
-						</template>
-					</cards-component>
-					<hr>
-				</div>
-			</div>
-		</div>
-
-
+		<btn-add-to-show
+		@add="add"
+		:models="_models"
+		:models_to_show="models_to_show"></btn-add-to-show>
 	</div>
 </template>
 <script>
-import TableComponent from '@/common-vue/components/display/TableComponent'
+import TableComponent from '@/common-vue/components/display/table/Index'
 import CardsComponent from '@/common-vue/components/display/cards/Index'
 import BtnAddToShow from '@/common-vue/components/BtnAddToShow'
 export default {

@@ -195,18 +195,17 @@
 								</b-button>
 
 								<div
+								class="m-l-15"
 						    	v-if="prop.belongs_to_many && !prop.belongs_to_many.related_with_all && (!prop.type || prop.type != 'checkbox')">
 									<table-component
 									:loading="false"
 									:models="model[prop.key]"
-									:properties="propsToShowInBelongsToMany(prop)"
 									:model_name="prop.store"
 									:pivot="prop.belongs_to_many"
-									:pivot_model="model"
 									:set_model_on_row_selected="false"
 									show_pivot_created_at
 									:show_btn_edit="false">
-										<template v-slot:default="slotProps">
+										<template v-slot:table_right_options="slotProps">
 											<slot name="belongs" :model="slotProps.model"></slot>
 											<b-button
 											v-if="show_btn_remove_belongs_to_many"
@@ -301,7 +300,7 @@ import SearchComponent from '@/common-vue/components/search/Index'
 import HasMany from '@/common-vue/components/model/HasMany'
 import BelongsToManyCheckbox from '@/common-vue/components/model/BelongsToManyCheckbox'
 import Cards from '@/common-vue/components/display/cards/Index'
-import TableComponent from '@/common-vue/components/display/TableComponent'
+import TableComponent from '@/common-vue/components/display/table/Index'
 import Images from '@/common-vue/components/model/images/Index'
 import BtnLoader from '@/common-vue/components/BtnLoader'
 // import BtnDelete from '@/common-vue/components/BtnDelete'
@@ -356,7 +355,7 @@ export default {
 	},
 	created() {
 		// console.log('se creo modelForm')
-		this.setPropsToShowInBelongsToMany()
+		// this.setPropsToShowInBelongsToMany()
 		// this.setPropsTypes()
 	},
 	data() {
@@ -408,38 +407,61 @@ export default {
 			})
 			this.model[prop.key].splice(index, 1)
 		},
-		setPropsToShowInBelongsToMany() {
-			console.log('setPropsToShowInBelongsToMany')
-			this.properties.forEach(prop => {
-				if (prop.belongs_to_many && !prop.belongs_to_many.related_with_all && (!prop.type || prop.type != 'checkbox')) {
-					let to_show 
-					if (prop.belongs_to_many.props_to_show) {
-						to_show = prop.belongs_to_many.props_to_show
-					} else {
-						to_show = this.modelPropertiesFromName(prop.store)
-					}
-					if (prop.belongs_to_many.pivot_props_to_show) {
-						let map = prop.belongs_to_many.pivot_props_to_show.map(_prop => {
-							return {
-								..._prop,
-								from_pivot: true,
-							}
-						})
-						to_show = to_show.concat(map)
-					}
-					this.props_to_show_in_belongs_to_many.push({
-						prop_key: prop.key,
-						to_show,
-					}) 
-				}
-			})
-			console.log('props_to_show_in_belongs_to_many')
-			console.log(this.props_to_show_in_belongs_to_many)
-		},
+		// setPropsToShowInBelongsToMany() {
+		// 	console.log('setPropsToShowInBelongsToMany')
+		// 	this.properties.forEach(prop => {
+		// 		if (prop.belongs_to_many && !prop.belongs_to_many.related_with_all && (!prop.type || prop.type != 'checkbox')) {
+		// 			let to_show 
+		// 			if (prop.belongs_to_many.props_to_show) {
+		// 				to_show = prop.belongs_to_many.props_to_show
+		// 			} else {
+		// 				to_show = this.modelPropertiesFromName(prop.store)
+		// 			}
+		// 			if (prop.belongs_to_many.pivot_props_to_show) {
+		// 				let map = prop.belongs_to_many.pivot_props_to_show.map(_prop => {
+		// 					return {
+		// 						..._prop,
+		// 						from_pivot: true,
+		// 					}
+		// 				})
+		// 				to_show = to_show.concat(map)
+		// 			}
+		// 			this.props_to_show_in_belongs_to_many.push({
+		// 				prop_key: prop.key,
+		// 				to_show,
+		// 			}) 
+		// 		}
+		// 	})
+		// 	console.log('props_to_show_in_belongs_to_many')
+		// 	console.log(this.props_to_show_in_belongs_to_many)
+		// },
 		propsToShowInBelongsToMany(prop) {
-			return this.props_to_show_in_belongs_to_many.find(_prop => {
-				return _prop.prop_key == prop.key 
-			}).to_show
+			let props = []
+			console.log('propsToShowInBelongsToMany prop:')
+			console.log(prop)
+			if (prop.belongs_to_many.props_to_show) {
+				props = props.concat(prop.belongs_to_many.props_to_show)
+				console.log('se seteo con props_to_show, quedo asi')
+				console.log(props)
+			} else {
+				if (prop.store) {
+					props = this.modelPropertiesFromName(prop.store)
+				} else {
+					props = this.modelPropertiesFromName(prop.belongs_to_many.model_name)
+				}
+			}
+			if (prop.belongs_to_many.properties_to_set) {
+				prop.belongs_to_many.properties_to_set.forEach(prop_to_set => {
+					console.log('se esta agregando '+prop_to_set.key)
+					props.push({
+						...prop_to_set,
+						is_pivot_prop: true,
+					})
+				})
+			}
+			console.log('se mandan estas properties')
+			console.log(props)
+			return props
 		},
 		// setPropsTypes() {
 		// 	this.properties_formated = []
@@ -644,6 +666,7 @@ export default {
 		@if ($theme == 'dark')
 			border-top: 1px solid red !important 
 	.function-value
-		font-size: 1.5em
+		// font-size: 1.5em
 		font-weight: bold
+		margin-left: 25px
 </style>

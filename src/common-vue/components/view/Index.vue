@@ -71,8 +71,8 @@
 			<template v-slot:display_top>
 				<slot name="display_top"></slot>
 			</template>
-			<template v-slot:default="slotProps">
-				<slot :model="slotProps.model"></slot>
+			<template v-slot:table_right_options="slotProps">
+				<slot name="table_right_options" :model="slotProps.model"></slot>
 			</template>
 		</list>
 	</div>

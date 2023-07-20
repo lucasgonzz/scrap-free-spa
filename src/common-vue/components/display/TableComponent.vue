@@ -12,7 +12,7 @@
 				:striped="_striped"
 				:fields="fields"
 				:items="items"
-				hover 
+				:hover="hover" 
 				selectable 
 				ref="tableComponent"
 				:select-mode="_select_mode"
@@ -288,6 +288,10 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		hover: {
+			type: Boolean,
+			default: true
+		},
 	},
 	data() {
 		return {
@@ -533,7 +537,7 @@ export default {
 <style lang="sass">
 @import '@/sass/_custom.scss'
 .table 
-	background: #FFF
+	// background: #FFF
 	img 
 		width: 100px
 	input, textarea
@@ -543,9 +547,61 @@ export default {
 		@if ($table_font_small)
 			font-size: 1em
 			padding: 5px !important
+
+	tr
+		@if ($theme == 'dark')
+			color: #f1f3f4
+			&:hover 
+				border: 2px solid $blue !important
+				& > td 
+					color: #f1f3f4 !important
+					background-color: rgba(0,0,0,.8) !important
+ 
+		@else
+			color: #000
+
+	.b-table-row-selected 
+		border: 2px solid $blue !important
+		td 
+			color: #f1f3f4 !important
+			background-color: rgba(0,0,0,.8) !important
+
+
+	// th, td 
+	// 	white-space: nowrap
+	// 	font-weight: bold
+	// 	text-align: left
+		
+		th 
+			padding: 10px 15px
+			font-size: 17px
+			position: sticky
+			top: 0px
+			@if ($theme == 'dark')
+				color: #f1f3f4
+				background: #2C2C2C
+				border-right: 1px solid rgba(255,255,255,.2)
+				border-bottom: 1px solid rgba(255,255,255,.2)
+				&:last-child(2)
+					border-right: 0 !important
+			@else
+				background: #f1f3f4
+
+
+		td 
+			padding: 5px 15px
+			line-height: 25px
+			@if ($theme == 'dark')
+				background: #3E3E3E
+				border-bottom: 1px solid rgba(255,255,255,.2)
+			@else
+				background: #f1f3f4
+				
+
 	.width-300
 		display: inline-block
 		width: 300px
+
 	.cont-edit 
 		display: flex
 		flex-direction: row

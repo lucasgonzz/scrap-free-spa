@@ -147,15 +147,12 @@ export default {
 				if (array[1]) {
 					sub_prop = array[1]
 				}
-				console.log('type_if en '+prop.text)
 				
 				if (sub_prop) {
 					prop_to_check = model[model_prop][sub_prop]
 				} else {
 					prop_to_check = model[model_prop]
 				}
-				console.log('prop_to_check:')
-				console.log(prop_to_check) 
 				let result 
 				if (prop_to_check) {
 					prop_to_check = prop_to_check.toLowerCase()
@@ -170,10 +167,8 @@ export default {
 					result = prop_to_check != prop.type_if.value
 				}
 				if (result) {
-					console.log('return then: '+prop.type_if.then)
 					return prop.type_if.then
 				} else {
-					console.log('return else: '+prop.type_if.else)
 					return prop.type_if.else
 				}
 			}
@@ -225,7 +220,6 @@ export default {
                 let container = document.getElementById(el)
                 if (container) {
                     container.scrollTop = container.scrollHeight
-                    console.log('scrollBottom a '+container.scrollTop+' con '+container.scrollHeight)
                 }
             }, 200)
         },
@@ -350,7 +344,6 @@ export default {
 				if (array[1]) {
 					sub_prop = array[1]
 				}
-				console.log('prop_to_check en '+property.text)
 				if (property.v_if_not_check_if_null || model[prop] || property.v_if_from_models_store) {
 					// if (sub_prop && model[prop][sub_prop]) {
 					if (property.v_if_from_models_store) {
@@ -367,8 +360,6 @@ export default {
 							prop_to_check = model[prop]
 						}
 					} 
-					console.log('entro, prop_to_check:')
-					console.log(prop_to_check) 
 					if (typeof prop_to_check == 'String') {
 						prop_to_check = prop_to_check.toLowerCase()
 					}
@@ -493,13 +484,9 @@ export default {
 				} else if (this.idiom == 'es') {
 					prop_name = 'nombre'
 				}
-				// console.log('prop:')
-				// console.log(prop)
 				if (model[prop.key]) {
 					if (prop.use_store_models) {
-						// console.log('use_store_models, relationship: '+relationship)
 						let finded_model = this.$store.state[relationship].models.find(_model => {
-							// console.log('comparando '+_model.id+' con '+model[prop.key])
 							return _model.id == model[prop.key]
 						})
 						if (typeof finded_model != 'undefined') {
@@ -552,8 +539,6 @@ export default {
 				return this.price(model[prop.key]) 
 			}
 			if (prop.type == 'search') {
-				// console.log('typeof de '+prop.key)
-				// console.log(typeof model[prop.key])
 				if (typeof model[prop.key] == 'array') {
 					return model[prop.key].length 
 				} else if (typeof model[prop.key] == 'object' && model[prop.key]) {
@@ -564,7 +549,7 @@ export default {
 					}
 				} 
 			}
-			if (prop.belongs_to_many) {
+			if (prop.belongs_to_many && typeof model[prop.key] != 'undefined') {
 				return model[prop.key].length
 			}
 			if (prop.has_many) {
@@ -657,14 +642,10 @@ export default {
 				} else if (prop.options_from_prop) {
 					let _model_name = prop.options_from_prop.split('.')[0]
 					let _prop = prop.options_from_prop.split('.')[1]
-					console.log('_model_name:' +_model_name)
-					console.log('_prop:' +_prop)
-					console.log('models:')
 					let _model = this.$store.state[_model_name].models.find(_model => {
 						return _model.id == model[_model_name+'_id']
 					})
 					models = _model[_prop]
-					console.log(models)
 				}
 			}
 			if (prop.depends_on && model) {
@@ -713,6 +694,9 @@ export default {
 				result = string.toLowerCase().replaceAll(' ', '-')
 			}
 			return result.replaceAll('_', '-')
+		},
+		routeToString(route) {
+			return route.replaceAll('-', ' ')
 		},
 		capitalize(str) {
 			return str.charAt(0).toUpperCase() + str.slice(1)

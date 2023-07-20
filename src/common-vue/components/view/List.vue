@@ -16,8 +16,8 @@
 		:properties="properties"
 		@clicked="clicked"
 		:model_name_spanish="model_name_spanish">
-			<template v-slot:default="slotProps">
-				<slot :model="slotProps.model"></slot>
+			<template v-slot:table_right_options="slotProps">
+				<slot name="table_right_options" :model="slotProps.model"></slot>
 			</template>
 		</display>
 	</div>

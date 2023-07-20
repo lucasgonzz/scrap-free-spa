@@ -46,8 +46,8 @@ hide-footer
 			<div
 			v-else>
 				<div class="text-with-icon">
-					<i class="icon-search"></i>
-					No se encontraron resultados. Precione ENTER
+					<i class="icon-eye-slash"></i>
+					No se encontraron resultados
 				</div>
 				<div 
 				v-if="prop && save_if_not_exist && query.length"

@@ -27,7 +27,7 @@ export default {
 				return this.models 
 			} else {
 				return this.models.filter(model => {
-					return model.gestor_scrap_free_id == this.gestor_scrap_free.name 
+					return model.gestor_scrap_free_id == this.gestor_scrap_free.id 
 				})
 			}
 		},
@@ -38,7 +38,7 @@ export default {
 		},	
 		gestor_scrap_free() {
 			return this.gestores_scrap_free.find(gestor_scrap_free => {
-				return gestor_scrap_free.name == this.view 
+				return gestor_scrap_free.nombre.toLowerCase() == this.routeToString(this.view) 
 			})
 		},
 		gestores_scrap_free() {

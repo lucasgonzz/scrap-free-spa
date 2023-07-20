@@ -145,7 +145,7 @@ export default {
 	},
 	created() {
 		if (!this.set_view && !this.set_sub_view) {
-			if (typeof this.items != 'undefined' && this.items.length && !this.selected_item) {
+			if (typeof this.items != 'undefined' && this.items && this.items.length && !this.selected_item) {
 				this.select(this.items[0])
 			}
 		}
@@ -234,7 +234,6 @@ export default {
 				this.$bvModal.show(item.is_for_modal)
 				return
 			}
-			console.log('this.set_view: '+this.set_view)
 			if (this.set_view) {
 				if (this.view != this.routeString(this.routeValue(item))) {
 					this.$router.push({params: {view: this.routeString(this.routeValue(item))}})

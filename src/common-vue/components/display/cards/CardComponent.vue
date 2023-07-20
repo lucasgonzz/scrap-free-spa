@@ -71,7 +71,7 @@
 			</div>
 			<div
 			class="p-15">
-				<slot v-bind:model="model"></slot>
+				<slot name="table_right_options" v-bind:model="model"></slot>
 			</div>
 		</div>
 	</div>
