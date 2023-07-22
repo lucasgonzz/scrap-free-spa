@@ -48,8 +48,8 @@ export default {
 .display-nav 
 	display: flex
 	justify-content: flex-end
-	@media screen and (max-width: 576px)
-		width: 100%
+	// @media screen and (max-width: 576px)
+	// 	width: 100%
 		// margin-top: 15px
 	.item 
 		padding: 0 .5em

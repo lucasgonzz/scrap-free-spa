@@ -2,13 +2,16 @@
 <view-component
 show_filter_modal
 :models_to_show="models_to_show"
-:horizontal_nav_items="horizontal_nav_items"
-horizontal_nav_set_view
 show_models_if_empty
 order_list_by="estado_siniestro"
-model_name="siniestro">
+model_name="siniestro"
+:table_height_para_restar="60">
 	<template #model_modal_header>
 		<pdf-buttons></pdf-buttons>
+	</template>
+
+	<template #view_footer>
+		<gestores-nav></gestores-nav>
 	</template>
 </view-component>	
 </template>
@@ -17,6 +20,7 @@ export default {
 	components: {
 		ViewComponent: () => import('@/common-vue/components/view/Index'),
 		PdfButtons: () => import('@/components/siniestro/components/PdfButtons'),
+		GestoresNav: () => import('@/components/siniestro/components/GestoresNav'),
 	},
 	computed: {
 		models() {
@@ -26,18 +30,16 @@ export default {
 			if (this.view == 'todos') {
 				return this.models 
 			} else {
+				console.log('entregando filtrados')
 				return this.models.filter(model => {
 					return model.gestor_scrap_free_id == this.gestor_scrap_free.id 
 				})
+				console.log(this.models)
 			}
 		},
-		horizontal_nav_items() {
-			let items = [{nombre: 'Todos'}]
-			items = items.concat(this.gestores_scrap_free)
-			return items 
-		},	
 		gestor_scrap_free() {
 			return this.gestores_scrap_free.find(gestor_scrap_free => {
+				console.log('compranado '+gestor_scrap_free.nombre.toLowerCase()+' con '+this.routeToString(this.view))
 				return gestor_scrap_free.nombre.toLowerCase() == this.routeToString(this.view) 
 			})
 		},

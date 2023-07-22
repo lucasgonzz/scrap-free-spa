@@ -31,17 +31,15 @@
 				class="m-r-15">
 					<b-button
 					v-if="can_filter_modal"
-					variant="outline-primary"
+					variant="primary"
 					@click="filterModal">
 						<i class="icon-search"></i>
-						Buscar
 					</b-button>
 					<b-button
 					v-if="is_filtered"
 					@click="restartSearch"
 					variant="outline-success">
-						<i class="icon-undo"></i>
-						Restaurar
+						<i class="icon-history"></i>
 					</b-button>
 				</b-btn-group>	
 			</div>
@@ -74,7 +72,6 @@
 				</b-form-checkbox>
 			</div>
 			<options-dropdown
-			class="m-t-15 m-lg-t-0"
 			v-if="show_filter_modal"
 			:model_name="model_name"></options-dropdown>
 		</div>
@@ -306,18 +303,18 @@ export default {
 		justify-content: flex-start
 		flex-wrap: wrap
 		max-width: 100%
-		@media screen and (max-width: 576px)
-			width: 100%
-			.cont-buttons
-				width: 100%
-				.btn-group
-					width: 100%
-					.btn 
-						width: 50%
-				.btn 
-					display: block
-					width: 100%
-					margin-bottom: 15px
+		// @media screen and (max-width: 576px)
+			// width: 100%
+			// .cont-buttons
+				// width: 100%
+				// .btn-group
+				// 	width: 100%
+				// 	.btn 
+				// 		width: 50%
+				// .btn 
+				// 	display: block
+				// 	width: 100%
+				// 	margin-bottom: 15px
 .horizontal-nav
 	width: 100%
 	display: flex

@@ -113,3 +113,15 @@
 .icon-down:before {
   content: "\79";
 }
+.icon-user:before {
+  content: "\7a";
+}
+.icon-undo:before {
+  content: "\41";
+}
+.icon-redo:before {
+  content: "\42";
+}
+.icon-history:before {
+  content: "\43";
+}

@@ -544,6 +544,7 @@ export default {
 		width: 200px
 	th, td 
 		text-align: left
+		white-space: nowrap
 		@if ($table_font_small)
 			font-size: 1em
 			padding: 5px !important

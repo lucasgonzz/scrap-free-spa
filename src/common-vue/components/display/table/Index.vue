@@ -23,9 +23,10 @@
 							<tr
 							class="list-title">
 								<td
-								:colspan="props.length + 1">
+								:colspan="props.length + 2">
 									{{ list.name }} 
 									<b-badge
+									variant="danger"
 									class="m-l-10">
 										{{ list.models.length }}
 									</b-badge>
@@ -104,6 +105,10 @@ export default {
 			type: Object,
 			default: null
 		},
+		table_height_para_restar: {
+			type: Number,
+			default: null
+		},
 		models: Array,
 		loading: Boolean,
 		model_name: String,
@@ -162,14 +167,12 @@ export default {
 				})
 			})
 
-			if (this.show_created_at) {
+			if (!this.pivot) {
 				fields.push({
 					key: 'updated_at',
 					label: 'Actualizado',
 				})
-			}
-
-			if (this.show_pivot_created_at) {
+			} else {
 				fields.push({
 					key: 'pivot_created_at',
 					label: 'Agregado',
@@ -226,9 +229,13 @@ export default {
 					setTimeout(() => {
 						console.log(window.innerHeight)
 						console.log(table.offsetTop)
-						console.log(Number(window.innerHeight) - Number(table.offsetTop))
+						console.log(Number(window.innerHeight) - (Number(table.offsetTop)))
 						console.log(window.innerHeight - table.offsetTop +'px')
-						table.style.max_height = window.innerHeight - table.offsetTop +'px'
+						let height = window.innerHeight - (Number(table.offsetTop))
+						if (this.table_height_para_restar) {
+							height -= this.table_height_para_restar
+						}
+						table.style.height = height +'px'
 					}, 500)
 				} else {
 					setTimeout(() => {
@@ -245,7 +252,6 @@ export default {
 @import '@/sass/_custom'
 .cont-table
 	width: calc(100% + 30px)
-	max-height: 80vh
 	overflow-y: scroll
 	margin-left: -15px
 	margin-top: 15px
@@ -306,7 +312,7 @@ export default {
 			padding: 5px 15px
 			line-height: 25px
 			@if ($theme == 'dark')
-				background: #3E3E3E
+				background: #1d1d1d
 				border-bottom: 1px solid rgba(255,255,255,.2)
 			@else
 				background: #f1f3f4

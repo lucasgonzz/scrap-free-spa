@@ -76,6 +76,7 @@
 						:modal="'delete-'+model_name"></btn-delete>
 
 						<btn-loader
+						class="m-l-10"
 						:block="false"
 						v-if="can_save"
 						@clicked="save"

@@ -643,8 +643,8 @@ export default {
 @import '@/sass/_custom.scss'
 .model-form 
 	[class^='col-']
-		padding-bottom: 15px
-		margin-bottom: 15px
+		padding-bottom: 7px
+		margin-bottom: 7px
 		@if ($theme == 'dark')
 			border-bottom: 1px solid rgba(255,255,255,.2)
 		@else

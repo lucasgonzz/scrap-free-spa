@@ -69,10 +69,7 @@
 					<hr>
 				</b-form-group>
 			</div>
-			<div
-			class="p-15">
-				<slot name="table_right_options" v-bind:model="model"></slot>
-			</div>
+			<slot name="table_right_options" v-bind:model="model"></slot>
 		</div>
 	</div>
 </template>
@@ -175,10 +172,7 @@ export default {
 	flex-direction: row  
 	margin: 1em 1%
 	border-radius: 12px
-	@if ($theme == 'dark') 
-		background: #333
-	@else 
-		background: #FFF
+	background: #FFF
 	.title 
 		font-size: 30px 
 		font-weight: bold
@@ -189,6 +183,7 @@ export default {
 		align-items: center
 		padding: 0 10px
 		p 
+			color: #333 !important
 			display: flex
 			flex-direction: row
 			line-height: 25px
@@ -203,6 +198,7 @@ export default {
 	.cont-props
 		padding: 1em
 		p 
+			color: #333 !important
 			text-align: left
 			margin-bottom: 0
 </style>

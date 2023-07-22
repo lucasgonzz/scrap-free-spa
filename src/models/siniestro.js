@@ -12,23 +12,23 @@ export default {
 
 // ----------------------------------------------------------
 		
-		{
-			text: 'Asegurado',
-			key: 'asegurado_id',
-			type: 'search',
-			value: '',
-			filter_modal_position: 5,
-		},
+		// {
+		// 	text: 'Asegurado',
+		// 	key: 'asegurado_id',
+		// 	type: 'search',
+		// 	value: '',
+		// 	filter_modal_position: 5,
+		// },
 
-		{
-			text: 'poliza',
-			key: 'poliza_id',
-			type: 'search',
-			is_between: {
-				parent_model_prop: 'asegurado',
-				model_prop: 'polizas',
-			}
-		},
+		// {
+		// 	text: 'poliza',
+		// 	key: 'poliza_id',
+		// 	type: 'search',
+		// 	is_between: {
+		// 		parent_model_prop: 'asegurado',
+		// 		model_prop: 'polizas',
+		// 	}
+		// },
 
 // ----------------------------------------------------------
 
@@ -130,13 +130,13 @@ export default {
 			not_show: true,
 		},
 
-		// {
-		// 	text: 'Asegurado',
-		// 	key: 'asegurado_id',
-		// 	type: 'search',
-		// 	value: '',
-		// 	filter_modal_position: 5,
-		// },
+		{
+			text: 'Asegurado',
+			key: 'asegurado_id',
+			type: 'search',
+			value: '',
+			filter_modal_position: 5,
+		},
 
 		{
 			text: 'Fecha ocurrencia',
@@ -266,15 +266,15 @@ export default {
 			not_show: true,
 		},
 
-		// {
-		// 	text: 'poliza',
-		// 	key: 'poliza_id',
-		// 	type: 'search',
-		// 	is_between: {
-		// 		parent_model_prop: 'asegurado',
-		// 		model_prop: 'polizas',
-		// 	}
-		// },
+		{
+			text: 'poliza',
+			key: 'poliza_id',
+			type: 'search',
+			is_between: {
+				parent_model_prop: 'asegurado',
+				model_prop: 'polizas',
+			}
+		},
 
 		{
 			text: 'Comentarios seguro',

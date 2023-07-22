@@ -8,6 +8,7 @@
 		<slot name="display_top"></slot>
 
 		<display
+		:table_height_para_restar="table_height_para_restar"
 		:order_list_by="order_list_by"
 		:check_permissions="check_permissions"
 		:models="models_to_show"
@@ -44,6 +45,10 @@ export default {
 		},
 		order_list_by: {
 			type: String,
+			default: null,
+		},
+		table_height_para_restar: {
+			type: Number,
 			default: null,
 		},
 	},

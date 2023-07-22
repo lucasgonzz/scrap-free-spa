@@ -104,6 +104,12 @@ export default {
 			}
 			return false
 		},
+		cant_models_to_show() {
+			if (typeof process.env.VUE_APP_CANT_MODELS_TO_SHOW != 'undefined') {
+				return process.env.VUE_APP_CANT_MODELS_TO_SHOW
+			}
+			return 40
+		},
 		is_mobile() {
 			if (this.$vssWidth < '992') {
 				return true
@@ -686,14 +692,17 @@ export default {
 		replaceGuion(string) {
 			return string.replaceAll('-', '_')
 		},
-		routeString(string, in_plural = false) {
+		routeString(string, in_plural = false, replace_guion_bajo = true) {
 			let result 
 			if (in_plural) {
 				result = this.modelPlural(string.toLowerCase().replaceAll(' ', '-'))
 			} else {
 				result = string.toLowerCase().replaceAll(' ', '-')
 			}
-			return result.replaceAll('_', '-')
+			if (replace_guion_bajo) {
+				return result.replaceAll('_', '-')
+			}
+			return result
 		},
 		routeToString(route) {
 			return route.replaceAll('-', ' ')

@@ -85,7 +85,19 @@
 			</span>
 		</td>
 		<td>
-			<slot name="table_right_options" :model="model"></slot>
+			<span
+			v-if="pivot">
+				{{ date(model.pivot.created_at) }}
+			</span>
+			<span
+			v-else>
+				{{ date(model.updated_at) }}
+			</span>
+		</td>
+		<td>
+			<slot name="table_right_options" :model="model">
+				&nbsp
+			</slot>
 		</td>
 	</tr>
 </template>

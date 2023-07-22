@@ -13,6 +13,7 @@
 		:model_name="model_name"
 		:set_model_on_click="set_model_on_click"
 		:on_click_set_property="on_click_set_property"
+		:table_height_para_restar="table_height_para_restar"
 		v-if="_display == 'table'">
 			<template v-slot:btn-edit="slotProps">
 				<slot name="buttons" :model="slotProps.model"></slot>
@@ -95,11 +96,14 @@ export default {
 			type: String,
 			default: null,
 		},
+		table_height_para_restar: {
+			type: Number,
+			default: null,
+		},
 	},
 	data() {
 		return {
 			index_to_show: 1,
-			cant_models_to_show: 40,
 		}
 	},
 	computed: {
@@ -119,16 +123,15 @@ export default {
 			return this.$store.state[this.model_name].loading
 		},
 		_models() {
-			console.log('ACAAAAAAA') 
 			console.log('models:')
 			console.log(this.models)
-			if (this.models.length || this.show_models_if_empty) {
+			if ((this.models.length || this.show_models_if_empty) && !this.is_filtered) {
 				console.log('return models que vinieron por props')
 				return this.models
 			} else {
 				if (typeof this.is_filtered != 'undefined' && this.is_filtered) {
 					let filtered = this.$store.state[this.model_name].filtered 
-					// console.log('return filtered_models')
+					console.log('return filtered_models')
 					return filtered
 				}  
 				console.log('return store_models')

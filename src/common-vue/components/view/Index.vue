@@ -60,6 +60,7 @@
 		<slot name="body"></slot>
 		
 		<list
+		:table_height_para_restar="table_height_para_restar"
 		:order_list_by="order_list_by"
 		:check_permissions="check_permissions"
 		:models_to_show="models_to_show"
@@ -75,6 +76,8 @@
 				<slot name="table_right_options" :model="slotProps.model"></slot>
 			</template>
 		</list>
+
+		<slot name="view_footer"></slot>
 	</div>
 </template>
 <script>
@@ -202,6 +205,10 @@ export default {
 		},
 		delete_text: {
 			type: String,
+			default: null,
+		},
+		table_height_para_restar: {
+			type: Number,
 			default: null,
 		},
 	},
