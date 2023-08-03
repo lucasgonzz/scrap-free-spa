@@ -25,6 +25,11 @@ const routes = [
         component: () => import('@/common-vue/views/Abm')
     },
     {
+        path: '/metricas/:view?',
+        name: 'metricas',
+        component: () => import('@/views/Metricas')
+    },
+    {
         path: '/empleados',
         name: 'employee',
         component: () => import('@/common-vue/views/Employee')

@@ -551,11 +551,11 @@ export default {
 
 	tr
 		@if ($theme == 'dark')
-			color: #f1f3f4
+			color: rgb(189, 189, 189)
 			&:hover 
 				border: 2px solid $blue !important
 				& > td 
-					color: #f1f3f4 !important
+					color: rgb(189, 189, 189) !important
 					background-color: rgba(0,0,0,.8) !important
  
 		@else
@@ -564,7 +564,7 @@ export default {
 	.b-table-row-selected 
 		border: 2px solid $blue !important
 		td 
-			color: #f1f3f4 !important
+			color: rgb(189, 189, 189) !important
 			background-color: rgba(0,0,0,.8) !important
 
 
@@ -579,14 +579,14 @@ export default {
 			position: sticky
 			top: 0px
 			@if ($theme == 'dark')
-				color: #f1f3f4
+				color: rgb(189, 189, 189)
 				background: #2C2C2C
 				border-right: 1px solid rgba(255,255,255,.2)
 				border-bottom: 1px solid rgba(255,255,255,.2)
 				&:last-child(2)
 					border-right: 0 !important
 			@else
-				background: #f1f3f4
+				background: rgb(189, 189, 189)
 
 
 		td 
@@ -596,7 +596,7 @@ export default {
 				background: #3E3E3E
 				border-bottom: 1px solid rgba(255,255,255,.2)
 			@else
-				background: #f1f3f4
+				background: rgb(189, 189, 189)
 				
 
 	.width-300

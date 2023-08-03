@@ -38,6 +38,7 @@ import tipo_documento from '@/store/tipo_documento'
 import centro_reparacion from '@/store/centro_reparacion'
 import nota_importante from '@/store/nota_importante'
 import color_siniestro from '@/store/color_siniestro'
+import siniestro_metricas from '@/store/siniestro_metricas/index' 
 
 Vue.use(Vuex)
 
@@ -85,5 +86,6 @@ export default new Vuex.Store({
         centro_reparacion,
         nota_importante,
         color_siniestro,
+        siniestro_metricas,
     }
 })

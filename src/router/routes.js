@@ -18,6 +18,13 @@ export default [
 		},
 	},
 	{
+		text: 'Metricas',
+		name: 'metricas',
+		params: {
+			view: 'casos-por-dia',
+		},
+	},
+	{
 		model_name: 'employee',
 		name: 'employee',
 		path: '/empleados',
