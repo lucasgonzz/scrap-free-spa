@@ -311,6 +311,7 @@ export default {
 		td 
 			padding: 5px 15px
 			line-height: 25px
+			font-size: 1em
 			@if ($theme == 'dark')
 				background: #1d1d1d
 				border-bottom: 1px solid rgba(255,255,255,.2)

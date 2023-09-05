@@ -104,6 +104,12 @@ export default {
 			}
 			return false
 		},
+		user_last_activity_minutes() {
+			if (typeof process.env.VUE_APP_USER_LAST_ACTIVITY_MINUTES != 'undefined') {
+				return VUE_APP_USER_LAST_ACTIVITY_MINUTES
+			}
+			return false
+		},
 		cant_models_to_show() {
 			if (typeof process.env.VUE_APP_CANT_MODELS_TO_SHOW != 'undefined') {
 				return process.env.VUE_APP_CANT_MODELS_TO_SHOW
@@ -623,6 +629,8 @@ export default {
 			} else {
 				store = prop.key.substring(0, prop.key.length-3)
 			}
+			console.log('store')
+			console.log(store)
 			let models = this.$store.state[store].models
 			let prop_name
 			let prop_to_use_in_select = this.getPropToUseInSelect(store)

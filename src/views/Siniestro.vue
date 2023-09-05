@@ -5,6 +5,7 @@ show_filter_modal
 show_models_if_empty
 order_list_by="estado_siniestro"
 model_name="siniestro"
+modal_size="md"
 :table_height_para_restar="60">
 	<template #model_modal_header>
 		<pdf-buttons></pdf-buttons>

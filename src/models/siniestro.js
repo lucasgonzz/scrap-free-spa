@@ -130,12 +130,43 @@ export default {
 			not_show: true,
 		},
 
+		// {
+		// 	text: 'Asegurado',
+		// 	key: 'asegurado_id',
+		// 	type: 'search',
+		// 	value: '',
+		// 	filter_modal_position: 5,
+		// },
+
 		{
 			text: 'Asegurado',
-			key: 'asegurado_id',
-			type: 'search',
+			key: 'asegurado',
+			type: 'text',
 			value: '',
 			filter_modal_position: 5,
+		},
+
+		{
+			text: 'Telefono',
+			key: 'telefono',
+			type: 'text',
+			value: '',
+		},
+
+
+		{
+			text: 'Telefono alternativo',
+			key: 'telefono_alternativo',
+			type: 'text',
+			value: '',
+		},
+
+
+		{
+			text: 'Email',
+			key: 'email',
+			type: 'text',
+			value: '',
 		},
 
 		{
@@ -266,13 +297,95 @@ export default {
 			not_show: true,
 		},
 
+		// {
+		// 	text: 'poliza',
+		// 	key: 'poliza_id',
+		// 	type: 'search',
+		// 	is_between: {
+		// 		parent_model_prop: 'asegurado',
+		// 		model_prop: 'polizas',
+		// 	}
+		// },
+
 		{
-			text: 'poliza',
-			key: 'poliza_id',
+			text: 'Ramo',
+			key: 'ramo_id',
+			type: 'select',
+		},	
+
+		{
+			key: 'referencia',
+			type: 'text',
+		},	
+
+		{
+			key: 'numero_poliza',
+			type: 'text',
+		},	
+
+		{
+			text: 'Tipo producto',
+			key: 'tipo_producto_de_seguro_id',
+			type: 'select',
+		},
+
+		{
+			key: 'numero_asociado',
+			type: 'text',
+		},	
+
+		{
+			text: 'Tipo documento',
+			key: 'tipo_documento_id',
+			type: 'select',
+		},
+
+		{
+			key: 'numero_documento',
+			type: 'text',
+		},
+		
+		{
+			text: 'Coberturas',
+			key: 'coberturas',
 			type: 'search',
-			is_between: {
-				parent_model_prop: 'asegurado',
-				model_prop: 'polizas',
+			value: '',
+			store: 'cobertura',
+			belongs_to_many: {
+				props_to_show: [
+					{
+						text: 'Nombre',
+						key: 'nombre',
+						show: true,
+					}
+				],
+				properties_to_set: [
+					{
+						text: 'Cobertura',
+						key: 'cobertura',
+						type: 'number',
+					},
+					{
+						text: 'Deducible',
+						key: 'deducible',
+						type: 'number',
+					},
+					// {
+					// 	text: 'Deducible en pesos',
+					// 	key: 'deducible_en_pesos',
+					// 	type: 'number',
+					// },
+					// {
+					// 	text: 'Monto minimo',
+					// 	key: 'monto_minimo',
+					// 	type: 'number',
+					// },
+					// {
+					// 	text: 'Suma asegurada',
+					// 	key: 'suma_asegurada',
+					// 	type: 'number',
+					// },
+				]
 			}
 		},
 

@@ -8,21 +8,21 @@
 		@setUntil="setUntil"></from-until-dates>	
 
 		<b-button
-		class="m-l-15 m-b-15"
+		class="m-l-15 m-md-b-15"
 		v-b-modal="'select-estados-para-coincidir'"
 		variant="primary">
 			Estados para coincidir
 		</b-button>
 
 		<b-button
-		class="m-l-15 m-b-15"
+		class="m-l-15 m-md-b-15"
 		v-b-modal="'select-estados-actuales'"
 		variant="primary">
 			Estados actuales
 		</b-button>
 
 		<b-button
-		class="m-l-15 m-b-15"
+		class="m-l-15 m-b-15 m-t-15 m-md-t-0"
 		@click="search"
 		variant="primary">
 			Buscar
@@ -43,18 +43,18 @@ export default {
 	},
 	computed: {
 		from_date() {
-			return moment().subtract(1, 'months').format('YYYY-MM-DD')
+			return moment().startOf('month').format('YYYY-MM-DD')
 		},
 		until_date() {
 			return moment().format('YYYY-MM-DD')
 		},
 	},
 	methods: {
-		setFrom(date) {
-			this.$store.commit('siniestro_metricas/casos_por_dia/setFromDate', date)
+		setFrom(result) {
+			this.$store.commit('siniestro_metricas/casos_por_dia/setFromDate', result.value)
 		},
-		setUntil(date) {
-			this.$store.commit('siniestro_metricas/casos_por_dia/setUntilDate', date)
+		setUntil(result) {
+			this.$store.commit('siniestro_metricas/casos_por_dia/setUntilDate', result.value)
 		},
 		search() {
 			this.$store.dispatch('siniestro_metricas/casos_por_dia/getModels')
@@ -67,4 +67,6 @@ export default {
 	display: flex 
 	flex-direction: row 
 	align-items: flex-end
+	justify-content: flex-start
+	flex-wrap: wrap
 </style>

@@ -30,7 +30,7 @@ export default {
 			show: true,
 		},
 		{
-			text: 'Indica que el siniestro fue CERRADO',
+			text: 'Por defecto para buscar en metricas como CASOS QUE COINCIDEN EN ESTADOS',
 			key: 'por_defecto_en_estados_que_coinciden',
 			type: 'checkbox',
 			value: 0,

@@ -5,10 +5,16 @@
 		<b-table
 		class="m-t-60"
 		head-variant="dark"
-		v-if="!loading"
+		v-if="!loading && items.length"
 		:hover="false"
 		:fields="fields"
 		:items="items"></b-table>
+		<span 
+		v-else
+		class="text-with-icon">
+			<i class="icon-eye-slash"></i>
+			No hay siniestros
+		</span>
 	</div>
 </template>
 <script>

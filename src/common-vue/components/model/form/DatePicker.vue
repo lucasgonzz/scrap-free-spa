@@ -3,15 +3,17 @@
 	class="cont-date-picker">
 		<label
 		v-if="label">
-			{{ label }}
+			{{ label }} 
 		</label>
 		<input 
 		@change="setDate"
-		v-model="_value"
-		type="date" name="dateofbirth" class="custom-date-picker">
+		v-model="date_value"
+		type="date" 
+		class="custom-date-picker">
 	</div>
 </template>
 <script>
+import moment from 'moment'
 export default {
 	props: {
 		label: {
@@ -22,49 +24,55 @@ export default {
 			type: String,
 			default: null
 		},
+		prop: {
+			type: Object,
+			default: null
+		},
 	},
 	created() {
 		if (this.value) {
-			this._value = this.value 
+			this.date_value = moment(this.value, 'YYYY-MM-DD').format('YYYY-MM-DD') 
 			this.setDate()
 		}
 	},
 	data() {
 		return {
-			_value: '',
+			date_value: '',
 		}
 	},
 	methods: {
 		setDate() {
-			this.$emit('setDate', this._value)
+			this.$emit('setDate', {
+				value: this.date_value,
+				prop: this.prop,
+			})
 		},
 	},
 }
 </script>
-<style>
-.cont-date-picker {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 15px;
-}
-.custom-date-picker::-webkit-inner-spin-button {
-	display: none !important;
-}
-.custom-date-picker::-webkit-calendar-picker-indicator {
-  	opacity: 0 !important;
-}
+<style lang="sass">
+@import '@/sass/_custom'
 
-label {
-  	display: block !important;
-}
-.custom-date-picker {
-	background: #fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat  !important;
-	border: 1px solid #c4c4c4 !important;
-	border-radius: 5px !important;
-	background-color: #fff !important;
-	padding: 3px 5px !important;
-	box-shadow: inset 0 3px 6px rgba(0,0,0,0.1) !important;
-	width: 190px !important;
-	color: #333 !important;
-}
+.cont-date-picker 
+	display: flex
+	flex-direction: column
+	margin-bottom: 15px
+
+label 
+	display: block !important
+
+.custom-date-picker 
+	border: 1px solid #c4c4c4 !important
+	border-radius: 5px !important
+	padding: 0.375rem 0.75rem !important
+	width: 190px !important
+
+	@if ($theme == 'dark')
+		color: #fff !important
+		background-color: #333 !important
+
+	@else 
+		color: #333 !important
+		background-color: #fff !important
+
 </style>

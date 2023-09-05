@@ -77,11 +77,11 @@
 								:parent_model_name="model_name"
 								:prop="prop"></has-many>
 
-						        <b-form-datepicker
-								v-else-if="prop.type == 'date'"
-						        placeholder="Fecha"
-						        :disabled="isDisabled(prop)"
-						        v-model="model[prop.key]"></b-form-datepicker>
+						        <date-picker
+						        @setDate="setDate"
+						        :prop="prop"
+						        :value="model[prop.key]"
+								v-else-if="prop.type == 'date'"></date-picker>
 
 								<div
 								v-else-if="prop.type == 'radio'">
@@ -387,6 +387,11 @@ export default {
 		// 		this.properties_formated.splice(index_porp_for_update_type, 1, prop_for_update_type)
 		// 	}
 		// },
+		setDate(result) {
+			console.log('result')
+			console.log(result)
+			this.model[result.prop.key] = result.value 
+		},
 		setBarCode(bar_code) {
 			let prop = this.getBarCodeProp(this.model_name)
 			this.model[prop.key] = bar_code 
@@ -636,6 +641,7 @@ export default {
 		BtnLoader,
 		// BtnDelete,
 		BarCodeScanner: () => import('@/common-vue/components/bar-code-scanner/Index'),
+		DatePicker: () => import('@/common-vue/components/model/form/DatePicker'),
 	}
 }
 </script>

@@ -57,5 +57,4 @@ export default {
 @import '@/common-vue/sass/app.sass'
 @import '@/sass/_custom.scss'
 @import '@/sass/app.sass'
-
 </style>

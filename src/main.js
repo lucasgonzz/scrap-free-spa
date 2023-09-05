@@ -4,6 +4,14 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
+import Geocoder from "@pderas/vue2-geocoder";
+Vue.use(Geocoder, {
+    defaultCountryCode: null, // e.g. 'CA'
+    defaultLanguage:    null, // e.g. 'en'
+    defaultMode:        'address', // or 'lat-lng'
+    googleMapsApiKey:   'AIzaSyC4sUC-MuEDsMNoIQqwUPmYWZmw74rsHOI'
+});
+
 // Vue Scrool
 Vue.prototype.$scrollToTop = (() => {
   setTimeout(() => {

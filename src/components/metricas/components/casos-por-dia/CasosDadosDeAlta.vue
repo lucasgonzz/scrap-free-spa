@@ -5,10 +5,17 @@
 			Ingresos al dia: {{ models.length }}
 		</p>
 		<b-table
+		v-if="items.length"
 		head-variant="dark"
 		:hover="false"
 		:fields="fields"
 		:items="items"></b-table>
+		<span 
+		v-else
+		class="text-with-icon">
+			<i class="icon-eye-slash"></i>
+			No hay siniestros
+		</span>
 	</div>
 </template>
 <script>

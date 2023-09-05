@@ -187,10 +187,7 @@ export default {
 	width: 100%
 	overflow-x: scroll
 	padding-bottom: 10px
-	@media screen and (max-width: 900px)
-		justify-content: flex-start
-	@media screen and (min-width: 900px)
-		justify-content: center
+	justify-content: flex-start
 	button 
 		// background: ligthen($blue, 10)
 		margin: 10px
