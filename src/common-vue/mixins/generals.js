@@ -629,8 +629,7 @@ export default {
 			} else {
 				store = prop.key.substring(0, prop.key.length-3)
 			}
-			console.log('store')
-			console.log(store)
+			console.log('getOptions')
 			let models = this.$store.state[store].models
 			let prop_name
 			let prop_to_use_in_select = this.getPropToUseInSelect(store)

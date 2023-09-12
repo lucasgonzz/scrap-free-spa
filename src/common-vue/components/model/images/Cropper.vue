@@ -123,6 +123,7 @@ export default {
 						} else {
 							console.log('aca')
 							this.model[this.prop.key] = res.data.image_url
+							this.setModel(this.model, this.model_name)
 						}
 					}
 				}

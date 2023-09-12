@@ -8,7 +8,7 @@
 		<b-form-row
 		class="m-b-0">
 			<b-col
-			v-for="(prop, index) in properties"
+			v-for="(prop, index) in _properties"
 			v-if="showProperty(prop, model, false, true)"
 			:md="getCol(prop, 6, input_full_width)"
 			:lg="getCol(prop, 4, input_full_width)"
@@ -196,7 +196,7 @@
 
 								<div
 								class="m-l-15"
-						    	v-if="prop.belongs_to_many && !prop.belongs_to_many.related_with_all && (!prop.type || prop.type != 'checkbox')">
+						    	v-if="(prop.has_many && prop.has_many.models_from_parent_prop && prop.type == 'search') || (prop.belongs_to_many && !prop.belongs_to_many.related_with_all && (!prop.type || prop.type != 'checkbox'))">
 									<table-component
 									:loading="false"
 									:models="model[prop.key]"
@@ -225,7 +225,7 @@
 								</p>
 
 								<b-button
-								v-if="(prop.type == 'radio') && model[prop.key] != prop.value"
+								v-if="checkButton(prop)"
 								variant="outline-primary"
 								size="sm"
 								@click="clear(prop)">
@@ -366,6 +366,9 @@ export default {
 		}
 	},
 	computed: {
+		_properties() {
+			return Object.freeze(this.properties)
+		},
 		_show_btn_delete() {
 			if (this.show_btn_delete && (this.check_can_delete || this.check_permissions)) {
 				return this.can(this.model_name+'.delete')
@@ -374,6 +377,10 @@ export default {
 		},
 	},
 	methods: {
+		checkButton(prop) {
+			console.log('checkButton')
+			return (prop.type == 'radio') && this.model[prop.key] != prop.value
+		},
 		// checkWatch(prop) {
 		// 	if (prop.watch_for) {
 		// 		console.log('watch_for en '+prop.text)
@@ -574,6 +581,8 @@ export default {
 				this.setBelongsToManyPivotProps(prop, model_to_add, result)
 			} else if (prop.has_many && prop.has_many.models_from_parent_prop) {
 				this.model[prop.key].unshift(result.model)
+				this.setModel(this.model, this.model_name)
+				console.log('ACA')
 			} else if (prop.set_model_on_click_or_prop_with_query_if_null) {
 				if (result.model) {
 					this.setModel(result.model, this.model_name, [], false)

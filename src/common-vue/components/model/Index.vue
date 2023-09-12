@@ -230,7 +230,10 @@ export default {
 			if (this.model_prop) {
 				return this.model_prop 
 			}
-			return this.modelStoreFromName(this.model_name)
+			let model = this.modelStoreFromName(this.model_name)
+			return {
+				...model
+			}
 		},
 		properties() {
 			return this.modelPropertiesFromName(this.model_name)
@@ -298,6 +301,9 @@ export default {
 						if (!this.emit_on_saved_instead_continue) {
 							if (this.has_many_parent_model) {
 								this.$set(this.has_many_parent_model, this.has_many_prop.key, this.has_many_parent_model[this.has_many_prop.key].concat([created_model]))
+
+								this.setModel(this.has_many_parent_model, this.has_many_parent_model_name)
+
 								if (!this.has_many_parent_model.id) {
 									if (this.has_many_parent_model.childrens) {
 										this.has_many_parent_model.childrens.push({
