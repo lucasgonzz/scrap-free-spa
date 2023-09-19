@@ -575,6 +575,9 @@ export default {
 					return ''
 				}
 			}
+			if (prop.type == 'textarea' && model[prop.key]) {
+				return model[prop.key].substring(0, 40)
+			}
 			return model[prop.key] 
 		},
 		isRelationKey(prop) {

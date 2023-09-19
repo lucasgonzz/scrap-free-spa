@@ -127,6 +127,7 @@
 						        :disabled="isDisabled(prop)"
 								:placeholder="'Ingresar '+propText(prop)"
 								:type="prop.type"
+								:rows="6"
 								v-model="model[prop.key]"></b-form-textarea>
 
 
@@ -154,6 +155,7 @@
 								<google-geocoder
 								v-else-if="prop.type == 'google_geocoder'"
 								:prop="prop"
+								:model_name="model_name"
 								:model="model"></google-geocoder>
 
 								<div

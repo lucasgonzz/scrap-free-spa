@@ -48,6 +48,18 @@ export default {
 		},
 
 		{
+			text: 'Notas importantes',
+			key: 'notas_importantes',
+			type: 'textarea',
+		},
+
+		{
+			key: 'notas_transporte',
+			type: 'text',
+			not_show: true,
+		},
+
+		{
 			text: 'Numero siniestro',
 			key: 'numero_siniestro',
 			type: 'text',
@@ -88,15 +100,15 @@ export default {
 			not_show: true,
 		},
 
-		{
-			text: 'Notas importantes',
-			key: 'nota_importantes',
-			has_many: {
-				text: 'Nota importante',
-				model_name: 'nota_importante'
-			},
-			not_show: true,
-		},
+		// {
+		// 	text: 'Notas importantes',
+		// 	key: 'nota_importantes',
+		// 	has_many: {
+		// 		text: 'Nota importante',
+		// 		model_name: 'nota_importante'
+		// 	},
+		// 	not_show: true,
+		// },
 
 		{
 			text: 'Centro reparacion',
