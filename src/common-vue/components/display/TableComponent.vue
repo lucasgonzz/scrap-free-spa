@@ -292,6 +292,10 @@ export default {
 			type: Boolean,
 			default: true
 		},
+		prop_to_check: {
+			type: String,
+			default: 'id',
+		},
 	},
 	data() {
 		return {
@@ -438,13 +442,15 @@ export default {
 			return ''
 		},
 		onRowSelected(items) {
-			console.log('items.length: '+items.length)
+			// console.log('items.length: '+items.length)
 			if (!this.is_from_keydown) {
 				if (this._select_mode == 'single' && items.length) {
-					console.log(1)
+					console.log('items')
+					console.log(items[0])
 					let model = this.models.find(_model => {
-						return _model.id == items[0].id
+						return _model[this.prop_to_check] == items[0][this.prop_to_check]
 					})
+					console.log(model)
 					this.$emit('onRowSelected', model)
 					if (this.set_model_on_row_selected) {
 						this.$refs.tableComponent.clearSelected()

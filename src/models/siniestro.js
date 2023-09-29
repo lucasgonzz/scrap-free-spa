@@ -323,6 +323,7 @@ export default {
 			text: 'Ramo',
 			key: 'ramo_id',
 			type: 'select',
+			value: 4,
 		},	
 
 		{
@@ -350,6 +351,7 @@ export default {
 			text: 'Tipo documento',
 			key: 'tipo_documento_id',
 			type: 'select',
+			value: 1,
 		},
 
 		{
