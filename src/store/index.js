@@ -25,7 +25,8 @@ import causa_bien from '@/store/causa_bien'
 import estado_bien from '@/store/estado_bien'
 import linea from '@/store/linea'
 import sub_linea from '@/store/sub_linea'
-import tecnico from '@/store/tecnico'
+import tecnico_asegurado from '@/store/tecnico_asegurado'
+import tecnico_scrap_free from '@/store/tecnico_scrap_free'
 import logistica from '@/store/logistica'
 import cobertura from '@/store/cobertura'
 import poliza from '@/store/poliza'
@@ -73,7 +74,8 @@ export default new Vuex.Store({
         estado_bien,
         linea,
         sub_linea,
-        tecnico,
+        tecnico_asegurado,
+        tecnico_scrap_free,
         logistica,
         cobertura,
         poliza,

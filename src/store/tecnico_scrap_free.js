@@ -7,7 +7,7 @@ import generals from '@/common-vue/mixins/generals'
 export default {
 	namespaced: true,
 	state: {
-		model_name: '',
+		model_name: 'tecnico_scrap_free',
 		route_prefix: '',
 		from_dates: false,
 		is_selecteable: false,

@@ -11,6 +11,10 @@ modal_size="md"
 		<pdf-buttons></pdf-buttons>
 	</template>
 
+	<template #bienes>
+		<bienes></bienes>
+	</template>
+
 	<template #view_footer>
 		<gestores-nav></gestores-nav>
 	</template>
@@ -21,6 +25,7 @@ export default {
 	components: {
 		ViewComponent: () => import('@/common-vue/components/view/Index'),
 		PdfButtons: () => import('@/components/siniestro/components/PdfButtons'),
+		Bienes: () => import('@/components/siniestro/components/bienes/Index'),
 		GestoresNav: () => import('@/components/siniestro/components/GestoresNav'),
 	},
 	computed: {

@@ -4,7 +4,6 @@
 		<!-- <images
 		:model="model"
 		:model_name="model_name"></images>	 -->
-
 		<b-form-row
 		class="m-b-0">
 			<b-col
@@ -24,7 +23,7 @@
 						<i 
 						v-else
 						class="icon-right"></i>
-						<strong>{{ label(prop) }}</strong>
+						<strong>{{ getLabel(prop) }}</strong>
 					</label>
 					<div>
 						<images
@@ -38,7 +37,8 @@
 						v-else>
 							<slot :name="prop.key">
 								<p
-								v-if="prop.only_show"
+								v-if="prop.only_show || prop.from_pre_view"
+								:class="prop.from_pre_view ? 'text-primary' : ''"
 								class="m-b-0 m-l-25 text-only-show">
 									<strong 
 									v-if="propertyText(model, prop) != '' || propertyText(model, prop) == 0">
@@ -70,12 +70,6 @@
 								v-else-if="prop.belongs_to_many && prop.type == 'checkbox'"
 								:model="model"
 								:prop="prop"></belongs-to-many-checkbox>
-
-								<has-many
-								v-else-if="prop.has_many"
-								:parent_model="model"
-								:parent_model_name="model_name"
-								:prop="prop"></has-many>
 
 						        <date-picker
 						        @setDate="setDate"
@@ -110,7 +104,7 @@
 								v-else-if="prop.type == 'text' || prop.type == 'number' || prop.type == 'password'"
 								class="d-flex w-100">
 									<b-form-input
-							        :disabled="isDisabled(prop)"
+							        :disabled="isDisabled(prop, form_to_filter)"
 									:placeholder="'Ingresar '+propText(prop)"
 									:type="prop.type"
 									@keyup.enter="clickEnter(prop)"
@@ -124,7 +118,7 @@
 
 								<b-form-textarea
 								v-else-if="prop.type == 'textarea'"
-						        :disabled="isDisabled(prop)"
+						        :disabled="isDisabled(prop, form_to_filter)"
 								:placeholder="'Ingresar '+propText(prop)"
 								:type="prop.type"
 								:rows="6"
@@ -138,14 +132,14 @@
 
 									<b-form-select
 									@change="setChange(prop)"
-							        :disabled="isDisabled(prop)"
+							        :disabled="isDisabled(prop, form_to_filter)"
 									v-model="model[prop.key]"
 									:options="getOptions(prop, model, model_name)"></b-form-select>
 								</div>		
 
 								<b-form-checkbox
 								v-else-if="prop.type == 'checkbox'"
-						        :disabled="isDisabled(prop)"
+						        :disabled="isDisabled(prop, form_to_filter)"
 								v-model="model[prop.key]"
 								:value="1"
 								:unchecked-value="0">
@@ -195,6 +189,12 @@
 										{{ propertyText(model, prop) }}
 									</span>
 								</b-button>
+								
+								<p
+								class="function-value"
+								v-else-if="prop.function">
+									{{ getFunctionValue(prop, model) }}
+								</p>
 
 								<div
 								class="m-l-15"
@@ -219,15 +219,15 @@
 										</template>  
 									</table-component>	
 								</div>
-
-								<p
-								class="function-value"
-								v-else-if="prop.function">
-									{{ getFunctionValue(prop, model) }}
-								</p>
+								
+								<has-many
+								v-else-if="prop.has_many"
+								:parent_model="model"
+								:parent_model_name="model_name"
+								:prop="prop"></has-many>
 
 								<b-button
-								v-if="checkButton(prop)"
+								v-if="checkButton(prop, model)"
 								variant="outline-primary"
 								size="sm"
 								@click="clear(prop)">
@@ -379,10 +379,6 @@ export default {
 		},
 	},
 	methods: {
-		checkButton(prop) {
-			console.log('checkButton')
-			return (prop.type == 'radio') && this.model[prop.key] != prop.value
-		},
 		// checkWatch(prop) {
 		// 	if (prop.watch_for) {
 		// 		console.log('watch_for en '+prop.text)
@@ -396,9 +392,13 @@ export default {
 		// 		this.properties_formated.splice(index_porp_for_update_type, 1, prop_for_update_type)
 		// 	}
 		// },
+		isDisabled(prop, form_to_filter = false) {
+			if (prop.disabled && !form_to_filter) {
+				return true 
+			}
+			return false
+		},
 		setDate(result) {
-			console.log('result')
-			console.log(result)
 			this.model[result.prop.key] = result.value 
 		},
 		setBarCode(bar_code) {
@@ -500,12 +500,6 @@ export default {
 		// 	console.log('properties_formated')
 		// 	console.log(this.properties_formated)
 		// },
-		isDisabled(prop) {
-			if (prop.disabled && !this.form_to_filter) {
-				return true 
-			}
-			return false
-		},
 		clear(prop) {
 			this.model[prop.key] = prop.value 
 			if (this.isRelationKey(prop)) {
@@ -571,9 +565,6 @@ export default {
 			console.log(properties)
 			this.$store.commit(prop.store+'/setModel', {model: null, properties: properties})
 			this.$bvModal.show(this.routeString(this.modelNameFromRelationKey(prop)))
-		},
-		label(prop) {
-			return this.capitalize(this.propText(prop))
 		},
 		setSelected(result) {
 			console.log(result)
@@ -678,12 +669,12 @@ export default {
 		width: 100%
 	.form-group
 		margin-bottom: 0 !important
-	hr 
-		width: 100%
-		@if ($theme == 'dark')
-			border-top: 1px solid red !important 
 	.function-value
 		// font-size: 1.5em
 		font-weight: bold
 		margin-left: 25px
+hr 
+	width: 100%
+	@if ($theme == 'dark')
+		border-top: 1px solid rgba(255, 255, 255, 0.2) !important 
 </style>

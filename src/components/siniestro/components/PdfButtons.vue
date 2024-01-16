@@ -138,29 +138,40 @@ export default {
 		},
 		indemnizacion() {
 			let link
-			if (this.siniestro.aseguradora.nombre == 'Sancor') {
-				if (this.siniestro.causa_siniestro) {
-					this.opciones_para_imprimir = [
-						{
-							text: 'Pago indemnizatorio',
-							link: 'ConformidadPagoIndemnizatorioSancor'
-						},
-						{
-							text: 'Pago indemnizatorio 3ros',
-							link: 'ConformidadPagoIndemnizatorioSancor3ros'
-						},
-					]	
-					this.$bvModal.show('opciones-para-imprimir')
-					link = 'VoucherSancor'
-					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+			console.log(1)
+			if (this.siniestro.aseguradora) {
+				console.log(2)
+				if (this.siniestro.ramo_id && this.siniestro.ramo_id != 0) {
+					if (this.siniestro.aseguradora.nombre == 'Sancor') {
+						if (this.siniestro.causa_siniestro) {
+							this.opciones_para_imprimir = [
+								{
+									text: 'Pago indemnizatorio',
+									link: 'ConformidadPagoIndemnizatorioSancor'
+								},
+								{
+									text: 'Pago indemnizatorio 3ros',
+									link: 'ConformidadPagoIndemnizatorioSancor3ros'
+								},
+							]	
+							this.$bvModal.show('opciones-para-imprimir')
+							link = 'VoucherSancor'
+							window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+						}
+					} else if (this.siniestro.aseguradora.nombre == 'MetLife') {
+						link = 'ConformidadPagoIndemnizatorioLife'
+						window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+						link = 'VoucherLifeSeguros'
+						window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+					}
+				} else {
+					console.log('entro')
+					this.$toast.error('Indique un ramo')
 				}
-			} else if (this.siniestro.aseguradora.nombre == 'MetLife') {
-				link = 'ConformidadPagoIndemnizatorioLife'
-				window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
-				link = 'VoucherLifeSeguros'
-				window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+			} else {
+				console.log(3)
+				this.$toast.error('Indique una aseguradora')
 			}
-
 		},
 		informeLiquidador() {
 			this.opciones_para_imprimir = [

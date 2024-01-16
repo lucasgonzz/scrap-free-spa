@@ -2,7 +2,7 @@
 <b-modal
 title="Subir Imagen"
 hide-footer
-:id="'upload-image-'+prop.key">
+:id="'upload-image-'+model.id+'-'+model.nombre+'-'+prop.key">
 	<b-form-file
 	id="input-file-selector"
 	class="m-b-15"
@@ -27,6 +27,7 @@ hide-footer
 export default {
 	props: {
 		prop: Object,
+		model: Object,
 	},
 	data() {
 		return {
@@ -34,14 +35,17 @@ export default {
 		}
 	},
 	methods: {
-		upload() {
-			var file    = document.getElementById('input-file-selector').files[0];
+		upload(event) {
+			var file = document.getElementById('input-file-selector').files[0];
+			if (typeof file == 'undefined') {
+				file = event.dataTransfer.files[0];		
+			}
 			var reader  = new FileReader();
 			reader.readAsDataURL(file)
 			let that = this
 			reader.onloadend = function () {
 				that.$emit('setImageUrl', reader.result)
-				that.$bvModal.hide('upload-image-'+that.prop.key)
+				that.$bvModal.hide('upload-image-'+that.model.id+'-'+that.model.nombre+'-'+that.prop.key)
 			}
 		}
 	}

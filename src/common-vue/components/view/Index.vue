@@ -4,6 +4,10 @@
 		
 		<slot name="modals"></slot>
 
+		<pre-view
+		:model_name="model_name"
+		v-if="usePreView(model_name)"></pre-view>
+
     	<model
     	v-if="show_modal"
     	:show_btn_remove_belongs_to_many="show_btn_remove_belongs_to_many"
@@ -91,6 +95,7 @@ export default {
 
 		List,
 		HorizontalNav,
+		PreView: () => import('@/common-vue/components/pre-view/Index'),
 	},
 	props: {
 		model_name: {

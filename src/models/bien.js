@@ -1,13 +1,13 @@
 export default {
 	properties: [
-		{
-			text: 'N°',
-			key: 'num',
-			type: 'text',
-			value: '',
-			not_show_on_form: true,
-			show: true,
-		},
+		// {
+		// 	text: 'N°',
+		// 	key: 'num',
+		// 	type: 'text',
+		// 	value: '',
+		// 	not_show_on_form: true,
+		// 	show: true,
+		// },
 		{
 			text: 'Nombre',
 			key: 'nombre',
@@ -15,86 +15,11 @@ export default {
 			value: '',
 			is_title: true,
 		},
-		{
-			text: 'Factura compra asegurado',
-			key: 'foto_factura_compra_asegurado',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Factura tecnico asegurado',
-			key: 'foto_factura_tecnico_asegurado',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Factura tecnico scrap free',
-			key: 'foto_factura_tecnico_scrap_free',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto adicional asegurado',
-			key: 'foto_adicional_asegurado',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto atras asegurado',
-			key: 'foto_atras_asegurado',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto atras tecnico scrap free',
-			key: 'foto_atras_tecnico_scrap_free',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto evidencia scrap free',
-			key: 'foto_evidencia_scrap_free',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto frente asegurado',
-			key: 'foto_frente_asegurado',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto frente scrap free',
-			key: 'foto_frente_tecnico_scrap_free',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto etiqueta',
-			key: 'foto_etiqueta',
-			type: 'image',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Foto captura de pantalla',
-			key: 'foto_captura_de_pantalla',
-			type: 'image',
-			value: '',
-			show: true,
-		},
+		
 		{
 			text: 'Causa bien',
 			key: 'causa_bien_id',
+			use_store_models: true,
 			type: 'select',
 			value: 0,
 			show: true,
@@ -102,6 +27,7 @@ export default {
 		{
 			text: 'Estado bien',
 			key: 'estado_bien_id',
+			use_store_models: true,
 			type: 'select',
 			value: 0,
 			show: true,
@@ -109,22 +35,17 @@ export default {
 		{
 			text: 'Linea',
 			key: 'linea_id',
+			use_store_models: true,
 			type: 'select',
 			value: 0,
 			show: true,
 		},
-		{
-			text: 'Sub Linea',
-			key: 'sub_linea_id',
-			depends_on: 'linea_id',
-			type: 'select',
-			value: 0,
-			show: true,
-		},
+	
 		{
 			text: 'Tecnico asegurado',
 			key: 'tecnico_asegurado_id',
-			store: 'tecnico',
+			use_store_models: true,
+			store: 'tecnico_asegurado',
 			type: 'select',
 			value: 0,
 			show: true,
@@ -132,53 +53,13 @@ export default {
 		{
 			text: 'Tecnico scrap free',
 			key: 'tecnico_scrap_free_id',
-			store: 'tecnico',
+			use_store_models: true,
+			store: 'tecnico_scrap_free',
 			type: 'select',
 			value: 0,
 			show: true,
 		},
-		{
-			text: 'Accesorios',
-			key: 'accesorios',
-			type: 'textarea',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Tiene base',
-			key: 'tiene_base',
-			type: 'checkbox',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Tiene cable',
-			key: 'tiene_cable',
-			type: 'checkbox',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Tiene cargador',
-			key: 'tiene_cargador',
-			type: 'checkbox',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Tiene control',
-			key: 'tiene_control',
-			type: 'checkbox',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'Comentarios tecnico',
-			key: 'comentarios_tecnico',
-			type: 'textarea',
-			value: '',
-			show: true,
-		},
+		
 		{
 			text: 'Descripcion',
 			key: 'descripcion',
@@ -186,6 +67,14 @@ export default {
 			value: '',
 			show: true,
 		},
+		
+		{
+			text: 'Imagenes',
+			key: 'images',
+			type: 'images',
+			not_show_google_search_option: true,
+		},
+		
 		{
 			text: 'Fecha compra',
 			key: 'fecha_compra',
@@ -228,13 +117,7 @@ export default {
 			value: '',
 			show: true,
 		},
-		{
-			text: 'pagado tecnico',
-			key: 'pagado_tecnico',
-			type: 'number',
-			value: '',
-			show: true,
-		},
+		
 		{
 			text: 'Posible causa asegurado',
 			key: 'posible_causa_asegurado',
@@ -242,20 +125,7 @@ export default {
 			value: '',
 			show: true,
 		},
-		{
-			text: 'precisa embalaje',
-			key: 'precisa_embalaje',
-			type: 'checkbox',
-			value: 0,
-			show: true,
-		},
-		{
-			text: 'presupuesto monto asegurado',
-			key: 'presupuesto_monto_asegurado',
-			type: 'number',
-			value: '',
-			show: true,
-		},
+	
 		{
 			text: 'liquidacion bien',
 			key: 'liquidacion_bien',
@@ -277,13 +147,7 @@ export default {
 			value: '',
 			show: true,
 		},
-		{
-			text: 'valor reposicion a nuevo',
-			key: 'valor_reposicion_a_nuevo',
-			type: 'number',
-			value: '',
-			show: true,
-		},
+		
 	],
 	plural_model_name_spanish: 'Bienes',
 	singular_model_name_spanish: 'Bien',

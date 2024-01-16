@@ -115,8 +115,17 @@ export default {
 		set_model_on_click: Boolean,
 		on_click_set_property: String,
 	},
+	data() {
+		return {
+			intentos_set_height: 0
+		}
+	},
 	created() {
 		this.setHeight()
+		let that = this
+		window.addEventListener('resize', function(event) {
+			that.setHeight()
+		}, true);
 	},
 	computed: {
 		_select_mode() {
@@ -142,6 +151,15 @@ export default {
 				this.pivot.props_to_show.forEach(prop_to_show => {
 					props.push(prop_to_show)
 				})
+				if (this.pivot.pivot_props_to_show) {
+					this.pivot.pivot_props_to_show.forEach(prop_to_show => {
+						props.push({
+							...prop_to_show,
+							is_pivot_prop: true,
+							only_show: true,
+						})
+					})
+				}
 				if (this.pivot.properties_to_set) {
 					this.pivot.properties_to_set.forEach(prop_to_set => {
 						props.push({
@@ -237,11 +255,12 @@ export default {
 						}
 						table.style.height = height +'px'
 					}, 500)
-				} else {
+				} else if (this.intentos_set_height < 5) {
 					setTimeout(() => {
 						console.log('no estaba la tabla, voy a llamar denuvo a setHeight')
 						this.setHeight()
-					}, 300)
+						this.intentos_set_height++
+					}, 500)
 				}
 			}
 		},

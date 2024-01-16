@@ -50,20 +50,46 @@
 		<i class="icon-eye-slash"></i>
 		No hay imagenes
 	</p>
-	<b-button-group>
+	<b-button-group
+	v-if="show_btn_google">
 		<b-button
 		size="sm"
 		variant="outline-primary"
 		@click="searchImage">
 			Buscar imagen en Google
 		</b-button>
-		<b-button
+
+		<!-- <b-button
 		size="sm"
 		variant="outline-primary"
 		@click="uploadImage">
 			Buscar imagen en este equipo 
-		</b-button>
+		</b-button> -->
+		<b-form-file
+		id="input-file-selector"
+		class="m-b-15 file-reader-input"
+		browse-text="Buscar"
+		v-model="file"
+		variant="primary"
+		:state="Boolean(file)"
+		@change="upload"
+		placeholder="Seleccione la imagen o arrastrala hasta aquí"
+		drop-placeholder="Solta la imagen aqui..."
+		></b-form-file>
+
 	</b-button-group>
+	<b-form-file
+	v-else
+	id="input-file-selector"
+	class="file-reader-input"
+	browse-text="Buscar"
+	v-model="file"
+	variant="primary"
+	:state="Boolean(file)"
+	@change="upload"
+	placeholder="Seleccione la imagen o arrastrala hasta aquí"
+	drop-placeholder="Solta la imagen aqui..."
+	></b-form-file>
 </div>
 </template>
 <script>
@@ -78,10 +104,35 @@ export default {
 	    Carousel,
 	    Slide
 	},
-	methods: {
-		uploadImage() {
-			this.$emit('uploadImage')
+	computed: {
+		show_btn_google() {
+			return typeof this.prop.not_show_google_search_option == 'undefined'
 		},
+	},
+	data() {
+		return {
+			file: null,
+		}
+	},
+	methods: {
+		upload(event) {
+			var file = document.getElementById('input-file-selector').files[0];
+			if (typeof file == 'undefined') {
+				file = event.dataTransfer.files[0];		
+			}
+			var reader  = new FileReader();
+			reader.readAsDataURL(file)
+			let that = this
+			reader.onloadend = function () {
+				that.$emit('setImageUrl', reader.result)
+				that.$bvModal.hide('upload-image-'+that.model.id+'-'+that.model.nombre+'-'+that.prop.key)
+				that.file = null
+
+			}
+		},
+		// uploadImage() {
+		// 	this.$emit('uploadImage')
+		// },
 		setDelete(image) {
 			this.$store.commit(this.model_name+'/setDeleteImageModel', image)
 			this.$bvModal.show('delete-'+this.model_name+'-images')
@@ -123,4 +174,8 @@ export default {
 			max-height: 50vh
 			// max-height: 50vh
 			// max-height: calc(100vh - 150px)
+
+.file-reader-input
+	width: 100% !important
+	margin: 15px 0
 </style>

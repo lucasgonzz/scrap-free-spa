@@ -2,7 +2,7 @@ export default {
 	properties: [
 		{
 			text: 'Nombre',
-			key: 'nombre',
+			key: 'name',
 			type: 'text',
 			value: '',
 			is_title: true,
@@ -14,12 +14,12 @@ export default {
 		},
 		{
 			text: 'Dias en estado minimo',
-			key: 'dias_en_estado_siniestro_min',
+			key: 'dias_estado_siniestro_min',
 			type: 'number',
 		},
 		{
 			text: 'Dias en estado max',
-			key: 'dias_en_estado_siniestro_max',
+			key: 'dias_estado_siniestro_max',
 			type: 'number',
 		},
 	],

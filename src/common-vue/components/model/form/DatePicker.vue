@@ -28,6 +28,14 @@ export default {
 			type: Object,
 			default: null
 		},
+		model: {
+			type: Object,
+			default: null
+		},
+		set_model_date: {
+			type: Boolean,
+			default: false
+		},
 	},
 	created() {
 		if (this.value) {
@@ -42,6 +50,9 @@ export default {
 	},
 	methods: {
 		setDate() {
+			if (this.set_model_date) {
+				this.model[this.prop.key] = this.date_value
+			}
 			this.$emit('setDate', {
 				value: this.date_value,
 				prop: this.prop,

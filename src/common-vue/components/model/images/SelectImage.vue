@@ -4,7 +4,7 @@ v-if="prop.select_image_from"
 title="Seleccionar Imagen"
 hide-footer
 size="lg"
-:id="'select-image-'+prop.key">
+:id="'select-image-'+model.id+'-'+prop.key">
 	<div class="select-cont-images">
 		<img 
 		class="s-1 b-r-1 c-p apretable"

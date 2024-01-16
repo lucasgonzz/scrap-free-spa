@@ -3,7 +3,7 @@
 	title="Recortar Imagen"
 	hide-footer
 	size="lg"
-	:id="'cropper-'+prop.key">
+	:id="'cropper-'+model.id+'-'+model.nombre+'-'+prop.key">
 		<cropper
 		ref="cropper"
 		class="cropper"
@@ -86,12 +86,15 @@ export default {
 				if (this.model_name == 'user') {
 					this.$store.commit('auth/setUser', res.data.model)
 					this.$toast.success('Imagen actualizada')
-					this.$bvModal.hide('cropper-'+this.prop.key)
+					this.$bvModal.hide('cropper-'+this.model.id+'-'+this.model.nombre+'-'+this.prop.key)
 				} else {
-					this.$bvModal.hide('cropper-'+this.prop.key)
+					this.$bvModal.hide('cropper-'+this.model.id+'-'+this.model.nombre+'-'+this.prop.key)
 					if (res.data.model) {
 						this.$bvModal.hide(this.model_name)
 						this.$store.commit(this.model_name+'/add', res.data.model)
+						if (this.prop.type == 'images') {
+							this.model[this.prop.key].push(res.data.image_model)
+						}
 						if (this.has_many_parent_model) {
 							let index = this.has_many_parent_model[this.has_many_prop.key].findIndex(model => {
 								return model.id == this.model.id 
@@ -127,6 +130,7 @@ export default {
 						}
 					}
 				}
+				this.$emit('imageSaved', this.model)
 			})
 			.catch(err => {
 				this.loading = false

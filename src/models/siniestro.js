@@ -7,6 +7,7 @@ export default {
 			value: '',
 			not_show_on_form: true,
 			not_show: true,
+			pre_view_position: 1,
 		},
 
 
@@ -37,6 +38,7 @@ export default {
 			key: 'dias_desde_alta',
 			function: 'getDiasDesdeAlta',
 			show_only_if_is_created: true,
+			pre_view_position: 2,
 		},
 
 		{
@@ -45,18 +47,17 @@ export default {
 			only_show: true,
 			filter_modal_position: 2,
 			show_only_if_is_created: true,
+			pre_view_position: 3,
 		},
 
 		{
-			text: 'Notas importantes',
-			key: 'notas_importantes',
-			type: 'textarea',
-		},
-
-		{
-			key: 'notas_transporte',
+			text: 'Asegurado',
+			key: 'asegurado',
 			type: 'text',
-			not_show: true,
+			value: '',
+			filter_modal_position: 5,
+			pre_view_position: 12,
+			required: true,
 		},
 
 		{
@@ -66,6 +67,21 @@ export default {
 			value: '',
 			is_title: true,
 			filter_modal_position: 1,
+			pre_view_position: 9,
+			required: true,
+		},
+
+		{
+			text: 'Notas importantes',
+			key: 'notas_importantes',
+			type: 'textarea',
+			pre_view_position: 8,
+		},
+
+		{
+			key: 'notas_transporte',
+			type: 'text',
+			not_show: true,
 		},
 
 		{
@@ -74,6 +90,16 @@ export default {
 			type: 'select',
 			value: 0,
 			filter_modal_position: 3,
+			pre_view_position: 4,
+			required: true,
+		},
+
+		{
+			text: 'N° Orden servicio',
+			key: 'orden_servicio',
+			type: 'text',
+			value: '',
+			not_show: true,
 		},
 
 		{
@@ -81,6 +107,7 @@ export default {
 			key: 'tipo_orden_de_servicio_id',
 			type: 'select',
 			value: 0,
+			pre_view_position: 5,
 		},
 
 		{
@@ -88,8 +115,10 @@ export default {
 			key: 'estado_siniestro_id',
 			type: 'select',
 			value: 1,
-			show: true,
+			show: false,
+			not_show: true,
 			filter_modal_position: 4,
+			pre_view_position: 6,
 		},
 
 		{
@@ -98,6 +127,7 @@ export default {
 			type: 'select',
 			value: 0,
 			not_show: true,
+			pre_view_position: 7,
 		},
 
 		// {
@@ -124,6 +154,7 @@ export default {
 			type: 'search',
 			value: 0,
 			show: true,
+			pre_view_position: 10,
 		},
 
 		{
@@ -132,30 +163,7 @@ export default {
 			type: 'search',
 			value: 0,
 			show: true,
-		},
-
-		{
-			text: 'N° Orden servicio',
-			key: 'orden_servicio',
-			type: 'text',
-			value: '',
-			not_show: true,
-		},
-
-		// {
-		// 	text: 'Asegurado',
-		// 	key: 'asegurado_id',
-		// 	type: 'search',
-		// 	value: '',
-		// 	filter_modal_position: 5,
-		// },
-
-		{
-			text: 'Asegurado',
-			key: 'asegurado',
-			type: 'text',
-			value: '',
-			filter_modal_position: 5,
+			pre_view_position: 11,
 		},
 
 		{
@@ -163,6 +171,7 @@ export default {
 			key: 'telefono',
 			type: 'text',
 			value: '',
+			pre_view_position: 17,
 		},
 
 
@@ -179,6 +188,7 @@ export default {
 			key: 'email',
 			type: 'text',
 			value: '',
+			pre_view_position: 18,
 		},
 
 		{
@@ -188,6 +198,7 @@ export default {
 			is_date: true,
 			value: '',
 			not_show: true,
+			pre_view_position: 13,
 		},
 
 		{
@@ -197,14 +208,16 @@ export default {
 			is_date: true,
 			value: '',
 			not_show: true,
+			pre_view_position: 14,
 		},
 
 		{
 			text: 'Descripcion del hecho',
 			key: 'descripcion_del_hecho',
-			type: 'text',
+			type: 'textarea',
 			value: '',
 			not_show: true,
+			pre_view_position: 15,
 		},
 
 		{
@@ -212,6 +225,7 @@ export default {
 			key: 'causa_siniestro_id',
 			type: 'select',
 			value: 0,
+			pre_view_position: 16,
 		},
 
 		{
@@ -219,6 +233,7 @@ export default {
 			key: 'descripcion_bien',
 			type: 'textarea',
 			value: '',
+			pre_view_position: 22,
 		},
 
 		{
@@ -227,6 +242,7 @@ export default {
 			type: 'google_geocoder',
 			value: '',
 			not_show: true,
+			pre_view_position: 19,
 		},
 
 		{
@@ -243,6 +259,7 @@ export default {
 			type: 'search',
 			value: 0,
 			show: true,
+			pre_view_position: 20,
 		},
 
 		{
@@ -252,6 +269,7 @@ export default {
 			search_depends_on_from_api: true,
 			type: 'search',
 			value: 0,
+			pre_view_position: 21,
 		},
 
 		// {
@@ -262,12 +280,20 @@ export default {
 		// 	show: true,
 		// },
 
+		// {
+		// 	text: 'Cantidad Bienes',
+		// 	key: 'cantidad_bienes',
+		// 	type: 'number',
+		// 	value: 1
+		// },
+
 		{
 			text: 'Bienes',
 			key: 'bienes',
 			has_many: {
 				model_name: 'bien',
-			}
+			},
+			pre_view_position: 28,
 		},
 
 		// {
@@ -289,6 +315,16 @@ export default {
 			key: 'estado_siniestros',
 			store: 'estado_siniestro',
 			belongs_to_many: {
+				props_to_show: [
+					{
+						text: 'Nombre',
+						key: 'nombre',	
+					},
+					{
+						text: 'Codigo',
+						key: 'codigo',	
+					},
+				],
 				pivot_props_to_show: [
 					{
 						text: 'Dias',
@@ -298,6 +334,7 @@ export default {
 				can_not_modify: true,
 			},
 			not_show: true,
+			pre_view_position: 28,
 		},	
 
 		{
@@ -324,6 +361,7 @@ export default {
 			key: 'ramo_id',
 			type: 'select',
 			value: 4,
+			pre_view_position: 23,
 		},	
 
 		{
@@ -334,12 +372,14 @@ export default {
 		{
 			key: 'numero_poliza',
 			type: 'text',
+			pre_view_position: 24,
 		},	
 
 		{
 			text: 'Tipo producto',
 			key: 'tipo_producto_de_seguro_id',
 			type: 'select',
+			pre_view_position: 25,
 		},
 
 		{
@@ -352,11 +392,13 @@ export default {
 			key: 'tipo_documento_id',
 			type: 'select',
 			value: 1,
+			pre_view_position: 26,
 		},
 
 		{
 			key: 'numero_documento',
 			type: 'text',
+			pre_view_position: 27,
 		},
 		
 		{
@@ -427,14 +469,14 @@ export default {
 			not_show: true,
 		},
 
-		{
-			text: 'Foto deposito deducible',
-			key: 'foto_deposito_deducible',
-			type: 'image',
-			value: '',
-			crop_aspect_ratio: null,
-			not_show: true,
-		},
+		// {
+		// 	text: 'Foto deposito deducible',
+		// 	key: 'foto_deposito_deducible',
+		// 	type: 'image',
+		// 	value: '',
+		// 	crop_aspect_ratio: null,
+		// 	not_show: true,
+		// },
 
 		{
 			text: 'Fecha alta en Scrap Free',
@@ -539,4 +581,5 @@ export default {
 	create_model_name_spanish: 'Nuevo',
 	text_delete: 'el',
 	color_display_function: true,
+	pre_view: true,
 }

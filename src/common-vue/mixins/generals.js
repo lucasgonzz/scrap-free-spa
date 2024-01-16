@@ -129,6 +129,16 @@ export default {
 		// }, 
 	},
 	methods: {
+		checkButton(prop, model) {
+			console.log('checkButton')
+			return (prop.type == 'radio') && model[prop.key] != prop.value
+		},
+		getLabel(prop) {
+			return this.capitalize(this.propText(prop))
+		},
+		usePreView(model_name) {
+			return typeof require('@/models/'+model_name).default.pre_view != 'undefined'
+		},
 		hasColor(model_name) {
 			return typeof require('@/models/'+model_name).default.color_display_function != 'undefined'
 		},
@@ -334,15 +344,19 @@ export default {
 
 		showProperty(property, model, check_if_is_empty, check_show_on_form = false) {
 			if (check_show_on_form && property.not_show_on_form) {
+				console.log(property.text+' entro en '+1)
 				return false
 			}
 			if (property.show_only_if_is_created && !model.id) {
+				console.log(property.text+' entro en '+2)
 				return false
 			}
 			if (check_if_is_empty && ((!model[property.key] || model[property.key] == '') && !property.function )) {
+				console.log(property.text+' entro en '+3)
 				return false
 			}
 			if (property.is_image || property.is_images) {
+				console.log(property.text+' entro en '+4)
 				return false
 			}
 			if (property.if_has_extencion) {
@@ -498,6 +512,8 @@ export default {
 				}
 				if (model[prop.key]) {
 					if (prop.use_store_models) {
+						console.log('relationship')
+						console.log(relationship)
 						let finded_model = this.$store.state[relationship].models.find(_model => {
 							return _model.id == model[prop.key]
 						})

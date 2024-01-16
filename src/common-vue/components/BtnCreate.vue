@@ -24,7 +24,7 @@ export default {
 	},
 	methods: {
 		create() {
-			this.setModel(null, this.model_name)
+			this.setModel(null, this.model_name, [], true, false)
 		}
 	}
 }

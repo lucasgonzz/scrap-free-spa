@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<b-form-group
-		v-if="prop.type == 'text' || prop.type == 'textarea' || prop.type == 'number' || prop.type == 'select' || prop.type == 'checkbox' || prop.type == 'date'"
+		v-if="prop.type == 'text' || prop.type == 'textarea' || prop.type == 'number' || prop.type == 'select' || prop.type == 'checkbox' || prop.type == 'date' || prop.only_show"
 		class="pivot-input">
 			<p
 			v-if="prop.only_show">
