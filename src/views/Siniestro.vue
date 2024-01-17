@@ -3,12 +3,13 @@
 show_filter_modal
 :models_to_show="models_to_show"
 show_models_if_empty
-order_list_by="estado_siniestro"
+:order_list_by="order_list_by"
 model_name="siniestro"
 modal_size="md"
 :table_height_para_restar="60">
 	<template #model_modal_header>
 		<pdf-buttons></pdf-buttons>
+		<enviar-mensaje></enviar-mensaje>
 	</template>
 
 	<template #bienes>
@@ -25,10 +26,20 @@ export default {
 	components: {
 		ViewComponent: () => import('@/common-vue/components/view/Index'),
 		PdfButtons: () => import('@/components/siniestro/components/PdfButtons'),
+		EnviarMensaje: () => import('@/components/siniestro/components/EnviarMensaje'),
 		Bienes: () => import('@/components/siniestro/components/bienes/Index'),
 		GestoresNav: () => import('@/components/siniestro/components/GestoresNav'),
 	},
 	computed: {
+		order_list_by() {
+			if (this.is_filtered) {
+				return null 
+			}
+			return 'estado_siniestro'
+		},
+		is_filtered() {
+			return this.$store.state.siniestro.is_filtered 
+		},
 		models() {
 			return this.$store.state.siniestro.models 
 		},

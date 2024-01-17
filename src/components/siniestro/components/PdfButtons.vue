@@ -89,30 +89,38 @@ export default {
 				link = 'PedidoInspeccionLifeSeguros'
 				window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
 			} else if (this.siniestro.aseguradora.nombre == 'Sancor') {
-				if (this.gestor_aseguradora && this.gestor_aseguradora.unidad_negocio) {
-					if (this.gestor_aseguradora.unidad_negocio.nombre == 'Neuquen') {
-						link = 'SuspensionDePlazosSancorNeuquen'
-					} else if (this.gestor_aseguradora.unidad_negocio.nombre == 'Mendoza') {
-						link = 'SuspensionDePlazosSancorMendoza'
-					} else {
-						link = 'SuspensionDePlazosSancorRosario'
+				if (this.siniestro.ramo) {
+					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/CartaDesistoSancor')
+					
+					if (this.gestor_aseguradora && this.gestor_aseguradora.unidad_negocio) {
+						if (this.gestor_aseguradora.unidad_negocio.nombre == 'Neuquen') {
+							link = 'SuspensionDePlazosSancorNeuquen'
+						} else if (this.gestor_aseguradora.unidad_negocio.nombre == 'Mendoza') {
+							link = 'SuspensionDePlazosSancorMendoza'
+						} else {
+							link = 'SuspensionDePlazosSancorRosario'
+						}
+						window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
 					}
-					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+				} else {
+					this.$toast.error('Ingrese el Ramo para generar Carta Desisto Sancor')
 				}
-				window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/CartaDesistoSancor')
 			}
 		},
 		rechazo() {
 			let link
 			if (this.siniestro.aseguradora.nombre == 'Sancor') {
 				if (this.siniestro.causa_siniestro) {
-					console.log('entro para ver la causa_siniestro: '+this.siniestro.causa_siniestro)
+					console.log('entro para ver la causa_siniestro: '+this.siniestro.causa_siniestro.nombre)
 					if (this.siniestro.causa_siniestro.nombre == 'Fluctuacion') {
 						link = 'FluctuacionElectromangneticaNoCubierta'
 					} else if (this.siniestro.causa_siniestro.nombre == 'Evento no cubierto') {
 						link = 'EventoNoCubierto'
 					} else if (this.siniestro.causa_siniestro.nombre == 'Desgaste y/o vicios propios') {
 						link = 'DesgasteYOViciosPropios'
+					} else {
+						this.$toast.error('La causa del siniestro no tiene ningun documento asignado')
+						return
 					}
 					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
 				} else {

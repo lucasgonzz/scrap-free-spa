@@ -137,13 +137,18 @@ export default {
 	watch: {
 		model_name() {
 			this.initProps()
-			this.initFilter()
+			// this.initFilter()
 		},
 	},
 	created() {	
 		this.initProps()
-		this.initFilter()
-		this.setSelectOptions()
+		// this.initFilter()
+		this.$root.$on('bv::modal::show', (bvEvent, modal_id) => {
+			if (modal_id == 'filter-modal') {
+				this.initFilter()
+				this.setSelectOptions()
+			}
+		})
 	},
 	methods: {
 		setBarCode(bar_code) {
@@ -253,11 +258,15 @@ export default {
 					})
 				}
 			})
+			console.log('initFilter')
+			console.log(this.filters)
 		},
 		setSelectOptions() {
 			this.filters.forEach(filter => {
 				if (filter.type == 'select') {
 					this.filter_model[filter.key] = filter.value 
+					console.log('setSelectOptions para '+filter.key)
+					console.log(this.getOptions({key: filter.key, text: filter.label, depends_on: filter.depends_on}, this.filter_model))
 					this.$set(this.select_options, filter.key, this.getOptions({key: filter.key, text: filter.label, depends_on: filter.depends_on}, this.filter_model))
 				}
 			})

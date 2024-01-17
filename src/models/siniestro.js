@@ -57,7 +57,7 @@ export default {
 			value: '',
 			filter_modal_position: 5,
 			pre_view_position: 12,
-			required: true,
+			// required: true,
 		},
 
 		{
@@ -68,7 +68,7 @@ export default {
 			is_title: true,
 			filter_modal_position: 1,
 			pre_view_position: 9,
-			required: true,
+			// required: true,
 		},
 
 		{
@@ -76,6 +76,7 @@ export default {
 			key: 'notas_importantes',
 			type: 'textarea',
 			pre_view_position: 8,
+			// required: true,
 		},
 
 		{
@@ -87,11 +88,12 @@ export default {
 		{
 			text: 'Aseguradora',
 			key: 'aseguradora_id',
+			store: 'aseguradora',
 			type: 'select',
-			value: 0,
+			value: 1,
 			filter_modal_position: 3,
 			pre_view_position: 4,
-			required: true,
+			// required: true,
 		},
 
 		{
@@ -100,6 +102,7 @@ export default {
 			type: 'text',
 			value: '',
 			not_show: true,
+			// required: true,
 		},
 
 		{
@@ -114,6 +117,7 @@ export default {
 			text: 'Estado siniestro',
 			key: 'estado_siniestro_id',
 			type: 'select',
+			store: 'estado_siniestro',
 			value: 1,
 			show: false,
 			not_show: true,
@@ -172,6 +176,7 @@ export default {
 			type: 'text',
 			value: '',
 			pre_view_position: 17,
+			// required: true,
 		},
 
 
@@ -189,6 +194,7 @@ export default {
 			type: 'text',
 			value: '',
 			pre_view_position: 18,
+			// required: true,
 		},
 
 		{
@@ -199,6 +205,7 @@ export default {
 			value: '',
 			not_show: true,
 			pre_view_position: 13,
+			// required: true,
 		},
 
 		{
@@ -209,6 +216,7 @@ export default {
 			value: '',
 			not_show: true,
 			pre_view_position: 14,
+			// required: true,
 		},
 
 		{
@@ -218,6 +226,7 @@ export default {
 			value: '',
 			not_show: true,
 			pre_view_position: 15,
+			// required: true,
 		},
 
 		{
@@ -226,6 +235,7 @@ export default {
 			type: 'select',
 			value: 0,
 			pre_view_position: 16,
+			// required: true,
 		},
 
 		{
@@ -234,6 +244,7 @@ export default {
 			type: 'textarea',
 			value: '',
 			pre_view_position: 22,
+			filter_modal_position: 6,
 		},
 
 		{
@@ -330,6 +341,11 @@ export default {
 						text: 'Dias',
 						key: 'dias_en_estado_siniestro',	
 					},
+					{
+						text: 'Usuario',
+						key: 'employee_id',
+						function: 'get_estado_siniestro_employee'	
+					},
 				],
 				can_not_modify: true,
 			},
@@ -373,6 +389,7 @@ export default {
 			key: 'numero_poliza',
 			type: 'text',
 			pre_view_position: 24,
+			// required: true,
 		},	
 
 		{

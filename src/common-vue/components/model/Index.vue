@@ -259,7 +259,7 @@ export default {
 			this.$emit('modelDeleted')
 		},
 		save(info) {
-			console.log(info)
+			this.setPropsValues()
 			if (this.check() && !this.loading) {
 				this.$store.commit('auth/setMessage', 'Guardando')
 				this.loading = true 
@@ -377,6 +377,24 @@ export default {
 				model_to_send[this.prop_to_send_on_save.key] = this.prop_to_send_on_save.value
 			}
 			return model_to_send
+		},
+		setPropsValues() {
+			this.properties.forEach(prop => {
+				if (
+					(prop.type == 'text' 
+					|| prop.type == 'textarea' 
+					|| prop.type == 'date' 
+					|| prop.type == 'select' 
+					|| prop.type == 'select')
+
+					&& typeof prop.not_show_on_form == 'undefined' && typeof prop.show_only_if_is_created == 'undefined') {
+					let input = document.getElementById(this.model_name+'-'+prop.key)
+					console.log('input de '+prop.text)
+					console.log(input)
+					console.log(input.value)
+					this.model[prop.key] = input.value
+				}
+			})
 		},
 		check() {
 			let ok = true

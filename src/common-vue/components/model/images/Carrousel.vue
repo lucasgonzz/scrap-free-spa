@@ -50,7 +50,8 @@
 		<i class="icon-eye-slash"></i>
 		No hay imagenes
 	</p>
-	<b-button-group
+	<div
+	class="cont-btn-input"
 	v-if="show_btn_google">
 		<b-button
 		size="sm"
@@ -59,15 +60,9 @@
 			Buscar imagen en Google
 		</b-button>
 
-		<!-- <b-button
-		size="sm"
-		variant="outline-primary"
-		@click="uploadImage">
-			Buscar imagen en este equipo 
-		</b-button> -->
 		<b-form-file
 		id="input-file-selector"
-		class="m-b-15 file-reader-input"
+		class="m-b-15 file-reader-input-with-button"
 		browse-text="Buscar"
 		v-model="file"
 		variant="primary"
@@ -77,7 +72,7 @@
 		drop-placeholder="Solta la imagen aqui..."
 		></b-form-file>
 
-	</b-button-group>
+	</div>
 	<b-form-file
 	v-else
 	id="input-file-selector"
@@ -174,6 +169,19 @@ export default {
 			max-height: 50vh
 			// max-height: 50vh
 			// max-height: calc(100vh - 150px)
+
+.cont-btn-input
+	display: flex 
+	flex-direction: row 
+	align-items: center 
+	justify-content: flex-start
+	
+	button 
+		padding: 8px
+
+	.file-reader-input-with-button
+		width: 200px !important
+		margin: 15px 0
 
 .file-reader-input
 	width: 100% !important

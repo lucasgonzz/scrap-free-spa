@@ -6,6 +6,7 @@
 			{{ label }} 
 		</label>
 		<input 
+		:id="id"
 		@change="setDate"
 		v-model="date_value"
 		type="date" 
@@ -35,6 +36,15 @@ export default {
 		set_model_date: {
 			type: Boolean,
 			default: false
+		},
+		model_name: {
+			type: String,
+			default: null
+		},
+	},
+	computed: {
+		id() {
+			return this.model_name+'-'+this.prop.key
 		},
 	},
 	created() {

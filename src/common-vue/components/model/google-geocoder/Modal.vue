@@ -192,7 +192,7 @@ export default {
 			this.model[this.prop.key] = result.address 
 			this.model[this.prop.key+'_lat'] = result.geometry.location.lat
 			this.model[this.prop.key+'_lng'] = result.geometry.location.lng
-			this.setModel(this.model, this.model_name, [], false)
+			this.setModel(this.model, this.model_name, [], false, false)
 			this.$bvModal.hide(this.id)
 		}
 	}

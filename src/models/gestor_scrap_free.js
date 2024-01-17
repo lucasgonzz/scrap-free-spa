@@ -15,6 +15,12 @@ export default {
 			value: '',
 			is_title: true,
 		},
+		{
+			text: 'Nombre Formal (para mostrar en WhatsApp)',
+			key: 'nombre_formal',
+			type: 'text',
+			value: '',
+		},
 		// {
 		// 	text: 'Celular',
 		// 	key: 'celular',

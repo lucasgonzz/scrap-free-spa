@@ -11,6 +11,7 @@ export default {
 			text: 'Estado siniestro',
 			key: 'estado_siniestro_id',
 			type: 'select',
+			use_store_models: true,
 		},
 		{
 			text: 'Dias en estado minimo',

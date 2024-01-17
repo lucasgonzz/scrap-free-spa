@@ -73,6 +73,8 @@
 
 						        <date-picker
 						        @setDate="setDate"
+						        :model_name="model_name"
+						        :model="model"
 						        :prop="prop"
 						        :value="model[prop.key]"
 								v-else-if="prop.type == 'date'"></date-picker>
@@ -104,6 +106,7 @@
 								v-else-if="prop.type == 'text' || prop.type == 'number' || prop.type == 'password'"
 								class="d-flex w-100">
 									<b-form-input
+									:id="model_name+'-'+prop.key"
 							        :disabled="isDisabled(prop, form_to_filter)"
 									:placeholder="'Ingresar '+propText(prop)"
 									:type="prop.type"
@@ -122,6 +125,7 @@
 								:placeholder="'Ingresar '+propText(prop)"
 								:type="prop.type"
 								:rows="6"
+								:id="model_name+'-'+prop.key"
 								v-model="model[prop.key]"></b-form-textarea>
 
 
@@ -131,6 +135,7 @@
 							    	:model_name="modelNameFromRelationKey(prop)"></model-component>
 
 									<b-form-select
+									:id="model_name+'-'+prop.key"
 									@change="setChange(prop)"
 							        :disabled="isDisabled(prop, form_to_filter)"
 									v-model="model[prop.key]"
