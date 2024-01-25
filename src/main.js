@@ -10,6 +10,7 @@ Vue.use(Geocoder, {
     defaultLanguage:    null, // e.g. 'en'
     defaultMode:        'address', // or 'lat-lng'
     googleMapsApiKey:   'AIzaSyAh0cdPh_LCVBWcrWeNsCiAHDcUDiNCc4E'
+    // AIzaSyBDyXI5lejBnwQ5iV601WnSFeAPqqRF4bw
 });
 
 // Vue Scrool

@@ -100,6 +100,8 @@ export default {
 			state.is_filtered = value
 		},
 		add(state, value) {
+			console.log('siniestro add:')
+			console.log(value)
 			let index = state.models.findIndex(item => {
 				return item.id == value.id
 			})

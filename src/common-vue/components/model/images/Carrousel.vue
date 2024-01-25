@@ -61,9 +61,9 @@
 		</b-button>
 
 		<b-form-file
-		id="input-file-selector"
 		class="m-b-15 file-reader-input-with-button"
 		browse-text="Buscar"
+		:id="input_file_name"
 		v-model="file"
 		variant="primary"
 		:state="Boolean(file)"
@@ -75,8 +75,8 @@
 	</div>
 	<b-form-file
 	v-else
-	id="input-file-selector"
 	class="file-reader-input"
+	:id="input_file_name"
 	browse-text="Buscar"
 	v-model="file"
 	variant="primary"
@@ -103,6 +103,9 @@ export default {
 		show_btn_google() {
 			return typeof this.prop.not_show_google_search_option == 'undefined'
 		},
+		input_file_name() {
+			return this.model_name+'-'+this.prop.key+'-input-file-drop'
+		}
 	},
 	data() {
 		return {
@@ -111,7 +114,7 @@ export default {
 	},
 	methods: {
 		upload(event) {
-			var file = document.getElementById('input-file-selector').files[0];
+			var file = document.getElementById(this.input_file_name).files[0];
 			if (typeof file == 'undefined') {
 				file = event.dataTransfer.files[0];		
 			}
@@ -169,6 +172,7 @@ export default {
 			max-height: 50vh
 			// max-height: 50vh
 			// max-height: calc(100vh - 150px)
+
 
 .cont-btn-input
 	display: flex 

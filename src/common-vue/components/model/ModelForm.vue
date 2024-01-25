@@ -14,6 +14,7 @@
 			:xl="getCol(prop, 3, input_full_width)"
 			:key="'model-prop-'+index">
 				<b-form-group
+				:class="colorLabel(prop)"
 				:description="prop.description">
 					<label
 					class="form-label">
@@ -41,8 +42,9 @@
 								:class="prop.from_pre_view ? 'text-primary' : ''"
 								class="m-b-0 m-l-25 text-only-show">
 									<strong 
+									:class="colorLabel(prop)"
+									v-html="propertyText(model, prop, false, !prop.from_pre_view)"
 									v-if="propertyText(model, prop) != '' || propertyText(model, prop) == 0">
-										{{ propertyText(model, prop) }}
 									</strong>
 									<span
 									v-else>
@@ -124,7 +126,7 @@
 						        :disabled="isDisabled(prop, form_to_filter)"
 								:placeholder="'Ingresar '+propText(prop)"
 								:type="prop.type"
-								:rows="6"
+								:rows="10"
 								:id="model_name+'-'+prop.key"
 								v-model="model[prop.key]"></b-form-textarea>
 
@@ -384,19 +386,11 @@ export default {
 		},
 	},
 	methods: {
-		// checkWatch(prop) {
-		// 	if (prop.watch_for) {
-		// 		console.log('watch_for en '+prop.text)
-		// 		let index_porp_for_update_type = this.properties_formated.findIndex(_prop => {
-		// 			return _prop.key == prop.watch_for
-		// 		})
-		// 		let prop_for_update_type = {
-		// 			...this.properties_formated[index_porp_for_update_type],
-		// 		}
-		// 		prop_for_update_type.type = this.propType(prop_for_update_type, this.model)
-		// 		this.properties_formated.splice(index_porp_for_update_type, 1, prop_for_update_type)
-		// 	}
-		// },
+		colorLabel(prop) {
+			if (prop.color_function) {
+				return this[prop.color_function](this.model)
+			}
+		},
 		isDisabled(prop, form_to_filter = false) {
 			if (prop.disabled && !form_to_filter) {
 				return true 

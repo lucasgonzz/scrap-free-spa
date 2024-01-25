@@ -63,7 +63,12 @@ export default {
 			return this.$store.state[this.model_name].models
 		},
 		properties() {
-			return require(`@/models/${this.model_name}`).default.properties 
+			let props = require(`@/models/${this.model_name}`).default.properties
+			let props_ordenadas = props.filter(prop => prop.table_position)
+			if (props_ordenadas.length) {
+				return props_ordenadas.sort((a, b) => a.table_position - b.table_position)
+			} 
+			return props
 		}
 	},
 	methods: {

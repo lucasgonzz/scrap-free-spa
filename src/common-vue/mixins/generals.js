@@ -129,6 +129,10 @@ export default {
 		// }, 
 	},
 	methods: {
+		prop_to_show_in_modal_title(model_name) {
+			let prop_to_show_in_modal_title = require('@/models/'+model_name).default.prop_to_show_in_modal_title
+			return typeof prop_to_show_in_modal_title != 'undefined' ? prop_to_show_in_modal_title : null
+		},
 		checkButton(prop, model) {
 			console.log('checkButton')
 			return (prop.type == 'radio') && model[prop.key] != prop.value
@@ -495,7 +499,8 @@ export default {
 		modelsStoreFromName(model_name) {
 			return this.$store.state[model_name].models
 		},
-		propertyText(model, prop, from_pivot = false) {
+		propertyText(model, prop, from_pivot = false, sort_string = true) {
+			console.log('propertyText de '+prop.text)
 			if (prop.type == 'images' || prop.type == 'image') {
 				return null
 			}
@@ -503,6 +508,7 @@ export default {
 				return this.getFunctionValue(prop, model)
 			}
 			if (this.isRelationKey(prop)) {
+				console.log('entro en relationKey')
 				let relationship = this.modelNameFromRelationKey(prop, false, false)
 				let prop_name = 'name'
 				if (prop.relation_prop_name) {
@@ -510,6 +516,9 @@ export default {
 				} else if (this.idiom == 'es') {
 					prop_name = 'nombre'
 				}
+				console.log(model)
+				console.log(prop)
+				console.log(model[prop.key])
 				if (model[prop.key]) {
 					if (prop.use_store_models) {
 						console.log('relationship')
@@ -592,7 +601,10 @@ export default {
 				}
 			}
 			if (prop.type == 'textarea' && model[prop.key]) {
-				return model[prop.key].substring(0, 40)
+				if (sort_string) {
+					return model[prop.key].substring(0, 40)
+				}
+				return model[prop.key].replace(/\n/g, '<br>')
 			}
 			return model[prop.key] 
 		},

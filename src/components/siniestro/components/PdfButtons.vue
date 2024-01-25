@@ -129,6 +129,10 @@ export default {
 			}
 		},
 		retiro() {
+			if (!this.siniestro.fecha_denuncia) {
+				this.$toast.error('Ingrese la fecha de denuncia del siniestro')
+				return false
+			} 
 			window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/RemitoRetiroAsegurado')
 		},
 		devolucion() {
@@ -182,6 +186,10 @@ export default {
 			}
 		},
 		informeLiquidador() {
+			if (!this.siniestro.tipo_orden_de_servicio) {
+				this.$toast.error('Indique TIPO ORDEN DE SERVICIO del siniestro')
+				return false
+			}
 			this.opciones_para_imprimir = [
 				{
 					text: 'Informe liquidador',

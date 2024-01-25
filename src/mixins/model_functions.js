@@ -9,6 +9,14 @@ export default {
 		getFunctionValue(prop, model) {
 			return this[prop.function](model)
 		},
+		diferencia_fecha_ocurrencia_fecha_denuncia(siniestro) {
+			if (siniestro.fecha_ocurrencia && siniestro.fecha_denuncia) {
+				let ocurrencia = moment(siniestro.fecha_ocurrencia)
+				let denuncia = moment(siniestro.fecha_denuncia)
+				return denuncia.diff(ocurrencia, 'days')+' dias'
+			}
+			return '-'
+		},
 		get_estado_siniestro_employee(estado_siniestro) {
 			console.log('get_estado_siniestro_employee')
 			console.log(estado_siniestro)
@@ -39,6 +47,9 @@ export default {
 				return color.name 
 			} 
 		},
+		// get_siniestro_prop_color(siniestro) {
+
+		// },
 		getDiasDesdeAlta(model) {
 			return moment().diff(model.created_at, 'days')
 		}

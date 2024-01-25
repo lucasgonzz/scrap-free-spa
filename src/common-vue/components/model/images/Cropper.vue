@@ -131,6 +131,10 @@ export default {
 					}
 				}
 				this.$emit('imageSaved', this.model)
+				let input_drop = document.getElementById(this.model_name+'-'+this.prop.key+'-input-file-drop')
+				setTimeout(() => {
+					input_drop.focus()
+				}, 500)
 			})
 			.catch(err => {
 				this.loading = false

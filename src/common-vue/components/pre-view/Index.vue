@@ -5,18 +5,19 @@ hide-footer
 size="md"
 :title="title">
 
-	
-	<model-form
-	:model="model"
-	:model_name="model_name"
-	:properties="properties">
-	</model-form>
+	<div class="modal-pre-view-content">
+		<model-form
+		:model="model"
+		:model_name="model_name"
+		:properties="properties">
+		</model-form>
 
 
-	<div 
-	@click="setModel(model, model_name, [], true, false)"
-	class="btn-edit apretable">
-		<i class="icon-edit"></i>
+		<div 
+		@click="setModel(model, model_name, [], true, false)"
+		class="btn-edit apretable">
+			<i class="icon-edit"></i>
+		</div>
 	</div>
 
 </b-modal>
@@ -34,7 +35,14 @@ export default {
 			return this.model_name+'-pre-view'
 		},
 		title() {
-			return this.singular(this.model_name)+' N° '+this.model.num
+			let text = this.singular(this.model_name)
+			let prop_title = this.prop_to_show_in_modal_title(this.model_name)
+			if (prop_title) {
+				text += ' '+ this.model[prop_title]
+			} else if (this.model.num) {
+				text += ' N° '+this.model.num
+			}
+			return text
 		},
 		model() {
 			return this.$store.state[this.model_name].model 
@@ -84,4 +92,20 @@ export default {
 		width: 70px
 		height: 70px
 		font-size: 25px
+
+.modal-pre-view-content
+
+	.model-form
+		.form-label 
+			font-size: .6em !important
+			strong 
+				font-weight: normal
+			i
+				display: none
+
+		[class^='col-']
+			border: none
+
+		.text-only-show 
+			margin-left: 0 !important
 </style>

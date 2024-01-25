@@ -241,7 +241,10 @@ export default {
 		title() {
 			if (this.model.id) {
 				let text = 'Actualizar '+this.singular(this.model_name).toLowerCase()
-				if (this.model.num) {
+				let prop_title = this.prop_to_show_in_modal_title(this.model_name)
+				if (prop_title) {
+					text += ' '+ this.model[prop_title]
+				} else if (this.model.num) {
 					text += ' N° '+this.model.num
 				}
 				return text
@@ -384,15 +387,25 @@ export default {
 					(prop.type == 'text' 
 					|| prop.type == 'textarea' 
 					|| prop.type == 'date' 
-					|| prop.type == 'select' 
+					|| prop.type == 'search' 
 					|| prop.type == 'select')
 
 					&& typeof prop.not_show_on_form == 'undefined' && typeof prop.show_only_if_is_created == 'undefined') {
 					let input = document.getElementById(this.model_name+'-'+prop.key)
 					console.log('input de '+prop.text)
 					console.log(input)
-					console.log(input.value)
-					this.model[prop.key] = input.value
+					if (prop.type == 'search') {
+						let model_id_value = input.getAttribute('model_id')
+						if (model_id_value) {
+							this.model[prop.key] = input.getAttribute('model_id')
+							console.log('Se le puso el value de search para '+prop.text)
+						} else {
+							console.log('NO SE le puso el value de search para '+prop.text)
+						}
+					} else {
+						console.log('se le puso el value de '+input.value)
+						this.model[prop.key] = input.value
+					}
 				}
 			})
 		},
@@ -424,7 +437,7 @@ export default {
 @import '@/sass/_custom.scss'
 @if ($theme == 'dark') 
 	.modal-content
-		background: #333 !important
+		background: #1d1d1d !important
 	.modal-header, .modal-header > .close
 		color: rgba(255, 255, 255, .9) !important
 @else 
