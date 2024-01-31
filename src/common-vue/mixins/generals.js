@@ -129,6 +129,18 @@ export default {
 		// }, 
 	},
 	methods: {
+		validarEmail(email) {
+			// Expresión regular para validar una dirección de correo electrónico
+			// var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			var regex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+			
+
+			// Comprobar si la dirección de correo electrónico cumple con la expresión regular
+			return regex.test(email);
+		},
+		get_table_prop_slot_name(prop) {
+			return 'table-prop-'+prop.key
+		},
 		prop_to_show_in_modal_title(model_name) {
 			let prop_to_show_in_modal_title = require('@/models/'+model_name).default.prop_to_show_in_modal_title
 			return typeof prop_to_show_in_modal_title != 'undefined' ? prop_to_show_in_modal_title : null

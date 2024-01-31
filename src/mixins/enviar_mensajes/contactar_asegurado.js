@@ -48,6 +48,7 @@ export default {
 		},
 		contactar_asegurado_email() {
 			console.log('entro al metodo contactar_asegurado_email')
+			this.sending_mail = true
 			if (this.check_contactar_asegurado(true)) {
 				let text = this.mensaje_contactar_asegurado(true) 
 
@@ -66,6 +67,8 @@ export default {
 					this.$toast.error(err)
 					console.log(err)
 				})
+			} else {
+				this.sending_mail = false
 			}
 		},
 		check_contactar_asegurado(for_email = false) {
@@ -85,9 +88,15 @@ export default {
 				this.$toast.error('Ingresa el TELEFONO para enviar el mensaje')
 				return false
 			}
-			if (for_email && !this.siniestro.email) {
-				this.$toast.error('Ingresa el EMAIL para enviar el mensaje')
-				return false
+			if (for_email) {
+				if (!this.siniestro.email) {
+					this.$toast.error('Ingresa el EMAIL para enviar el mensaje')
+					return false
+				}
+				if (!this.validarEmail(this.siniestro.email)) {
+					this.$toast.error('Revise el campo EMAIL, parece que no esta bien ingresado')
+					return false
+				}
 			}
 			console.log('paso el metodo check_contactar_asegurado')
 			return true

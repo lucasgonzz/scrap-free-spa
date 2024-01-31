@@ -11,9 +11,14 @@
 
 		<b-modal
 		:size="size"
-		:title="title"
 		scrollable
 		:id="model_name">
+
+			<template #modal-title>
+				<slot name="model_modal_title">
+					{{ title }}
+				</slot>
+			</template>
 
 			<slot 
 			name="model_modal_header"
@@ -47,8 +52,8 @@
 
 				<template
 				v-for="prop in properties"
-				v-slot:[prop.key]>
-					<slot :name="prop.key"></slot>
+				v-slot:[prop.key]="props">
+					<slot :name="prop.key" :model="props.model"></slot>
 				</template>
 
 			</model-form>
@@ -78,7 +83,7 @@
 						<btn-loader
 						class="m-l-10"
 						:block="false"
-						v-if="can_save"
+						v-if="can_save && show_only_guardar"
 						@clicked="save"
 						:prop_to_send_on_emit="{close: false}"
 						:loader="loading"
@@ -176,6 +181,10 @@ export default {
 		delete_text: {
 			type: String,
 			default: null,
+		},
+		show_only_guardar: {
+			type: Boolean,
+			default: true,
 		},
 	},
 	components: {

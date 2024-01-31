@@ -2,8 +2,13 @@
 <b-modal
 :id="id"
 hide-footer
-size="md"
-:title="title">
+size="md">
+
+	<template #modal-title>
+		<slot name="model_modal_pre_view_title">
+			{{ title }}
+		</slot>
+	</template>
 
 	<div class="modal-pre-view-content">
 		<model-form
@@ -79,13 +84,13 @@ export default {
 	color: #FFF
 	z-index: 10000
 	border-radius: 50%
-	border: 3px solid darken($blue, 20)
+	border: 5px solid darken($blue, 30)
 	cursor: pointer
 
 	@media screen and (max-width: 768px)
 		right: 10px
-		width: 50px
-		height: 50px
+		width: 60px
+		height: 60px
 		font-size: 20px
 	@media screen and (min-width: 768px)
 		left: calc(50vw + 300px)

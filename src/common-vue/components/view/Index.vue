@@ -6,7 +6,11 @@
 
 		<pre-view
 		:model_name="model_name"
-		v-if="usePreView(model_name)"></pre-view>
+		v-if="usePreView(model_name)">
+    		<template #model_modal_pre_view_title>
+    			<slot name="model_modal_pre_view_title"></slot>
+    		</template>
+		</pre-view>
 
     	<model
     	v-if="show_modal"
@@ -22,7 +26,12 @@
     	:prop_to_send_on_save="prop_to_send_on_save"
     	:emit_on_saved_instead_continue="emit_on_saved_instead_continue"
     	:not_show_delete_text="not_show_delete_text"
-    	:delete_text="delete_text">
+    	:delete_text="delete_text"
+    	:show_only_guardar="show_only_guardar">
+    		<template #model_modal_title>
+    			<slot name="model_modal_title"></slot>
+    		</template>
+
     		<template v-slot:model_modal_header="slotProps">
     			<slot name="model_modal_header" :model="slotProps.model"></slot>
     		</template>
@@ -34,8 +43,8 @@
     		</template>
     		<template
     		v-for="prop in properties"
-			v-slot:[prop.key]>
-				<slot :name="prop.key">
+			v-slot:[prop.key]="props">
+				<slot :name="prop.key" :model="props.model">
 				</slot>
     		</template>
     	</model>
@@ -59,6 +68,7 @@
 			<template v-slot:buttons>
 				<slot name="horizontal_nav_buttons"></slot>
 			</template>
+			
 		</horizontal-nav>
 	
 		<slot name="body"></slot>
@@ -79,6 +89,11 @@
 			<template v-slot:table_right_options="slotProps">
 				<slot name="table_right_options" :model="slotProps.model"></slot>
 			</template>
+    		<template
+    		v-for="prop in properties"
+			v-slot:[get_table_prop_slot_name(prop)]="props">
+				<slot :name="'table-prop-'+prop.key" :model="props.model"></slot>
+    		</template>
 		</list>
 
 		<slot name="view_footer"></slot>
@@ -215,6 +230,10 @@ export default {
 		table_height_para_restar: {
 			type: Number,
 			default: null,
+		},
+		show_only_guardar: {
+			type: Boolean,
+			default: true,
 		},
 	},
 	computed: {

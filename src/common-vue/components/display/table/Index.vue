@@ -40,6 +40,12 @@
 							:model_name="model_name"
 							:props="props"
 							:set_model_on_row_selected="set_model_on_row_selected">
+								<template
+								v-for="prop in properties"
+								v-slot:[prop.key]>
+									<slot :model="model" :name="'table-prop-'+prop.key"></slot>
+								</template>
+
 								<template v-slot:table_right_options="slotProps">
 									<slot name="table_right_options" :model="model"></slot>
 								</template>
@@ -58,6 +64,11 @@
 						:set_model_on_row_selected="set_model_on_row_selected">
 							<template v-slot:table_right_options="slotProps">
 								<slot name="table_right_options" :model="model"></slot>
+							</template>
+							<template
+							v-for="prop in properties"
+							v-slot:[prop.key]>
+								<slot :model="model" :name="'table-prop-'+prop.key"></slot>
 							</template>
 						</tr-component>
 					</template>

@@ -6,7 +6,17 @@ show_models_if_empty
 :order_list_by="order_list_by"
 model_name="siniestro"
 modal_size="md"
-:table_height_para_restar="60">
+:table_height_para_restar="60"
+:show_only_guardar="false">
+	
+	<template #model_modal_title>
+		<model-modal-title></model-modal-title>
+	</template>
+	
+	<template #model_modal_pre_view_title>
+		<model-modal-title></model-modal-title>
+	</template>
+
 	<template #model_modal_header>
 		<pdf-buttons></pdf-buttons>
 		<enviar-mensaje></enviar-mensaje>
@@ -19,12 +29,19 @@ modal_size="md"
 	<template #view_footer>
 		<gestores-nav></gestores-nav>
 	</template>
+
+	<template #table-prop-numero_siniestro="props">
+		<numero-siniestro-con-svg
+		:siniestro_prop="props.model"></numero-siniestro-con-svg>
+	</template>
 </view-component>	
 </template>
 <script>
 export default {
 	components: {
 		ViewComponent: () => import('@/common-vue/components/view/Index'),
+		ModelModalTitle: () => import('@/components/siniestro/components/ModelModalTitle'),
+		NumeroSiniestroConSvg: () => import('@/components/siniestro/components/NumeroSiniestroConSvg'),
 		PdfButtons: () => import('@/components/siniestro/components/PdfButtons'),
 		EnviarMensaje: () => import('@/components/siniestro/components/EnviarMensaje'),
 		Bienes: () => import('@/components/siniestro/components/bienes/Index'),
@@ -66,3 +83,8 @@ export default {
 	}
 }
 </script>
+<style lang="sass">
+.modal-title-img
+	width: 25px
+	margin-left: 10px
+</style>

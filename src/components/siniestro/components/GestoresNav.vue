@@ -5,7 +5,12 @@
 		:class="isActive(gestor) ? 'active-gestor' : ''"
 		@click="setGestor(gestor)"
 		class="gestor-item">
-			<i class="icon-user"></i>
+			<img 
+			v-if="gestor.svg"
+			:src="gestor.svg">
+			<i 
+			v-else
+			class="icon-user"></i>
 			<p class="name">
 				{{ gestor.nombre }}
 			</p>
@@ -50,7 +55,11 @@ export default {
 		flex-direction: column
 		align-items: center 
 		justify-content: center
-		i 
+		
+		img 
+			width: 20px
+
+		i
 			font-size: 18px
 			color: #FFF
 		.name 
@@ -61,4 +70,5 @@ export default {
 	.active-gestor
 		border-bottom: 4px solid $blue 
 		border-radius: 4px	
+		font-weight: bold
 </style>

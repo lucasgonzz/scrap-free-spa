@@ -21,27 +21,12 @@ export default {
 			type: 'text',
 			value: '',
 		},
-		// {
-		// 	text: 'Celular',
-		// 	key: 'celular',
-		// 	type: 'text',
-		// 	value: '',
-		// 	show: true,
-		// },
-		// {
-		// 	text: 'Telefono',
-		// 	key: 'telefono',
-		// 	type: 'text',
-		// 	value: '',
-		// 	show: true,
-		// },
-		// {
-		// 	text: 'Email',
-		// 	key: 'email',
-		// 	type: 'text',
-		// 	value: '',
-		// 	show: true,
-		// },
+		{
+			text: 'SVG',
+			key: 'svg',
+			type: 'text',
+			value: '',
+		},
 		{
 			text: 'Unidad de negocios',
 			key: 'unidad_negocio_id',

@@ -20,6 +20,12 @@
 			<template v-slot:table_right_options="slotProps">
 				<slot name="table_right_options" :model="slotProps.model"></slot>
 			</template>
+			
+			<template
+			v-for="prop in properties"
+			v-slot:[get_table_prop_slot_name(prop)]="props">
+				<slot :name="'table-prop-'+prop.key" :model="props.model"></slot>
+			</template>
 		</display>
 	</div>
 </template>

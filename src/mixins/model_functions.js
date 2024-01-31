@@ -51,7 +51,10 @@ export default {
 
 		// },
 		getDiasDesdeAlta(model) {
-			return moment().diff(model.created_at, 'days')
+			if (model.fecha_denuncia) {
+				return moment().diff(model.fecha_denuncia, 'days')
+			}
+			return ''
 		}
 	}
 }
