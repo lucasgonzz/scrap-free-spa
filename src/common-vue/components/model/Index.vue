@@ -394,6 +394,7 @@ export default {
 			this.properties.forEach(prop => {
 				if (
 					(prop.type == 'text' 
+					|| prop.type == 'checkbox' 
 					|| prop.type == 'textarea' 
 					|| prop.type == 'date' 
 					|| prop.type == 'search' 
@@ -401,9 +402,17 @@ export default {
 
 					&& typeof prop.not_show_on_form == 'undefined' && typeof prop.show_only_if_is_created == 'undefined') {
 					let input = document.getElementById(this.model_name+'-'+prop.key)
-					console.log('input de '+prop.text)
+					console.log('input de '+prop.key)
 					console.log(input)
 					if (prop.type == 'search') {
+						let model_id_value = input.getAttribute('model_id')
+						if (model_id_value) {
+							this.model[prop.key] = input.getAttribute('model_id')
+							console.log('Se le puso el value de search para '+prop.text)
+						} else {
+							console.log('NO SE le puso el value de search para '+prop.text)
+						}
+					} else if (prop.type == 'checkbox') {
 						let model_id_value = input.getAttribute('model_id')
 						if (model_id_value) {
 							this.model[prop.key] = input.getAttribute('model_id')

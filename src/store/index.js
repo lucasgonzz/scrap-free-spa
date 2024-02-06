@@ -40,6 +40,8 @@ import centro_reparacion from '@/store/centro_reparacion'
 import nota_importante from '@/store/nota_importante'
 import color_siniestro from '@/store/color_siniestro'
 import siniestro_metricas from '@/store/siniestro_metricas/index' 
+import amortizacion from '@/store/amortizacion' 
+import liquidacion from '@/store/liquidacion' 
 
 Vue.use(Vuex)
 
@@ -89,5 +91,7 @@ export default new Vuex.Store({
         nota_importante,
         color_siniestro,
         siniestro_metricas,
+        amortizacion,
+        liquidacion,
     }
 })

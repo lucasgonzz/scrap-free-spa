@@ -10,6 +10,18 @@ export default {
 		},
 
 		{
+			text: 'Liquidacion',
+			type: 'button',
+			button: {
+				button_text: 'Liquidacion',
+				variant: 'primary',
+				function: 'setLiquidaciones',
+			},
+			modal: 'liquidacion',
+			not_show: true,
+		},
+
+		{
 			text: 'Dias',
 			key: 'dias_desde_alta',
 			function: 'getDiasDesdeAlta',
@@ -82,8 +94,8 @@ export default {
 		{
 			text: 'Centro reparacion',
 			key: 'centro_reparacion_id',
-			type: 'select',
-			value: 0,
+			type: 'search',
+			// value: 0,
 			not_show: true,
 			table_position: 16,
 		},

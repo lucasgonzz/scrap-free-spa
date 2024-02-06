@@ -247,7 +247,9 @@ export default {
 	watch: {
 		loading() {
 			console.log('watch loading y setHeight')
-			this.setHeight()
+			setTimeout(() => {
+				this.setHeight()
+			}, 500)
 		}
 	},
 	methods: {

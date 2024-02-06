@@ -148,6 +148,7 @@
 								v-else-if="prop.type == 'checkbox'"
 						        :disabled="isDisabled(prop, form_to_filter)"
 								v-model="model[prop.key]"
+								:id="model_name+'-'+prop.key"
 								:value="1"
 								:unchecked-value="0">
 									{{ propText(prop) }}

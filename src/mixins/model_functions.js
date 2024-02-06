@@ -9,6 +9,15 @@ export default {
 		getFunctionValue(prop, model) {
 			return this[prop.function](model)
 		},
+		setLiquidaciones(siniestro) {
+			console.log('setLiquidaciones')
+			this.$store.commit('liquidacion/setSiniestro', siniestro)
+			this.$store.commit('liquidacion/setCoberturas')
+			this.$store.commit('liquidacion/set_bienes_antiguedad')
+			this.$store.commit('liquidacion/set_bienes_amortizacion', this.$store.state.amortizacion.models)
+			this.$store.commit('liquidacion/aplicar_coberturas_a_los_bienes')
+			// this.$bvModal.show('liquidacion')
+		},
 		diferencia_fecha_ocurrencia_fecha_denuncia(siniestro) {
 			if (siniestro.fecha_ocurrencia && siniestro.fecha_denuncia) {
 				let ocurrencia = moment(siniestro.fecha_ocurrencia)

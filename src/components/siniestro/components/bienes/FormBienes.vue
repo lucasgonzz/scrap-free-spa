@@ -97,6 +97,30 @@
 									:options="getOptions(prop, model, 	model_name)"></b-form-select>
 								</div>		
 
+								<div
+								v-else-if="prop.type == 'search'">
+									<search-component
+									class="m-b-15"
+									:id="index+'-'+model_name+'-'+prop.key"
+									@setSelected="setSelected"
+									:model_name="modelNameFromRelationKey(prop)"
+									:model="model"
+									show_btn_create
+									:clear_query="clearQuery(prop)" 
+									save_if_not_exist
+									:auto_select="false"
+									:prop="prop"></search-component>
+								</div>
+
+								<b-form-checkbox
+								v-else-if="prop.type == 'checkbox'"
+								v-model="model[prop.key]"
+								@change="callSetBienesData"
+								:value="1"
+								:unchecked-value="0">
+									{{ propText(prop) }}
+								</b-form-checkbox>
+
 								<p
 								class="function-value"
 								v-else-if="prop.function">
@@ -114,6 +138,30 @@
 								v-if="prop.prop_info">
 									{{ propInfo(prop) }}
 								</p>
+
+
+								<div
+								class="m-l-15 m-b-20"
+						    	v-if="(prop.has_many && prop.has_many.models_from_parent_prop && prop.type == 'search') || (prop.belongs_to_many && !prop.belongs_to_many.related_with_all && (!prop.type || prop.type != 'checkbox'))">
+									<table-component
+									:loading="false"
+									:models="model[prop.key]"
+									:model_name="prop.store"
+									:pivot="prop.belongs_to_many"
+									:set_model_on_row_selected="false"
+									show_pivot_created_at
+									:show_btn_edit="false">
+										<template v-slot:table_right_options="slotProps">
+											<slot name="belongs" :model="slotProps.model"></slot>
+											<b-button
+											class="m-l-15"
+											variant="danger"
+											@click="removeModel(model, prop, slotProps.model)">
+												<i class="icon-trash"></i>
+											</b-button>
+										</template>  
+									</table-component>	
+								</div>
 							</slot>
 						</div>
 
@@ -137,6 +185,8 @@ export default {
 		Images: () => import('@/common-vue/components/model/images/Index'),
 		BtnLoader: () => import('@/common-vue/components/BtnLoader'),
 		DatePicker: () => import('@/common-vue/components/model/form/DatePicker'),
+		SearchComponent: () => import('@/common-vue/components/search/Index'),
+		TableComponent: () => import('@/common-vue/components/display/table/Index'),
 	},
 	computed: {
 		model_name() {
@@ -204,7 +254,45 @@ export default {
 			this.siniestro.bienes = bienes 
 			console.log(this.siniestro)
 			this.setModel(this.siniestro, 'siniestro', [], false, false) 
-		}
+		},
+		setSelected(result) {
+			console.log(result)
+			let model = result.received_model
+			let prop = result.prop
+			if (prop.belongs_to_many) {
+				let model_to_add = result.model 
+				this.setBelongsToManyPivotProps(model, prop, model_to_add, result)
+			}
+		},
+		setBelongsToManyPivotProps(model, prop, model_to_add, result) {
+			if (prop.belongs_to_many.properties_to_set) {
+				model_to_add.pivot = {}
+				prop.belongs_to_many.properties_to_set.forEach(prop_to_set => {
+					if (prop_to_set.from_store) {
+						let models = this.modelsStoreFromName(prop_to_set.store)
+						models.forEach(model => {
+							model_to_add.pivot[prop_to_set.store+'_'+model.id] = ''
+						})
+					} else if (typeof prop_to_set.value === 'object') {
+						if (model_to_add[prop_to_set.value.key]) {
+							model_to_add.pivot[prop_to_set.key] = model_to_add[prop_to_set.value.key] 
+						} else {
+							model_to_add.pivot[prop_to_set.key] = prop_to_set.value.value_if_undefined
+						}
+					} else {
+						model_to_add.pivot[prop_to_set.key] = prop_to_set.value 
+					}
+				})
+			}
+			model[prop.key].push(model_to_add)
+			this.setTableFocus(prop, model_to_add)
+		},
+		removeModel(bien, prop, model) {
+			let index = bien[prop.key].findIndex(_model => {
+				return _model.id == model.id 
+			})
+			bien[prop.key].splice(index, 1)
+		},
 	}
 }
 </script>

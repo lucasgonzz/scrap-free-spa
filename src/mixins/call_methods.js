@@ -1,4 +1,5 @@
 export default [
+    'amortizacion',
     'siniestro',
     'color_siniestro',
     'aseguradora',

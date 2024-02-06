@@ -1,44 +1,49 @@
 <template>
-<view-component
-show_filter_modal
-:models_to_show="models_to_show"
-show_models_if_empty
-:order_list_by="order_list_by"
-model_name="siniestro"
-modal_size="md"
-:table_height_para_restar="60"
-:show_only_guardar="false">
-	
-	<template #model_modal_title>
-		<model-modal-title></model-modal-title>
-	</template>
-	
-	<template #model_modal_pre_view_title>
-		<model-modal-title></model-modal-title>
-	</template>
+<div>
+	<liquidacion></liquidacion>	
 
-	<template #model_modal_header>
-		<pdf-buttons></pdf-buttons>
-		<enviar-mensaje></enviar-mensaje>
-	</template>
+	<view-component
+	show_filter_modal
+	:models_to_show="models_to_show"
+	show_models_if_empty
+	:order_list_by="order_list_by"
+	model_name="siniestro"
+	modal_size="md"
+	:table_height_para_restar="60"
+	:show_only_guardar="false">
+		
+		<template #model_modal_title>
+			<model-modal-title></model-modal-title>
+		</template>
+		
+		<template #model_modal_pre_view_title>
+			<model-modal-title></model-modal-title>
+		</template>
 
-	<template #bienes>
-		<bienes></bienes>
-	</template>
+		<template #model_modal_header>
+			<pdf-buttons></pdf-buttons>
+			<enviar-mensaje></enviar-mensaje>
+		</template>
 
-	<template #view_footer>
-		<gestores-nav></gestores-nav>
-	</template>
+		<template #bienes>
+			<bienes></bienes>
+		</template>
 
-	<template #table-prop-numero_siniestro="props">
-		<numero-siniestro-con-svg
-		:siniestro_prop="props.model"></numero-siniestro-con-svg>
-	</template>
-</view-component>	
+		<template #view_footer>
+			<gestores-nav></gestores-nav>
+		</template>
+
+		<template #table-prop-numero_siniestro="props">
+			<numero-siniestro-con-svg
+			:siniestro_prop="props.model"></numero-siniestro-con-svg>
+		</template>
+	</view-component>	
+</div>
 </template>
 <script>
 export default {
 	components: {
+		Liquidacion: () => import('@/components/siniestro/modals/liquidacion/Index'),
 		ViewComponent: () => import('@/common-vue/components/view/Index'),
 		ModelModalTitle: () => import('@/components/siniestro/components/ModelModalTitle'),
 		NumeroSiniestroConSvg: () => import('@/components/siniestro/components/NumeroSiniestroConSvg'),

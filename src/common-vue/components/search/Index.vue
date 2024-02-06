@@ -262,6 +262,7 @@ export default {
 				this.$bvModal.show(this.id+'-search-modal')
 				setTimeout(() => {
 					document.getElementById(this.id+'-search-modal-input').focus()
+					console.log('llamando a '+this.id+'-search-modal-input')
 				}, 100)
 			}
 		},
@@ -271,6 +272,7 @@ export default {
 				model,
 				prop: this.prop,
 				query: this.query,				
+				received_model: this.model,				
 			})
 			if (this.clear_query) {
 				this.query = ''

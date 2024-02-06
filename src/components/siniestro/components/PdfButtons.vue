@@ -89,7 +89,7 @@ export default {
 				link = 'PedidoInspeccionLifeSeguros'
 				window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
 			} else if (this.siniestro.aseguradora.nombre == 'Sancor') {
-				if (this.siniestro.ramo) {
+				if (this.siniestro.ramo_id) {
 					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/CartaDesistoSancor')
 					
 					if (this.gestor_aseguradora && this.gestor_aseguradora.unidad_negocio) {

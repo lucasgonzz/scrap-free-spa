@@ -4,7 +4,7 @@ export default {
 			return [ 
 				'aseguradora',
 				'asegurado',
-				'poliza',
+				'amortizacion',
 				'cobertura',
 				'color_siniestro',
 				'tipo_producto_de_seguro',

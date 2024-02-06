@@ -9,11 +9,99 @@ export default {
 		// 	show: true,
 		// },
 		{
-			text: 'Nombre',
+			text: 'Equipo',
 			key: 'nombre',
 			type: 'text',
 			value: '',
 			is_title: true,
+		},
+		{
+			text: 'Marca',
+			key: 'marca',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'modelo',
+			key: 'modelo',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+		
+		{
+			text: 'Descripcion',
+			key: 'descripcion',
+			type: 'textarea',
+			value: '',
+			show: true,
+		},
+		
+		{
+			text: 'Imagenes',
+			key: 'images',
+			type: 'images',
+			not_show_google_search_option: true,
+		},
+		
+		{
+			text: 'Fecha compra',
+			key: 'fecha_compra',
+			type: 'date',
+			is_date: true,
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Informe tecnico asegurado',
+			key: 'informe_tecnico_asegurado',
+			type: 'text',
+			value: '',
+			show: true,
+		},
+
+		{
+			text: 'Coberturas',
+			key: 'coberturas',
+			type: 'search',
+			store: 'cobertura',
+			belongs_to_many: {
+				model_name: 'cobertura',
+				props_to_show: [
+					{
+						text: 'Nombre',
+						key: 'nombre',
+					},
+				],
+				properties_to_set: [
+					{
+						text: 'Suma asegurada',
+						key: 'suma_asegurada',
+						type: 'number',
+					},
+					{
+						text: 'Deducible',
+						key: 'deducible',
+						type: 'number',
+					},
+				],
+			}
+		},
+		{
+			key: 'valor_reposicion_a_nuevo',
+			type: 'number',
+			show: true,
+		},
+		{
+			key: 'valor_reparacion',
+			type: 'number',
+			show: true,
+		},
+		{
+			key: 'usar_el_valor_de_reparacion',
+			type: 'checkbox',
+			show: true,
 		},
 		
 		{
@@ -57,51 +145,6 @@ export default {
 			store: 'tecnico_scrap_free',
 			type: 'select',
 			value: 0,
-			show: true,
-		},
-		
-		{
-			text: 'Descripcion',
-			key: 'descripcion',
-			type: 'textarea',
-			value: '',
-			show: true,
-		},
-		
-		{
-			text: 'Imagenes',
-			key: 'images',
-			type: 'images',
-			not_show_google_search_option: true,
-		},
-		
-		{
-			text: 'Fecha compra',
-			key: 'fecha_compra',
-			type: 'date',
-			is_date: true,
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Informe tecnico asegurado',
-			key: 'informe_tecnico_asegurado',
-			type: 'text',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'Marca',
-			key: 'marca',
-			type: 'text',
-			value: '',
-			show: true,
-		},
-		{
-			text: 'modelo',
-			key: 'modelo',
-			type: 'text',
-			value: '',
 			show: true,
 		},
 		{
