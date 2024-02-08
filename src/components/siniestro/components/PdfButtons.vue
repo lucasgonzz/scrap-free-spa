@@ -92,16 +92,18 @@ export default {
 				if (this.siniestro.ramo_id) {
 					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/CartaDesistoSancor')
 					
-					if (this.gestor_aseguradora && this.gestor_aseguradora.unidad_negocio) {
-						if (this.gestor_aseguradora.unidad_negocio.nombre == 'Neuquen') {
-							link = 'SuspensionDePlazosSancorNeuquen'
-						} else if (this.gestor_aseguradora.unidad_negocio.nombre == 'Mendoza') {
-							link = 'SuspensionDePlazosSancorMendoza'
-						} else {
-							link = 'SuspensionDePlazosSancorRosario'
-						}
-						window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
-					}
+					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/SuspensionDePlazosSancorNeuquen')
+					
+					// if (this.gestor_aseguradora && this.gestor_aseguradora.unidad_negocio) {
+					// 	if (this.gestor_aseguradora.unidad_negocio.nombre == 'Neuquen') {
+					// 		link = 'SuspensionDePlazosSancorNeuquen'
+					// 	} else if (this.gestor_aseguradora.unidad_negocio.nombre == 'Mendoza') {
+					// 		link = 'SuspensionDePlazosSancorMendoza'
+					// 	} else {
+					// 		link = 'SuspensionDePlazosSancorRosario'
+					// 	}
+					// 	window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+					// }
 				} else {
 					this.$toast.error('Ingrese el Ramo para generar Carta Desisto Sancor')
 				}

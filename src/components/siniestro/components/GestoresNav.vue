@@ -46,10 +46,15 @@ export default {
 .gestores-nav
 	display: flex 
 	flex-direction: row 
-	justify-content: space-around
+	justify-content: center
+	// justify-content: space-around
 	align-items: center
 	height: 60px
+	max-width: 100vw
+	overflow-x: scroll
+	flex-wrap: nowrap
 	.gestor-item 
+		width: 100px !important
 		cursor: pointer 
 		display: flex
 		flex-direction: column

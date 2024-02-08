@@ -7,6 +7,8 @@ id="liquidacion">
 	<info-coberturas></info-coberturas>
 
 	<info-bienes></info-bienes>
+
+	<btn-pdf></btn-pdf>
 </b-modal>
 </template>
 <script>
@@ -14,6 +16,7 @@ export default {
 	components: {
 		InfoCoberturas: () => import('@/components/siniestro/modals/liquidacion/InfoCoberturas'),
 		InfoBienes: () => import('@/components/siniestro/modals/liquidacion/info-bienes/Index'),
+		BtnPdf: () => import('@/components/siniestro/modals/liquidacion/BtnPdf'),
 	}
 }
 </script>

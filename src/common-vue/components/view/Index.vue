@@ -10,6 +10,10 @@
     		<template #model_modal_pre_view_title>
     			<slot name="model_modal_pre_view_title"></slot>
     		</template>
+
+    		<template v-slot:model_modal_pre_view_header="slotProps">
+    			<slot name="model_modal_pre_view_header" :model="slotProps.model"></slot>
+    		</template>
 		</pre-view>
 
     	<model
@@ -82,6 +86,7 @@
 		:show_previus_days="show_previus_days"
 		:show_search_nav="show_search_nav"
 		:model_name="model_name"
+		:list_props_to_show="list_props_to_show"
 		@clicked="clicked">
 			<template v-slot:display_top>
 				<slot name="display_top"></slot>
@@ -235,6 +240,7 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		list_props_to_show: Array,
 	},
 	computed: {
 		show_view() {

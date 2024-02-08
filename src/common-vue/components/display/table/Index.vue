@@ -24,6 +24,10 @@
 							class="list-title">
 								<td
 								:colspan="props.length + 2">
+									<span
+									v-for="prop in list_props_to_show">
+										{{ list[prop] }} |
+									</span>
 									{{ list.name }} 
 									<b-badge
 									variant="danger"
@@ -119,6 +123,12 @@ export default {
 		table_height_para_restar: {
 			type: Number,
 			default: null
+		},
+		list_props_to_show: {
+			type: Array,
+			default: () => {
+				return []
+			}
 		},
 		models: Array,
 		loading: Boolean,
@@ -229,7 +239,9 @@ export default {
 				let lists = []
 				let list
 				models_from_order_by.forEach(model => {
-					list = {}
+					list = {
+						...model,
+					}
 					if (this.idiom == 'es') {
 						list.name = model.nombre
 					} else {

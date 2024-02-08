@@ -15,6 +15,7 @@
 		:model_name="model_name"
 		:show_models_if_empty="show_models_if_empty"
 		:properties="properties"
+		:list_props_to_show="list_props_to_show"
 		@clicked="clicked"
 		:model_name_spanish="model_name_spanish">
 			<template v-slot:table_right_options="slotProps">
@@ -57,6 +58,7 @@ export default {
 			type: Number,
 			default: null,
 		},
+		list_props_to_show: Array,
 	},
 	computed: {
 		to_show() {

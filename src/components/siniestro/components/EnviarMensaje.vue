@@ -60,7 +60,7 @@ export default {
 	mixins: [enviar_mensajes],
 	computed: {
 		show() {
-			if (this.siniestro.estado_siniestro.enviar_mensaje_function) {
+			if (this.siniestro.estado_siniestro && this.siniestro.estado_siniestro.enviar_mensaje_function) {
 				return true 
 			}
 			return false 

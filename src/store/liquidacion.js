@@ -26,6 +26,7 @@ export default {
 
 					if (typeof cobertura == 'undefined') {
 						if (cobertura_bien.pivot.suma_asegurada) {
+							cobertura_bien.suma_asegurada = cobertura_bien.pivot.suma_asegurada
 							cobertura_bien.fondos = cobertura_bien.pivot.suma_asegurada
 							cobertura_bien.perdidas = 0
 							cobertura_bien.deducible = 0
@@ -100,6 +101,7 @@ export default {
 
 
 						let cobertura_aplicada = {
+							id: cobertura_store.id,
 							nombre: cobertura_store.nombre,
 							fondos: cobertura_store.fondos,
 							remanente_a_cubrir: remanente,

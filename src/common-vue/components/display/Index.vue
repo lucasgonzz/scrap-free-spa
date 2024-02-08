@@ -14,6 +14,7 @@
 		:set_model_on_click="set_model_on_click"
 		:on_click_set_property="on_click_set_property"
 		:table_height_para_restar="table_height_para_restar"
+		:list_props_to_show="list_props_to_show"
 		v-if="_display == 'table'">
 			<template v-slot:btn-edit="slotProps">
 				<slot name="buttons" :model="slotProps.model"></slot>
@@ -107,6 +108,7 @@ export default {
 			type: Number,
 			default: null,
 		},
+		list_props_to_show: Array,
 	},
 	data() {
 		return {

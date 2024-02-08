@@ -281,6 +281,32 @@ export default {
 		},
 
 		{
+			text: 'Fecha informe tecnico',
+			key: 'fecha_informe_tecnico',
+			type: 'date',
+		},
+
+		{
+			key: 'tecnico',
+			type: 'text',
+		},
+
+		{
+			key: 'comentarios_tecnico',
+			type: 'textarea',
+		},
+
+		{
+			key: 'posible_causa',
+			type: 'text',
+		},
+
+		{
+			key: 'recomendacion',
+			type: 'textarea',
+		},
+
+		{
 			text: 'Bienes',
 			key: 'bienes',
 			has_many: {

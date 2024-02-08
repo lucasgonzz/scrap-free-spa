@@ -10,7 +10,8 @@
 	model_name="siniestro"
 	modal_size="md"
 	:table_height_para_restar="60"
-	:show_only_guardar="false">
+	:show_only_guardar="false"
+	:list_props_to_show="['codigo']">
 		
 		<template #model_modal_title>
 			<model-modal-title></model-modal-title>
@@ -18,6 +19,10 @@
 		
 		<template #model_modal_pre_view_title>
 			<model-modal-title></model-modal-title>
+		</template>
+		
+		<template #model_modal_pre_view_header>
+			<pdf-buttons></pdf-buttons>
 		</template>
 
 		<template #model_modal_header>

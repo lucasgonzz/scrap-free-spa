@@ -11,6 +11,10 @@ size="md">
 	</template>
 
 	<div class="modal-pre-view-content">
+
+		<slot name="model_modal_pre_view_header">
+		</slot>
+		
 		<model-form
 		:model="model"
 		:model_name="model_name"

@@ -46,6 +46,13 @@ export default {
 		},
 		
 		{
+			text: 'Imagen estudio de mercado',
+			key: 'foto_estudio_mercado',
+			type: 'image',
+			not_show_google_search_option: true,
+		},
+		
+		{
 			text: 'Fecha compra',
 			key: 'fecha_compra',
 			type: 'date',
