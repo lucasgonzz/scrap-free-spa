@@ -113,18 +113,32 @@ export default {
 			let link
 			if (this.siniestro.aseguradora.nombre == 'Sancor') {
 				if (this.siniestro.causa_siniestro) {
-					console.log('entro para ver la causa_siniestro: '+this.siniestro.causa_siniestro.nombre)
-					if (this.siniestro.causa_siniestro.nombre == 'Fluctuacion') {
-						link = 'FluctuacionElectromangneticaNoCubierta'
-					} else if (this.siniestro.causa_siniestro.nombre == 'Evento no cubierto') {
-						link = 'EventoNoCubierto'
-					} else if (this.siniestro.causa_siniestro.nombre == 'Desgaste y/o vicios propios') {
-						link = 'DesgasteYOViciosPropios'
-					} else {
-						this.$toast.error('La causa del siniestro no tiene ningun documento asignado')
-						return
-					}
-					window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+					// if (this.siniestro.causa_siniestro.nombre == 'Fluctuacion') {
+					// 	link = 'FluctuacionElectromangneticaNoCubierta'
+					// } else if (this.siniestro.causa_siniestro.nombre == 'Evento no cubierto') {
+					// 	link = 'EventoNoCubierto'
+					// } else if (this.siniestro.causa_siniestro.nombre == 'Desgaste y/o vicios propios') {
+					// 	link = 'DesgasteYOViciosPropios'
+					// } else {
+					// 	this.$toast.error('La causa del siniestro no tiene ningun documento asignado')
+					// 	return
+					// }
+					this.opciones_para_imprimir = [
+						{
+							text: 'Fluctuacion',
+							link: 'FluctuacionElectromangneticaNoCubierta'
+						},
+						{
+							text: 'Evento no cubierto',
+							link: 'EventoNoCubierto'
+						},
+						{
+							text: 'Desgaste y/o vicios propios',
+							link: 'DesgasteYOViciosPropios'
+						},
+					]	
+					this.$bvModal.show('opciones-para-imprimir')
+					// window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
 				} else {
 					this.$toast.error('Indique la causa del siniestro')
 				}
@@ -188,10 +202,10 @@ export default {
 			}
 		},
 		informeLiquidador() {
-			if (!this.siniestro.tipo_orden_de_servicio) {
-				this.$toast.error('Indique TIPO ORDEN DE SERVICIO del siniestro')
-				return false
-			}
+			// if (!this.siniestro.tipo_orden_de_servicio) {
+			// 	this.$toast.error('Indique TIPO ORDEN DE SERVICIO del siniestro')
+			// 	return false
+			// }
 			this.opciones_para_imprimir = [
 				{
 					text: 'Informe liquidador',

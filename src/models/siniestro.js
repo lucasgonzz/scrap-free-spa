@@ -61,6 +61,7 @@ export default {
 			text: 'Estado siniestro',
 			key: 'estado_siniestro_id',
 			type: 'select',
+			select_start_text_prop_to_add: 'codigo',
 			store: 'estado_siniestro',
 			value: 1,
 			show: false,
@@ -97,6 +98,7 @@ export default {
 			type: 'search',
 			// value: 0,
 			not_show: true,
+			color_function: 'siniestroGetColor',
 			table_position: 16,
 		},
 
@@ -129,6 +131,7 @@ export default {
 			value: 3,
 			show: true,
 			pre_view_position: 11,
+			color_function: 'siniestroGetColor',
 			table_position: 13,
 		},
 

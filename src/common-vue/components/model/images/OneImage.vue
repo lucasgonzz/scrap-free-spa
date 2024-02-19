@@ -133,11 +133,16 @@ export default {
 			this.$bvModal.show('delete-'+this.model_name+'-image-'+this.prop.key)
 		},
 		deleteFromHasMany() {
+			this.setModel(this.model, this.model_name, [], false, false)
 			if (this.has_many_parent_model) {
 				let model = this.has_many_parent_model[this.has_many_prop.key].find(_model => {
 					return _model.id == this.model.id 
 				})
 				model[this.prop.key] = null
+			} else {
+				this.model[this.prop.key] = null
+				console.log(this.prop.key+' quedo en ')
+				console.log(this.model[this.prop.key])
 			}
 		}
 	}

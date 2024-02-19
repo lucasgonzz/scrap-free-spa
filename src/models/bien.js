@@ -106,7 +106,8 @@ export default {
 			show: true,
 		},
 		{
-			key: 'usar_el_valor_de_reparacion',
+			text: 'Usar el valor de INDEMNIZACION',
+			key: 'usar_el_valor_de_indemnizacion',
 			type: 'checkbox',
 			show: true,
 		},

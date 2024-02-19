@@ -130,6 +130,14 @@ export default {
 				return []
 			}
 		},
+		check_order_list_has_models: {
+			type: Boolean,
+			default: false,
+		},
+		order_lists_by: {
+			type: String,
+			default: null
+		},
 		models: Array,
 		loading: Boolean,
 		model_name: String,
@@ -247,10 +255,17 @@ export default {
 					} else {
 						list.name = model.name
 					}
-					list.models = this.models.filter(_model => {
+					let models = this.models.filter(_model => {
 						return _model[this.order_list_by+'_id'] == model.id 
 					})
-					lists.push(list)
+					if (this.order_lists_by) {
+						console.log('ordenando por '+this.order_lists_by)
+						models = models.sort((a, b) => a[this.order_lists_by] - b[this.order_lists_by])
+					}
+					list.models = models 
+					if (!this.check_order_list_has_models || list.models.length) {
+						lists.push(list)
+					}
 				})
 				return lists
 			} 
@@ -270,10 +285,6 @@ export default {
 				let table = document.getElementById(this.id)
 				if (table) {
 					setTimeout(() => {
-						console.log(window.innerHeight)
-						console.log(table.offsetTop)
-						console.log(Number(window.innerHeight) - (Number(table.offsetTop)))
-						console.log(window.innerHeight - table.offsetTop +'px')
 						let height = window.innerHeight - (Number(table.offsetTop))
 						if (this.table_height_para_restar) {
 							height -= this.table_height_para_restar

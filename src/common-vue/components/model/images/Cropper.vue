@@ -103,6 +103,9 @@ export default {
 								this.has_many_parent_model[this.has_many_prop.key].splice(index, 1, res.data.model)
 							}
 						}
+						if (this.prop.type == 'image') {
+							this.model[this.prop.key] = res.data.image_url
+						}
 						this.$toast.success('Imagen actualizada')
 					} else {
 						if (this.prop.type == 'images') {
@@ -120,11 +123,8 @@ export default {
 									is_imageable: true,
 								})
 							}
-							console.log('childrens')
-							console.log(this.model.childrens)
 							this.model[this.prop.key].push(res.data.image_model)
 						} else {
-							console.log('aca')
 							this.model[this.prop.key] = res.data.image_url
 							this.setModel(this.model, this.model_name)
 						}
@@ -132,7 +132,9 @@ export default {
 				}
 				this.$emit('imageSaved', this.model)
 				let input_drop = document.getElementById(this.model_name+'-'+this.prop.key+'-input-file-drop')
+				console.log(input_drop)
 				setTimeout(() => {
+					console.log('se puso focus')
 					input_drop.focus()
 				}, 500)
 			})

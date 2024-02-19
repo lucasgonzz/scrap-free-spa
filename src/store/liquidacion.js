@@ -27,10 +27,13 @@ export default {
 					if (typeof cobertura == 'undefined') {
 						if (cobertura_bien.pivot.suma_asegurada) {
 							cobertura_bien.suma_asegurada = cobertura_bien.pivot.suma_asegurada
-							cobertura_bien.fondos = cobertura_bien.pivot.suma_asegurada
+							cobertura_bien.fondos_reparacion = cobertura_bien.pivot.suma_asegurada
+							cobertura_bien.fondos_a_nuevo = cobertura_bien.pivot.suma_asegurada
 							cobertura_bien.perdidas = 0
 							cobertura_bien.deducible = 0
 							cobertura_bien.indemnizacion = 0
+							// cobertura_bien.indemnizacion_reparacion = 0
+							// cobertura_bien.indemnizacion_a_nuevo = 0
 							coberturas.push(cobertura_bien)
 						}
 					} 
@@ -41,6 +44,8 @@ export default {
 
 			})
 			state.coberturas = coberturas
+			console.log('las coberturas de indemnizacion quedaron asi:')
+			console.log(state.coberturas)
 		},
 		set_bienes_antiguedad(state) {
 			state.siniestro.bienes.forEach(bien => {
@@ -80,112 +85,186 @@ export default {
 				console.log('bien '+bien.nombre)
 				
 				// El remanente es lo que hay que cubrir con las coberturas
-				let remanente = Number(bien.valor_depreciado) 
+				let remanente_a_nuevo = Number(bien.valor_depreciado) 
+				let remanente_reparacion = Number(bien.valor_reparacion) 
 
-				if (bien.valor_reparacion && bien.usar_el_valor_de_reparacion) {
-					console.log('se usa valor_reparacion')
-					remanente = Number(bien.valor_reparacion)
+				let usar_reparacion = false
+				if (bien.valor_reparacion && !bien.usar_el_valor_de_indemnizacion) {
+					usar_reparacion = true
 				}
 
-				let indemnizacion = 0
+				let valor_reparacion = null
+				let deducible_aplicado_a_reparacion = 0
+
+				let deducible_aplicado_a_nuevo = 0
+
+				if (bien.valor_reparacion) {
+					valor_reparacion = Number(bien.valor_reparacion)
+				}
+
+				let indemnizacion_reparacion = 0
+				let indemnizacion_a_nuevo = 0
 
 				bien.coberturas.forEach(cobertura_bien => {
 
-					// if (remanente > 0) {
+					let cobertura_store = state.coberturas.find(_cobertura => {
+						return _cobertura.id == cobertura_bien.id 
+					})
 
-						let cobertura_store = state.coberturas.find(_cobertura => {
-							return _cobertura.id == cobertura_bien.id 
-						})
+					let fondos_reparacion = Number(cobertura_store.fondos_reparacion)
+					let fondos_a_nuevo = Number(cobertura_store.fondos_a_nuevo)
 
-						let fondos = Number(cobertura_store.fondos)
+					let cobertura_aplicada = {
+						id: cobertura_store.id,
+						nombre: cobertura_store.nombre,
+						fondos_reparacion: cobertura_store.fondos_reparacion,
+						fondos_a_nuevo: cobertura_store.fondos_a_nuevo,
+						remanente_a_cubrir_reparacion: remanente_reparacion,
+						remanente_a_cubrir_a_nuevo: remanente_a_nuevo,
+						deducible: cobertura_store.pivot.deducible ? cobertura_store.pivot.deducible : 0,
+					}
 
-
-						let cobertura_aplicada = {
-							id: cobertura_store.id,
-							nombre: cobertura_store.nombre,
-							fondos: cobertura_store.fondos,
-							remanente_a_cubrir: remanente,
-							deducible: cobertura_store.pivot.deducible ? cobertura_store.pivot.deducible : 0,
-						}
-
-						// Se suma a las perdidas para el resumen final
-						cobertura_store.perdidas += remanente
-
-
-						// console.log(cobertura_aplicada.nombre+' tiene '+cobertura_aplicada.fondos+' para pagar '+remanente)
-
-						if (fondos >= remanente) {
-
-							cobertura_store.fondos -= remanente
-
-						} else {
-
-							cobertura_store.fondos = 0
-
-						}
+					// Se suma a las perdidas para el resumen final
+					if (usar_reparacion) {
+						console.log('Se suma a perdidas el valor de reparacion')
+						cobertura_store.perdidas += remanente_reparacion
+					} else {
+						cobertura_store.perdidas += remanente_a_nuevo
+					}
 
 
-						if (cobertura_store.pivot.deducible) {
-							let deducible = remanente * Number(cobertura_store.pivot.deducible) / 100
-							
-							cobertura_store.deducible += deducible
+					// console.log(cobertura_aplicada.nombre+' tiene '+cobertura_aplicada.fondos+' para pagar '+remanente)
 
-	 						remanente -= deducible
-						} 
 
-						cobertura_aplicada.deducible_aplicado = remanente
+					if (fondos_reparacion >= remanente_reparacion) {
+						cobertura_store.fondos_reparacion -= remanente_reparacion
+					} else {
+						cobertura_store.fondos_reparacion = 0
+					}
 
-						console.log('Hay '+fondos+' de '+cobertura_store.nombre+' para pagar '+remanente)
-						console.log(fondos)
-						console.log(remanente)
+
+					if (fondos_a_nuevo >= remanente_a_nuevo) {
+						cobertura_store.fondos_a_nuevo -= remanente_a_nuevo
+					} else {
+						cobertura_store.fondos_a_nuevo = 0
+					}
+
+
+					if (cobertura_store.pivot.deducible) {
+
+						let deducible_reparacion = remanente_reparacion * Number(cobertura_store.pivot.deducible) / 100
+
+						remanente_reparacion -= deducible_reparacion
+
+						deducible_aplicado_a_reparacion += deducible_reparacion
+
+
+
+						let deducible_a_nuevo = remanente_a_nuevo * Number(cobertura_store.pivot.deducible) / 100
 						
-						if (fondos >= remanente) {
 
-							console.log('Alcanza para pagar')
+ 						remanente_a_nuevo -= deducible_a_nuevo
 
-							cobertura_store.indemnizacion += remanente
+						deducible_aplicado_a_nuevo += deducible_a_nuevo
 
-							console.log('Se aumento la indemnizacion global de '+cobertura_store.nombre+ ' a '+cobertura_store.indemnizacion)
-
-							indemnizacion += remanente
-
-							console.log('Se aumento la indemnizacion del equipo a '+indemnizacion)
-
-							remanente = 0
-
-
+						if (usar_reparacion) {
+							cobertura_store.deducible += deducible_reparacion
 						} else {
-
-							console.log('NO alcanza para pagar')
-
-							// let indemnizado = remanente - fondos 
-							let indemnizado = fondos 
-
-							console.log('Se indemniza '+indemnizado)
-
-							cobertura_store.indemnizacion += indemnizado
-
-							console.log('Se aumento la indemnizacion global de '+cobertura_store.nombre+ ' a '+cobertura_store.indemnizacion)
-							
-							indemnizacion += fondos
-
-							console.log('Se aumento la indemnizacion del equipo a '+indemnizacion)
-
-							remanente -= fondos
-
-							console.log('El remanente quedo en '+remanente)
+							cobertura_store.deducible += deducible_a_nuevo
 						}
 
+					} 
 
-						cobertura_aplicada.remanente = remanente
+					cobertura_aplicada.deducible_aplicado = remanente_a_nuevo
 
-						bien.coberturas_aplicadas.push(cobertura_aplicada)
-					// }
+					let indemnizado_reparacion = 0
+					let indemnizado_a_nuevo = 0
+
+					if (fondos_reparacion >= remanente_reparacion) {
+
+						indemnizado_reparacion = remanente_reparacion
+						indemnizacion_reparacion += remanente_reparacion
+
+						remanente_reparacion = 0
+
+					} else {
+
+						let indemnizado = fondos_reparacion 
+
+						indemnizado_reparacion = indemnizado
+						
+						indemnizacion_reparacion += fondos_reparacion
+
+						remanente_reparacion -= fondos_reparacion
+
+					}
+					
+					if (fondos_a_nuevo >= remanente_a_nuevo) {
+
+						indemnizado_a_nuevo = remanente_a_nuevo
+						indemnizacion_a_nuevo += remanente_a_nuevo
+
+						remanente_a_nuevo = 0
+
+					} else {
+
+						let indemnizado = fondos_a_nuevo 
+
+						indemnizado_a_nuevo = indemnizado
+						
+						indemnizacion_a_nuevo += fondos_a_nuevo
+
+						remanente_a_nuevo -= fondos_a_nuevo
+
+					}
+
+					if (usar_reparacion) {
+						console.log('sumando indemnizado_reparacion de '+indemnizado_reparacion)
+						cobertura_store.indemnizacion += indemnizado_reparacion
+					} else {
+						console.log('sumando indemnizado_a_nuevo de '+indemnizado_a_nuevo)
+						cobertura_store.indemnizacion += indemnizado_a_nuevo
+					}
+
+					cobertura_aplicada.remanente_reparacion = remanente_reparacion
+					cobertura_aplicada.remanente_a_nuevo = remanente_a_nuevo
+
+					bien.coberturas_aplicadas.push(cobertura_aplicada)
 
 				})
 
-				bien.remanente = remanente
-				bien.indemnizacion = indemnizacion
+				bien.remanente_reparacion = remanente_reparacion
+				bien.remanente_a_nuevo = remanente_a_nuevo
+				bien.indemnizacion_reparacion = indemnizacion_reparacion
+				bien.indemnizacion_a_nuevo = indemnizacion_a_nuevo
+
+				bien.deducible_aplicado_a_nuevo = deducible_aplicado_a_nuevo
+
+
+				if (bien.valor_reparacion) {
+					console.log('bien.valor_reparacion')
+					console.log(bien.valor_reparacion)
+					console.log('deducible_aplicado_a_reparacion')
+					console.log(deducible_aplicado_a_reparacion)
+					let reparacion = bien.valor_reparacion - deducible_aplicado_a_reparacion
+
+					console.log('reparacion')
+					console.log(reparacion)
+
+					console.log('indemnizacion_a_nuevo')
+					console.log(indemnizacion_a_nuevo)
+
+					let ratio = reparacion / Number(indemnizacion_a_nuevo)
+
+					console.log('ratio')
+					console.log(ratio)
+					
+					ratio = ratio+' '
+					ratio = ratio.substring(2,4)
+					bien.ratio = ratio 
+
+					bien.deducible_aplicado_a_reparacion = deducible_aplicado_a_reparacion
+				}
 			
 				console.log('El remanente del bien quedo en '+bien.remanente)
 

@@ -239,7 +239,7 @@ export default {
 				} else {
 					this.waiting_time--
 				}		
-			}, 500)
+			}, 200)
 		},
 		setBienesData(bien_from_image = null) {
 			let bienes = []

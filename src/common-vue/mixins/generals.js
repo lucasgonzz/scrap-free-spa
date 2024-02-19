@@ -146,7 +146,7 @@ export default {
 			return typeof prop_to_show_in_modal_title != 'undefined' ? prop_to_show_in_modal_title : null
 		},
 		checkButton(prop, model) {
-			console.log('checkButton')
+			// console.log('checkButton')
 			return (prop.type == 'radio') && model[prop.key] != prop.value
 		},
 		getLabel(prop) {
@@ -332,7 +332,7 @@ export default {
 				this.$toast.success(this.singular(model_name)+' actualizado')
 			})
 			.catch(err => {
-				console.log(err)
+				// console.log(err)
 			})
 		},
 		addModel(model_name, model) {
@@ -360,19 +360,19 @@ export default {
 
 		showProperty(property, model, check_if_is_empty, check_show_on_form = false) {
 			if (check_show_on_form && property.not_show_on_form) {
-				console.log(property.text+' entro en '+1)
+				// console.log(property.text+' entro en '+1)
 				return false
 			}
 			if (property.show_only_if_is_created && !model.id) {
-				console.log(property.text+' entro en '+2)
+				// console.log(property.text+' entro en '+2)
 				return false
 			}
 			if (check_if_is_empty && ((!model[property.key] || model[property.key] == '') && !property.function )) {
-				console.log(property.text+' entro en '+3)
+				// console.log(property.text+' entro en '+3)
 				return false
 			}
 			if (property.is_image || property.is_images) {
-				console.log(property.text+' entro en '+4)
+				// console.log(property.text+' entro en '+4)
 				return false
 			}
 			if (property.if_has_extencion) {
@@ -512,7 +512,7 @@ export default {
 			return this.$store.state[model_name].models
 		},
 		propertyText(model, prop, from_pivot = false, sort_string = true) {
-			console.log('propertyText de '+prop.text)
+			// console.log('propertyText de '+prop.text)
 			if (prop.type == 'images' || prop.type == 'image') {
 				return null
 			}
@@ -520,7 +520,7 @@ export default {
 				return this.getFunctionValue(prop, model)
 			}
 			if (this.isRelationKey(prop)) {
-				console.log('entro en relationKey')
+				// console.log('entro en relationKey')
 				let relationship = this.modelNameFromRelationKey(prop, false, false)
 				let prop_name = 'name'
 				if (prop.relation_prop_name) {
@@ -528,13 +528,13 @@ export default {
 				} else if (this.idiom == 'es') {
 					prop_name = 'nombre'
 				}
-				console.log(model)
-				console.log(prop)
-				console.log(model[prop.key])
+				// console.log(model)
+				// console.log(prop)
+				// console.log(model[prop.key])
 				if (model[prop.key]) {
 					if (prop.use_store_models) {
-						console.log('relationship')
-						console.log(relationship)
+						// console.log('relationship')
+						// console.log(relationship)
 						let finded_model = this.$store.state[relationship].models.find(_model => {
 							return _model.id == model[prop.key]
 						})
@@ -672,7 +672,7 @@ export default {
 			} else {
 				store = prop.key.substring(0, prop.key.length-3)
 			}
-			console.log('getOptions')
+			// console.log('getOptions')
 			let models = this.$store.state[store].models
 			let prop_name
 			let prop_to_use_in_select = this.getPropToUseInSelect(store)
@@ -710,7 +710,11 @@ export default {
 				})
 			} 
 			models.forEach(item => {
-				let text = item[prop_name] 
+				let text = '' 
+				if (prop.select_start_text_prop_to_add) {
+					text += item[prop.select_start_text_prop_to_add] + ' '
+				}
+				text += item[prop_name] 
 				if (prop.select_text_to_add) {
 					text += prop.select_text_to_add
 				}

@@ -46,10 +46,10 @@ export default {
 		},
 		items() {
 			let items = []
-			console.log('this.bien.valor_reparacion && this.bien.usar_el_valor_de_reparacion')
+			console.log('this.bien.valor_reparacion && this.bien.usar_el_valor_de_indemnizacion')
 			console.log(this.bien.valor_reparacion)
-			console.log(this.bien.usar_el_valor_de_reparacion)
-			if (this.bien.valor_reparacion && this.bien.usar_el_valor_de_reparacion) {
+			console.log(this.bien.usar_el_valor_de_indemnizacion)
+			if (this.bien.valor_reparacion && this.bien.usar_el_valor_de_indemnizacion) {
 				
 				items = this.addValorReparacion(items)
 
@@ -63,7 +63,7 @@ export default {
 				items = this.addSumaAseguradaDepreciada(items)
 			}
 
-			if (this.bien.valor_reparacion && this.bien.usar_el_valor_de_reparacion) {
+			if (this.bien.valor_reparacion && this.bien.usar_el_valor_de_indemnizacion) {
 				items = this.addRatioReparacion(items)
 			}
 
@@ -75,9 +75,13 @@ export default {
 	},
 	methods: {
 		addRatioReparacion(items) {
+			// let ratio = Number(this.bien.valor_reparacion) / Number(this.bien.indemnizacion)
+			// ratio = ratio+' '
+			// ratio = ratio.substring(2,4)
+
 			let valor_reparacion = {
 				concepto: 'Ratio reparacion',
-				valor: (Number(this.bien.valor_reparacion) / Number(this.bien.indemnizacion)).toFixed(2) +'%',
+				valor: this.bien.ratio +'%',
 			}
 			items.push(valor_reparacion)
 			let ahorro = {

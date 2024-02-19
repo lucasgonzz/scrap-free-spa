@@ -10,6 +10,8 @@
 		<display
 		:table_height_para_restar="table_height_para_restar"
 		:order_list_by="order_list_by"
+		:order_lists_by="order_lists_by"
+		:check_order_list_has_models="check_order_list_has_models"
 		:check_permissions="check_permissions"
 		:models="models_to_show"
 		:model_name="model_name"
@@ -59,6 +61,14 @@ export default {
 			default: null,
 		},
 		list_props_to_show: Array,
+		order_lists_by: {
+			type: String,
+			default: null,
+		},
+		check_order_list_has_models: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	computed: {
 		to_show() {

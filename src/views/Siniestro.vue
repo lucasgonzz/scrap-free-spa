@@ -7,6 +7,8 @@
 	:models_to_show="models_to_show"
 	show_models_if_empty
 	:order_list_by="order_list_by"
+	order_lists_by="dias_en_estado_siniestro"
+	:check_order_list_has_models="check_order_list_has_models"
 	model_name="siniestro"
 	modal_size="md"
 	:table_height_para_restar="60"
@@ -59,10 +61,13 @@ export default {
 	},
 	computed: {
 		order_list_by() {
-			if (this.is_filtered) {
-				return null 
-			}
 			return 'estado_siniestro'
+		},
+		check_order_list_has_models() {
+			if (this.is_filtered) {
+				return true
+			}
+			return false
 		},
 		is_filtered() {
 			return this.$store.state.siniestro.is_filtered 

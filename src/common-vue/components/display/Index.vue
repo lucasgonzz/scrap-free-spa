@@ -7,6 +7,8 @@
 		:model_name="model_name"></color-info>
 		<table-component
 		:order_list_by="order_list_by"
+		:order_lists_by="order_lists_by"
+		:check_order_list_has_models="check_order_list_has_models"
 		:properties="properties"
 		:loading="loading_prop"
 		:models="models_to_show"
@@ -109,6 +111,14 @@ export default {
 			default: null,
 		},
 		list_props_to_show: Array,
+		order_lists_by: {
+			type: String,
+			default: null,
+		},
+		check_order_list_has_models: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
