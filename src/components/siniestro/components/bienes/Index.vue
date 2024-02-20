@@ -1,15 +1,15 @@
 <template>
 	<div class="bienes">
-		<label
-		class="form-label">
-			Cantidad de bienes
-		</label>
-		<b-form-input
-		class="m-b-20"
-		type="number"
-		@keyup.enter="setBienes"
-		v-model="cantidad_bienes"
-		placeholder="Cantidad de bienes"></b-form-input>
+		<b-form-group
+		class="m-b-35"
+		description="Despues de colocar la cantidad, presionar ENTER"
+		label="Cantidad de bienes">
+			<b-form-input
+			type="number"
+			@keyup.enter="setBienes"
+			v-model="cantidad_bienes"
+			placeholder="Cantidad de bienes"></b-form-input>
+		</b-form-group>
 
 		<form-bienes></form-bienes>
 	</div>
@@ -40,7 +40,7 @@ export default {
 				this.siniestro.cantidad_bienes = 0
 			}
 			this.cantidad_bienes = Number(this.cantidad_bienes)
-			if (this.cantidad_bienes < this.siniestro.cantidad_bienes) {
+			if (this.cantidad_bienes < this.siniestro.bienes.length) {
 				this.siniestro.bienes = this.siniestro.bienes.slice(0, this.cantidad_bienes)
 				console.log('los bienes quedaron asi:')
 				console.log(this.siniestro.bienes)

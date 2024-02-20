@@ -245,12 +245,7 @@ export default {
 			return null
 		},
 		getImageUploadUrl(prop) {
-			let url = process.env.VUE_APP_API_URL+'/api/set-image/'
-			if (prop.type == 'images') {
-				url += 'has_many'
-			} else {
-				url += prop.key 
-			}
+			let url = process.env.VUE_APP_API_URL+'/api/set-image/'+prop.type+'/'+prop.key
 			return url
 		},
         scrollBottom(el) {

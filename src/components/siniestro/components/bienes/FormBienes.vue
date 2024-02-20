@@ -66,7 +66,7 @@
 								v-else-if="prop.type == 'text' || prop.type == 'number' || prop.type == 'password'"
 								class="d-flex w-100">
 									<b-form-input
-									@keyup="callSetBienesData"
+									@keyup="callSetBienesData(prop)"
 									:placeholder="'Ingresar '+propText(prop)"
 									:type="prop.type"
 									@keyup.enter="clickEnter(prop)"
@@ -79,7 +79,7 @@
 								</div>
 
 								<b-form-textarea
-								@keyup="callSetBienesData"
+								@keyup="callSetBienesData(prop)"
 								v-else-if="prop.type == 'textarea'"
 								:placeholder="'Ingresar '+propText(prop)"
 								:type="prop.type"
@@ -92,7 +92,7 @@
 							    	<!-- <model-component
 							    	:model_name="modelNameFromRelationKey(prop)"></model-component> -->
 									<b-form-select
-									@change="callSetBienesData"
+									@change="callSetBienesData(prop)"
 									v-model="model[prop.key]"
 									:options="getOptions(prop, model, 	model_name)"></b-form-select>
 								</div>		
@@ -115,7 +115,7 @@
 								<b-form-checkbox
 								v-else-if="prop.type == 'checkbox'"
 								v-model="model[prop.key]"
-								@change="callSetBienesData"
+								@change="callSetBienesData(prop)"
 								:value="1"
 								:unchecked-value="0">
 									{{ propText(prop) }}
@@ -223,7 +223,7 @@ export default {
 			console.log(model)
 			this.setBienesData(model)
 		},
-		callSetBienesData() {
+		callSetBienesData(prop) {
 			// this.loading = true 
 			console.log('por llamar')
 			if (this.interval) {
@@ -235,13 +235,13 @@ export default {
 				if (this.waiting_time == 0) {
                     window.clearInterval(this.interval)
 					console.log('llamando')
-					this.setBienesData()
+					this.setBienesData(null, prop)
 				} else {
 					this.waiting_time--
 				}		
 			}, 200)
 		},
-		setBienesData(bien_from_image = null) {
+		setBienesData(bien_from_image = null, prop = null) {
 			let bienes = []
 			this.bienes.forEach(bien => {
 				if (bien_from_image && bien_from_image.nombre == bien.nombre) {
@@ -254,6 +254,10 @@ export default {
 			this.siniestro.bienes = bienes 
 			console.log(this.siniestro)
 			this.setModel(this.siniestro, 'siniestro', [], false, false) 
+			if (prop && (prop.key == 'valor_reparacion' || prop.key == 'valor_reposicion_a_nuevo')) {
+				console.log('LA PROP ERA '+prop.key)
+				this.setLiquidaciones(this.siniestro)
+			}
 		},
 		setSelected(result) {
 			console.log(result)

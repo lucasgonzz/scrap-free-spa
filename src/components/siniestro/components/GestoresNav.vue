@@ -52,6 +52,7 @@ export default {
 	height: 60px
 	max-width: 100vw
 	overflow-x: scroll
+	overflow-y: hidden
 	flex-wrap: nowrap
 	.gestor-item 
 		width: 100px !important

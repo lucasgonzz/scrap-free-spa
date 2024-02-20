@@ -9,6 +9,47 @@ export default {
 		getFunctionValue(prop, model) {
 			return this[prop.function](model)
 		},
+		getBienRatio(bien) {
+			let siniestro = this.$store.state.siniestro.model
+			let siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
+			
+			if (!siniestro_liquidacion.id || siniestro_liquidacion.id != siniestro.id) {
+				this.setLiquidaciones(siniestro)
+			} 
+
+			console.log('getBienRatio para '+bien.nombre)
+
+			siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
+
+			let bien_siniestro = siniestro_liquidacion.bienes.find(_bien => {
+				return _bien.id == bien.id 
+			})
+
+			if (typeof bien_siniestro != 'undefined' && bien_siniestro.ratio) {
+				return bien_siniestro.ratio+'%'
+			}
+		},
+		getBienIndemnizacionANuevo(bien) {
+			let siniestro = this.$store.state.siniestro.model
+			let siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
+			
+			if (!siniestro_liquidacion.id || siniestro_liquidacion.id != siniestro.id) {
+				this.setLiquidaciones(siniestro)
+			} 
+
+			console.log('getBienRatio para '+bien.nombre)
+
+			siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
+
+			let bien_siniestro = siniestro_liquidacion.bienes.find(_bien => {
+				return _bien.id == bien.id 
+			})
+
+			if (typeof bien_siniestro != 'undefined' && bien_siniestro.indemnizacion_a_nuevo) {
+				return this.price(bien_siniestro.indemnizacion_a_nuevo)
+			}
+
+		},
 		setLiquidaciones(siniestro) {
 			console.log('setLiquidaciones')
 			this.$store.commit('liquidacion/setSiniestro', siniestro)

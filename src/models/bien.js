@@ -48,7 +48,7 @@ export default {
 		{
 			text: 'Imagen estudio de mercado',
 			key: 'foto_estudio_mercado',
-			type: 'image',
+			type: 'images',
 			not_show_google_search_option: true,
 		},
 		
@@ -104,6 +104,16 @@ export default {
 			key: 'valor_reparacion',
 			type: 'number',
 			show: true,
+		},
+		{
+			key: 'indemnizacion',
+			show: true,
+			function: 'getBienIndemnizacionANuevo'
+		},
+		{
+			key: 'ratio',
+			show: true,
+			function: 'getBienRatio'
 		},
 		{
 			text: 'Usar el valor de INDEMNIZACION',
