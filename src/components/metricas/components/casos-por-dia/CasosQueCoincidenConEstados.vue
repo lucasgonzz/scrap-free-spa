@@ -2,8 +2,11 @@
 	<div>
 		<select-estados-para-coincidir></select-estados-para-coincidir>
 		
+		<p class="metrica-title">
+			Siniestro que coinciden con los estados
+		</p>
+
 		<b-table
-		class="m-t-60"
 		head-variant="dark"
 		v-if="!loading && items.length"
 		:hover="false"
@@ -18,6 +21,7 @@
 	</div>
 </template>
 <script>
+import moment from 'moment'
 export default {
 	components: {
 		SelectEstadosParaCoincidir: () => import('@/components/metricas/modals/casos-por-dia/SelectEstadosParaCoincidir'),
@@ -39,7 +43,7 @@ export default {
 			let items = []
 			this.models.forEach(model => {
 				items.push({
-					created_at: model.created_at,
+					created_at: moment(model.created_at).format("D [de] MMMM [de] YYYY"),
 					siniestros_count: model.siniestros_count,
 				})
 			})

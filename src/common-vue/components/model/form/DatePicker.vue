@@ -44,7 +44,10 @@ export default {
 	},
 	computed: {
 		id() {
-			return this.model_name+'-'+this.prop.key
+			if (this.prop) {
+				return this.model_name+'-'+this.prop.key
+			}
+			return null
 		},
 	},
 	created() {

@@ -42,6 +42,7 @@ export default {
 			this.$store.commit('siniestro_metricas/casos_por_dia/setEstadosParaCoincidir', this.estados_actuales)
 		},
 		search() {
+			this.$bvModal.hide('select-estados-actuales')
 			this.$store.dispatch('siniestro_metricas/casos_por_dia/getModels')
 		},
 		setEstadosPorDefecto() {

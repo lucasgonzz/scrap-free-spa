@@ -83,6 +83,9 @@ export default {
 			return null
 		},
 		siniestroGetColor(siniestro) {
+			if (siniestro.fecha_denuncia && moment().diff(siniestro.fecha_denuncia, 'days') >= 26) {
+				return 'Naranja'
+			}
 			let colores = this.colores_siniestro.filter(color => {
 				return color.estado_siniestro_id == siniestro.estado_siniestro_id 
 			})

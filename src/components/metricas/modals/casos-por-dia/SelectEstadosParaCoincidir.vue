@@ -42,6 +42,7 @@ export default {
 			this.$store.commit('siniestro_metricas/casos_por_dia/setEstadosCoincidenId', this.estados_para_coincidir)
 		},
 		search() {
+			this.$bvModal.hide('select-estados-para-coincidir')
 			this.$store.dispatch('siniestro_metricas/casos_por_dia/getModels')
 		},
 		setEstadosCerrados() {

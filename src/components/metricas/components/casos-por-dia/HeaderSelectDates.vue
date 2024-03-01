@@ -18,7 +18,7 @@
 		class="m-l-15 m-md-b-15"
 		v-b-modal="'select-estados-actuales'"
 		variant="primary">
-			Estados actuales
+			Estados actuales (Foco del dia)
 		</b-button>
 
 		<b-button
@@ -69,4 +69,7 @@ export default {
 	align-items: flex-end
 	justify-content: flex-start
 	flex-wrap: wrap
+
+	border-bottom: 1px solid rgba(255, 255, 255, .5)
+	margin-bottom: 15px
 </style>

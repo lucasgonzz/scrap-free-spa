@@ -44,6 +44,11 @@
 			<numero-siniestro-con-svg
 			:siniestro_prop="props.model"></numero-siniestro-con-svg>
 		</template>
+
+		<template #table-prop-asegurado="props">
+			<asegurado-con-svg
+			:siniestro_prop="props.model"></asegurado-con-svg>
+		</template>
 	</view-component>	
 </div>
 </template>
@@ -54,6 +59,7 @@ export default {
 		ViewComponent: () => import('@/common-vue/components/view/Index'),
 		ModelModalTitle: () => import('@/components/siniestro/components/ModelModalTitle'),
 		NumeroSiniestroConSvg: () => import('@/components/siniestro/components/NumeroSiniestroConSvg'),
+		AseguradoConSvg: () => import('@/components/siniestro/components/AseguradoConSvg'),
 		PdfButtons: () => import('@/components/siniestro/components/PdfButtons'),
 		EnviarMensaje: () => import('@/components/siniestro/components/EnviarMensaje'),
 		Bienes: () => import('@/components/siniestro/components/bienes/Index'),

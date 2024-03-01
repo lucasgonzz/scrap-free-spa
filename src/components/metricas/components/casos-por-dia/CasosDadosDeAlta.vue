@@ -1,8 +1,8 @@
 <template>
 	<div
 	v-if="!loading">
-		<p class="total">
-			Ingresos al dia: {{ models.length }}
+		<p class="metrica-title">
+			Ingresos al dia: {{ cantidad_siniestros }}
 		</p>
 		<b-table
 		v-if="items.length"
@@ -19,12 +19,13 @@
 	</div>
 </template>
 <script>
+import moment from 'moment'
 export default {
 	computed: {
 		fields() {
 			return [
 				{
-					label: 'Fecha',
+					label: 'Fecha Alta',
 					key: 'created_at',
 				},
 				{
@@ -37,11 +38,18 @@ export default {
 			let items = []
 			this.models.forEach(model => {
 				items.push({
-					created_at: model.created_at,
+					created_at: moment(model.created_at).format("D [de] MMMM [de] YYYY"),
 					siniestros_count: model.siniestros_count,
 				})
 			})
 			return items
+		},
+		cantidad_siniestros() {
+			let cantidad = 0
+			this.models.forEach(model => {
+				cantidad += model.siniestros_count
+			})
+			return cantidad
 		},
 		models() {
 			return this.$store.state.siniestro_metricas.casos_por_dia.casos_por_dia 
