@@ -16,7 +16,11 @@ export default {
 		},
 		setCoberturas(state) {
 			let coberturas = []
-			state.siniestro.bienes.forEach(bien => {
+			let bienes = state.siniestro.bienes 
+
+			bienes = bienes.sort((a, b) => a.posicion_en_liquidacion - b.posicion_en_liquidacion)
+
+			bienes.forEach(bien => {
 
 				bien.coberturas.forEach(cobertura_bien => {
 
@@ -44,13 +48,17 @@ export default {
 
 			})
 			state.coberturas = coberturas
-			console.log('las coberturas de indemnizacion quedaron asi:')
-			console.log(state.coberturas)
+			// console.log('las coberturas de indemnizacion quedaron asi:')
+			// console.log(state.coberturas)
 		},
 		set_bienes_antiguedad(state) {
 			state.siniestro.bienes.forEach(bien => {
-				let fecha_compra = moment(bien.fecha_compra)
-				bien.anos_antiguedad = moment().diff(fecha_compra, 'years', true).toFixed(2)
+				if (bien.fecha_compra) {
+					let fecha_compra = moment(bien.fecha_compra)
+					bien.anos_antiguedad = moment().diff(fecha_compra, 'years', true).toFixed(2)
+				} else {
+					bien.anos_antiguedad = ''
+				}
 			})
 		},
 		set_bienes_amortizacion(state, amortizaciones) {
@@ -61,12 +69,12 @@ export default {
 				})
 
 				if (typeof amortizacion == 'undefined') {
-					console.log('no se encontro amortizacion')
+					// console.log('no se encontro amortizacion')
 					amortizacion = amortizaciones.reduce(function (objetoActual, objetoSiguiente) {
 						return (objetoSiguiente.anos > objetoActual.anos) ? objetoSiguiente : objetoActual;
 					}, amortizaciones[0])
-					console.log('se encontro esta:')
-					console.log(amortizacion)
+					// console.log('se encontro esta:')
+					// console.log(amortizacion)
 				}
 
 				if (typeof amortizacion != 'undefined') {
@@ -77,12 +85,12 @@ export default {
 		},
 		aplicar_coberturas_a_los_bienes(state) {
 
-			console.log('aplicar_coberturas_a_los_bienes state.coberturas')
-			console.log(state.coberturas)
+			// console.log('aplicar_coberturas_a_los_bienes state.coberturas')
+			// console.log(state.coberturas)
 			
 			state.siniestro.bienes.forEach(bien => {
 
-				console.log('bien '+bien.nombre)
+				// console.log('bien '+bien.nombre)
 				
 				// El remanente es lo que hay que cubrir con las coberturas
 				let remanente_a_nuevo = Number(bien.valor_depreciado) 
@@ -126,7 +134,7 @@ export default {
 
 					// Se suma a las perdidas para el resumen final
 					if (usar_reparacion) {
-						console.log('Se suma a perdidas el valor de reparacion')
+						// console.log('Se suma a perdidas el valor de reparacion')
 						cobertura_store.perdidas += remanente_reparacion
 					} else {
 						cobertura_store.perdidas += remanente_a_nuevo
@@ -219,10 +227,10 @@ export default {
 					}
 
 					if (usar_reparacion) {
-						console.log('sumando indemnizado_reparacion de '+indemnizado_reparacion)
+						// console.log('sumando indemnizado_reparacion de '+indemnizado_reparacion)
 						cobertura_store.indemnizacion += indemnizado_reparacion
 					} else {
-						console.log('sumando indemnizado_a_nuevo de '+indemnizado_a_nuevo)
+						// console.log('sumando indemnizado_a_nuevo de '+indemnizado_a_nuevo)
 						cobertura_store.indemnizacion += indemnizado_a_nuevo
 					}
 
@@ -242,22 +250,22 @@ export default {
 
 
 				if (bien.valor_reparacion) {
-					console.log('bien.valor_reparacion')
-					console.log(bien.valor_reparacion)
-					console.log('deducible_aplicado_a_reparacion')
-					console.log(deducible_aplicado_a_reparacion)
+					// console.log('bien.valor_reparacion')
+					// console.log(bien.valor_reparacion)
+					// console.log('deducible_aplicado_a_reparacion')
+					// console.log(deducible_aplicado_a_reparacion)
 					let reparacion = bien.valor_reparacion - deducible_aplicado_a_reparacion
 
-					console.log('reparacion')
-					console.log(reparacion)
+					// console.log('reparacion')
+					// console.log(reparacion)
 
-					console.log('indemnizacion_a_nuevo')
-					console.log(indemnizacion_a_nuevo)
+					// console.log('indemnizacion_a_nuevo')
+					// console.log(indemnizacion_a_nuevo)
 
 					let ratio = reparacion / Number(indemnizacion_a_nuevo)
 
-					console.log('ratio')
-					console.log(ratio)
+					// console.log('ratio')
+					// console.log(ratio)
 					
 					ratio = ratio+' '
 					ratio = ratio.substring(2,4)
@@ -266,9 +274,9 @@ export default {
 					bien.deducible_aplicado_a_reparacion = deducible_aplicado_a_reparacion
 				}
 			
-				console.log('El remanente del bien quedo en '+bien.remanente)
+				// console.log('El remanente del bien quedo en '+bien.remanente)
 
-				console.log('________________________')
+				// console.log('________________________')
 			})
 
 		}

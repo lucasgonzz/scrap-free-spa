@@ -14,50 +14,60 @@ export default {
 			let siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
 			
 			if (!siniestro_liquidacion.id || siniestro_liquidacion.id != siniestro.id) {
+				console.log('Se manda setLiquidaciones desde getBienRatio')
 				this.setLiquidaciones(siniestro)
 			} 
 
 			console.log('getBienRatio para '+bien.nombre)
 
 			siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
+			// if (siniestro_liquidacion.id) {
 
-			let bien_siniestro = siniestro_liquidacion.bienes.find(_bien => {
-				return _bien.id == bien.id 
-			})
+				let bien_siniestro = siniestro_liquidacion.bienes.find(_bien => {
+					return _bien.id == bien.id 
+				})
 
-			if (typeof bien_siniestro != 'undefined' && bien_siniestro.ratio) {
-				return bien_siniestro.ratio+'%'
-			}
+				if (typeof bien_siniestro != 'undefined' && bien_siniestro.ratio) {
+					return bien_siniestro.ratio+'%'
+				}
+				
+			// }
+
 		},
 		getBienIndemnizacionANuevo(bien) {
 			let siniestro = this.$store.state.siniestro.model
 			let siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
 			
+
 			if (!siniestro_liquidacion.id || siniestro_liquidacion.id != siniestro.id) {
+				console.log('Se manda setLiquidaciones desde getBienIndemnizacion')
 				this.setLiquidaciones(siniestro)
 			} 
 
-			console.log('getBienRatio para '+bien.nombre)
-
+			console.log('getBienIndemnizacionANuevo para '+bien.nombre)
 			siniestro_liquidacion = this.$store.state.liquidacion.siniestro 
+			// if (siniestro_liquidacion.id) {
 
-			let bien_siniestro = siniestro_liquidacion.bienes.find(_bien => {
-				return _bien.id == bien.id 
-			})
+				let bien_siniestro = siniestro_liquidacion.bienes.find(_bien => {
+					return _bien.id == bien.id 
+				})
 
-			if (typeof bien_siniestro != 'undefined' && bien_siniestro.indemnizacion_a_nuevo) {
-				return this.price(bien_siniestro.indemnizacion_a_nuevo)
-			}
+				if (typeof bien_siniestro != 'undefined' && bien_siniestro.indemnizacion_a_nuevo) {
+					return this.price(bien_siniestro.indemnizacion_a_nuevo)
+				}
+			// }
+
 
 		},
 		setLiquidaciones(siniestro) {
-			console.log('setLiquidaciones')
+			console.log('setLiquidaciones siniestro')
+			console.log(siniestro)
 			this.$store.commit('liquidacion/setSiniestro', siniestro)
 			this.$store.commit('liquidacion/setCoberturas')
 			this.$store.commit('liquidacion/set_bienes_antiguedad')
 			this.$store.commit('liquidacion/set_bienes_amortizacion', this.$store.state.amortizacion.models)
 			this.$store.commit('liquidacion/aplicar_coberturas_a_los_bienes')
-			// this.$bvModal.show('liquidacion')
+			
 		},
 		diferencia_fecha_ocurrencia_fecha_denuncia(siniestro) {
 			if (siniestro.fecha_ocurrencia && siniestro.fecha_denuncia) {

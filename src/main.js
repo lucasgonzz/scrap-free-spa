@@ -9,6 +9,7 @@ Vue.use(Geocoder, {
     defaultCountryCode: null, // e.g. 'CA'
     defaultLanguage:    null, // e.g. 'en'
     defaultMode:        'address', // or 'lat-lng'
+
     googleMapsApiKey:   'AIzaSyAeG9C9cWoZGnUPtRMuWM3OQ1bdgRqnIQo'
     // googleMapsApiKey:   'AIzaSyAh0cdPh_LCVBWcrWeNsCiAHDcUDiNCc4E'
     // AIzaSyBDyXI5lejBnwQ5iV601WnSFeAPqqRF4bw

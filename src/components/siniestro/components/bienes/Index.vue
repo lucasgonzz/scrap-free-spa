@@ -36,7 +36,7 @@ export default {
 		setBienes() {
 			console.log(this.siniestro.cantidad_bienes)
 			if (typeof this.siniestro.cantidad_bienes == 'undefined' || this.siniestro.cantidad_bienes == '') {
-				console.log('hola')
+				console.log('siniestro.cantidad_bienes estaba vacio')
 				this.siniestro.cantidad_bienes = 0
 			}
 			this.cantidad_bienes = Number(this.cantidad_bienes)
@@ -46,26 +46,36 @@ export default {
 				console.log(this.siniestro.bienes)
 			} else {
 				console.log('entro')
-				console.log(this.cantidad_bienes)
 				console.log(this.siniestro.cantidad_bienes)
 				for (var i = this.cantidad_bienes - this.siniestro.cantidad_bienes; i > 0; i--) {
 					console.log('aca:')
 					let props = this.getSelectAndCheckboxProps(null, 'bien')
 					props = this.getImagesProp(props)
 					let bien = {}
+					props.push({
+						key: 'coberturas',
+						value: [],
+					})
 					props.forEach(prop => {
 						bien[prop.key] = prop.value
 					})
 
+
 					this.siniestro.bienes.push(bien)
 				}
 			}
+			console.log('YA PASO, quedo asi:')
+			console.log(this.siniestro)
 			this.siniestro.cantidad_bienes = this.cantidad_bienes
 			this.setModel(this.siniestro, 'siniestro', [], false, false) 
 		},
 		getImagesProp(props) {
 			props.push({
 				key: 'images',
+				value: [],
+			})
+			props.push({
+				key: 'foto_estudio_mercado',
 				value: [],
 			})
 			return props

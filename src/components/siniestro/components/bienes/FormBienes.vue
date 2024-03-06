@@ -123,7 +123,7 @@
 
 								<p
 								class="function-value"
-								v-else-if="prop.function">
+								v-else-if="prop.function && model.id">
 									{{ getFunctionValue(prop, model) }}
 								</p>
 

@@ -29,6 +29,7 @@ export default {
 		delete: null,
 		delete_image_prop: null,
 		delete_image_model: null,
+		delete_image_model_image_model_name: null,
 		
 		prop_model_to_delete: null,
 
@@ -130,6 +131,9 @@ export default {
 		setDeleteImageModel(state, value) {
 			state.delete_image_model = value
 		},
+		setDeleteImageModelImageModelName(state, value) {
+			state.delete_image_model_image_model_name = value 
+		},
 		deleteImage(state, value) {
 			let index = state.models.images.findIndex(model => {
 				return model.id == state.delete_image.id
@@ -203,7 +207,8 @@ export default {
 			})
 		},
 		deleteImageModel({ commit, state }) {
-			return axios.delete(`/api/delete-image-model/${generals.methods.routeString(state.model_name)}/${state.model.id}/${state.delete_image_model.id}`)
+			let url = `/api/delete-image-model/${generals.methods.routeString(state.model_name)}/${state.model.id}/${state.delete_image_model_image_model_name}/${state.delete_image_model.id}`
+			return axios.delete(url)
 			.then((res) => {
 				commit('add', res.data.model)
 			})

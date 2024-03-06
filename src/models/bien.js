@@ -48,6 +48,7 @@ export default {
 		{
 			text: 'Imagen estudio de mercado',
 			key: 'foto_estudio_mercado',
+			image_model_name: 'FotoEstudioMercado',
 			type: 'images',
 			not_show_google_search_option: true,
 		},
@@ -60,10 +61,10 @@ export default {
 			value: '',
 			show: true,
 		},
+		
 		{
-			text: 'Informe tecnico asegurado',
-			key: 'informe_tecnico_asegurado',
-			type: 'text',
+			key: 'posicion_en_liquidacion',
+			type: 'number',
 			value: '',
 			show: true,
 		},
@@ -205,6 +206,13 @@ export default {
 			text: 'liquidacion paga asegurado',
 			key: 'liquidacion_paga_asegurado',
 			type: 'number',
+			value: '',
+			show: true,
+		},
+		{
+			text: 'Informe tecnico asegurado',
+			key: 'informe_tecnico_asegurado',
+			type: 'text',
 			value: '',
 			show: true,
 		},

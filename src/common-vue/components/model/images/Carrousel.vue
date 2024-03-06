@@ -2,9 +2,10 @@
 <div>
     <confirm
     text="la imagen"
-    :actions="[model_name+'/deleteImageModel']"
-    :id="'delete-'+model_name+'-images'"
+    :id="'delete-'+model_name+'-'+model.id+'-'+prop.key+'-images'"
     :model_name="model_name"
+    emit="deleteImage"
+    @deleteImage="deleteImage"
     toast="Imagen eliminada"></confirm>
 
 	<carousel
@@ -104,12 +105,13 @@ export default {
 			return typeof this.prop.not_show_google_search_option == 'undefined'
 		},
 		input_file_name() {
-			return this.model_name+'-'+this.prop.key+'-input-file-drop'
+			return this.model_name+'-'+this.model.id+'-'+this.prop.key+'-input-file-drop'
 		}
 	},
 	data() {
 		return {
 			file: null,
+			image_to_delete: {},
 		}
 	},
 	methods: {
@@ -132,14 +134,51 @@ export default {
 		// 	this.$emit('uploadImage')
 		// },
 		setDelete(image) {
-			this.$store.commit(this.model_name+'/setDeleteImageModel', image)
-			this.$bvModal.show('delete-'+this.model_name+'-images')
+			// if (this.prop.image_model_name) {
+			// 	this.$store.commit(this.model_name+'/setDeleteImageModelImageModelName', this.prop.image_model_name)
+			// } else {
+			// 	this.$store.commit(this.model_name+'/setDeleteImageModelImageModelName', 'Image')
+			// }
+			// this.setModel(this.model, 'bien')
+			// this.$store.commit(this.model_name+'/setDeleteImageModel', image)
+			this.image_to_delete = image
+			this.$bvModal.show('delete-'+this.model_name+'-'+this.model.id+'-'+this.prop.key+'-images')
 		},
 		searchImage() {
 			this.$bvModal.show('search-image')
 			setTimeout(() => {
 				document.getElementById('search-image-input').focus()
 			}, 200)
+		},
+		deleteImage() {
+			console.log('deleteImage prop:')
+			console.log(this.prop)
+			let delete_image_model_name
+			if (this.prop.image_model_name) {
+				delete_image_model_name = this.prop.image_model_name
+			} else {
+				delete_image_model_name = 'Image'
+			}
+			let url = `/delete-image-model/${this.routeString(this.model_name)}/${this.model.id}/${delete_image_model_name}/${this.image_to_delete.id}`
+			this.$api.delete(url)
+			.then((res) => {
+				console.log('llego esto')
+				console.log(res.data.model)
+				this.model[this.prop.key] = res.data.model[this.prop.key]
+				if (this.model_name == 'bien') {
+					let siniestro = this.$store.state.siniestro.model 
+					let bienes = siniestro.bienes
+					let index = bienes.findIndex(_bien => {
+						return _bien.id == this.model.id 
+					})
+					bienes.splice(index, 1, this.model)
+					siniestro.bienes = bienes 
+					this.setModel(siniestro, 'siniestro', [], false, false) 
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 		},
 	}
 }
