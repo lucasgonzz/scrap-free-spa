@@ -109,7 +109,10 @@ export default {
 						if (this.waiting_time == 0) {
 		                    window.clearInterval(this.interval)
 		                    console.log('Se limpio intervalo')
-							this.search()
+							this.waiting_time--
+		                    if (this.loading) {
+								this.search()
+		                    }
 						} else {
 							this.waiting_time--
 						}		
@@ -121,50 +124,28 @@ export default {
 		},
 		search() {
 			console.log('buscando')
-			console.log(this.$geocoder)
 
-			var addressObj = {
-			    address_line_1: this.query,
-			    address_line_2: '',
-			    // city:           'Mountain View',
-			    // state:          'CA',               // province also valid
-			    // zip_code:       '94043',            // postal_code also valid
-			    country:        'Argentina'
-			}
-			this.$geocoder.send(addressObj, response => { 
-				console.log(response)
-				this.results = response.results.map(response => {
-					return {
-						address: response.formatted_address,
-						geometry: response.geometry,
-					}
+				this.$api.get('google-geocoder/'+this.query)
+				.then(res => {
+
+					console.log(res)
+					this.results = res.data.direcciones.map(direccion => {
+						return {
+							address: direccion.formatted_address,
+							latitude: direccion.coordinates.latitude,
+							longitude: direccion.coordinates.longitude,
+						}
+					})
+					this.searching = false
+					this.interval = null
+					this.loading = false 
+					this.setFirstSelectedRow()
 				})
-				this.searching = false
-				this.interval = null
-				this.loading = false 
-				this.setFirstSelectedRow()
-			})
-
-			// const geocoder = new google.maps.Geocoder()
-			// google.maps.Geocoder.geocode({
-			// 	address: this.query+' Argentina'
-			// })
-			// .then(res => {
-			// 	this.results = res.results.map(result => {
-			// 		return {
-			// 			address: result.formatted_address,
-			// 			geometry: result.geometry,
-			// 		}
-			// 	})
-			// 	console.log(res.results)
-			// 	this.searching = false
-			// 	this.interval = null
-			// 	this.loading = false 
-			// 	this.setFirstSelectedRow()
-			// })
-			// .catch(err => {
-			// 	console.log(err)
-			// })
+				.catch(err => {
+					this.$toast.error('Error al buscar la direccion')
+					console.log(err)
+					this.loading = false 
+				})
 		},
 		enterSelect() { 
 			if (!this.loading) {
@@ -190,8 +171,8 @@ export default {
 			console.log('setSelectedss')
 			console.log(result)
 			this.model[this.prop.key] = result.address 
-			this.model[this.prop.key+'_lat'] = result.geometry.location.lat
-			this.model[this.prop.key+'_lng'] = result.geometry.location.lng
+			this.model[this.prop.key+'_lat'] = result.latitude
+			this.model[this.prop.key+'_lng'] = result.longitude
 			this.setModel(this.model, this.model_name, [], false, false)
 			this.$bvModal.hide(this.id)
 		}

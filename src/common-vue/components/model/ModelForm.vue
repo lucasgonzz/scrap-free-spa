@@ -70,6 +70,7 @@
 
 								<belongs-to-many-checkbox
 								v-else-if="prop.belongs_to_many && prop.type == 'checkbox'"
+								:model_name="model_name"
 								:model="model"
 								:prop="prop"></belongs-to-many-checkbox>
 

@@ -16,7 +16,7 @@
 				v-for="model_checkbox in group"
 				:key="model_checkbox.id"
 				:value="model_checkbox.id"
-				:id="'checkbox-'+model_checkbox.id"
+				:id="model_name+'-'+prop.key"
 				@change="change(model_checkbox)"
 				v-model="models_id">
 					{{ model_checkbox.name }}
@@ -29,7 +29,7 @@
 			v-for="model_checkbox in modelsStoreFromName(prop.store)"
 			:key="model_checkbox.id"
 			:value="model_checkbox.id"
-			:id="'checkbox-'+model_checkbox.id"
+			:id="model_name+'-'+prop.key"
 			@change="change(model_checkbox)"
 			v-model="models_id">
 				{{ model_checkbox.name }}
@@ -42,6 +42,7 @@ export default {
 	props: {
 		model: Object,
 		prop: Object,
+		model_name: String,
 	},
 	data() {
 		return {
