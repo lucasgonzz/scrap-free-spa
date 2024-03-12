@@ -15,8 +15,8 @@
 				<b-form-checkbox 
 				v-for="model_checkbox in group"
 				:key="model_checkbox.id"
-				:value="model_checkbox.id"
-				:id="model_name+'-'+prop.key"
+				:value="model_checkbox.id" 
+				:id="model_name+'-'+prop.key+'-'+model_checkbox.id"
 				@change="change(model_checkbox)"
 				v-model="models_id">
 					{{ model_checkbox.name }}
@@ -29,7 +29,7 @@
 			v-for="model_checkbox in modelsStoreFromName(prop.store)"
 			:key="model_checkbox.id"
 			:value="model_checkbox.id"
-			:id="model_name+'-'+prop.key"
+			:id="model_name+'-'+prop.key+'-'+model_checkbox.id"
 			@change="change(model_checkbox)"
 			v-model="models_id">
 				{{ model_checkbox.name }}

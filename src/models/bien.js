@@ -67,6 +67,7 @@ export default {
 			type: 'number',
 			value: '',
 			show: true,
+			description: 'Colocal 0 para que no este presente en la liquidacion',
 		},
 
 		{

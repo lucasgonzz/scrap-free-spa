@@ -9,6 +9,7 @@ export default [
     'estado_siniestro',
     // 'localidad',
     'provincia',
+    'employee',
     'tipo_orden_de_servicio',
     'gestor_scrap_free',
     'gestor_aseguradora',

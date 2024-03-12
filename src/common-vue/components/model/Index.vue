@@ -394,7 +394,7 @@ export default {
 			this.properties.forEach(prop => {
 				if (
 					(prop.type == 'text' 
-					|| prop.type == 'checkbox' 
+					|| (prop.type == 'checkbox' && !prop.belongs_to_many) 
 					|| prop.type == 'textarea' 
 					|| prop.type == 'date' 
 					|| prop.type == 'search' 

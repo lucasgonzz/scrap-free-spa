@@ -12,7 +12,6 @@
 	model_name="siniestro"
 	modal_size="md"
 	:table_height_para_restar="60"
-	:show_only_guardar="false"
 	:list_props_to_show="['codigo']">
 		
 		<template #model_modal_title>
