@@ -28,6 +28,8 @@ export default {
 		border-spacing: 0
 		border-collapse: separate
 		// border-radius: 0 0 8px 8px 
+		max-width: 100% !important
+		overflow-x: auto !important
 
 		tr  
 			&:hover 

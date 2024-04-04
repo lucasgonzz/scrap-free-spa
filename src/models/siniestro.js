@@ -359,49 +359,49 @@ export default {
 			type: 'text',
 		},
 		
-		{
-			text: 'Coberturas',
-			key: 'coberturas',
-			type: 'search',
-			value: '',
-			store: 'cobertura',
-			belongs_to_many: {
-				props_to_show: [
-					{
-						text: 'Nombre',
-						key: 'nombre',
-						show: true,
-					}
-				],
-				properties_to_set: [
-					{
-						text: 'Cobertura',
-						key: 'cobertura',
-						type: 'number',
-					},
-					{
-						text: 'Deducible',
-						key: 'deducible',
-						type: 'number',
-					},
-					// {
-					// 	text: 'Deducible en pesos',
-					// 	key: 'deducible_en_pesos',
-					// 	type: 'number',
-					// },
-					// {
-					// 	text: 'Monto minimo',
-					// 	key: 'monto_minimo',
-					// 	type: 'number',
-					// },
-					// {
-					// 	text: 'Suma asegurada',
-					// 	key: 'suma_asegurada',
-					// 	type: 'number',
-					// },
-				]
-			}
-		},
+		// {
+		// 	text: 'Coberturas',
+		// 	key: 'coberturas',
+		// 	type: 'search',
+		// 	value: '',
+		// 	store: 'cobertura',
+		// 	belongs_to_many: {
+		// 		props_to_show: [
+		// 			{
+		// 				text: 'Nombre',
+		// 				key: 'nombre',
+		// 				show: true,
+		// 			}
+		// 		],
+		// 		properties_to_set: [
+		// 			{
+		// 				text: 'Cobertura',
+		// 				key: 'cobertura',
+		// 				type: 'number',
+		// 			},
+		// 			{
+		// 				text: 'Deducible',
+		// 				key: 'deducible',
+		// 				type: 'number',
+		// 			},
+		// 			// {
+		// 			// 	text: 'Deducible en pesos',
+		// 			// 	key: 'deducible_en_pesos',
+		// 			// 	type: 'number',
+		// 			// },
+		// 			// {
+		// 			// 	text: 'Monto minimo',
+		// 			// 	key: 'monto_minimo',
+		// 			// 	type: 'number',
+		// 			// },
+		// 			// {
+		// 			// 	text: 'Suma asegurada',
+		// 			// 	key: 'suma_asegurada',
+		// 			// 	type: 'number',
+		// 			// },
+		// 		]
+		// 	}
+		// },
 
 		{
 			text: 'Historial Estados siniestro',

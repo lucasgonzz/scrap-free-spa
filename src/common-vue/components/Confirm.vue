@@ -87,7 +87,7 @@ export default {
 					this.$bvModal.hide(this.model_name)
 				}
 			}
-			this.loading = true
+			this.loading = false
 			this.$emit('confimed')
 		},
 	}

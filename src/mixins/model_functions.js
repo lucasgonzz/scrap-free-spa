@@ -52,8 +52,8 @@ export default {
 					return _bien.id == bien.id 
 				})
 
-				if (typeof bien_siniestro != 'undefined' && bien_siniestro.indemnizacion_a_nuevo) {
-					return this.price(bien_siniestro.indemnizacion_a_nuevo)
+				if (typeof bien_siniestro != 'undefined' && bien_siniestro.indemnizacion_bien) {
+					return this.price(bien_siniestro.indemnizacion_bien)
 				}
 			// }
 

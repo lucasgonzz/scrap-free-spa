@@ -29,6 +29,12 @@ export default {
 			value: '',
 			show: true,
 		},
+		{
+			key: 'numero_serie',
+			type: 'text',
+			value: '',
+			show: true,
+		},
 		
 		{
 			text: 'Descripcion',
@@ -165,12 +171,6 @@ export default {
 			store: 'tecnico_scrap_free',
 			type: 'select',
 			value: 0,
-			show: true,
-		},
-		{
-			key: 'numero_serie',
-			type: 'text',
-			value: '',
 			show: true,
 		},
 		{

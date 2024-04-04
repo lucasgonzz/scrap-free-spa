@@ -19,10 +19,17 @@ export default {
 			let bienes = state.siniestro.bienes 
 
 			bienes = bienes.filter(bien => {
-				return bien.posicion_en_liquidacion != 0
+				return bien.posicion_en_liquidacion != 0 || bien.posicion_en_liquidacion == ''
 			})
 
+			console.log('se van a usar los siguientes bienes:')
+			console.log(bienes)
+
 			bienes = bienes.sort((a, b) => a.posicion_en_liquidacion - b.posicion_en_liquidacion)
+
+
+			console.log('Asi quedaron ordenados:')
+			console.log(bienes)
 
 			bienes.forEach(bien => {
 
@@ -35,8 +42,9 @@ export default {
 					if (typeof cobertura == 'undefined') {
 						if (cobertura_bien.pivot.suma_asegurada) {
 							cobertura_bien.suma_asegurada = cobertura_bien.pivot.suma_asegurada
-							cobertura_bien.fondos_reparacion = cobertura_bien.pivot.suma_asegurada
-							cobertura_bien.fondos_a_nuevo = cobertura_bien.pivot.suma_asegurada
+							cobertura_bien.fondos = cobertura_bien.pivot.suma_asegurada
+							// cobertura_bien.fondos_reparacion = cobertura_bien.pivot.suma_asegurada
+							// cobertura_bien.fondos_a_nuevo = cobertura_bien.pivot.suma_asegurada
 							cobertura_bien.perdidas = 0
 							cobertura_bien.deducible = 0
 							cobertura_bien.indemnizacion = 0
@@ -94,7 +102,7 @@ export default {
 			
 			state.siniestro.bienes.forEach(bien => {
 
-				if (bien.posicion_en_liquidacion != 0) {
+				if (bien.posicion_en_liquidacion != 0 || bien.posicion_en_liquidacion == '') {
 					
 					// console.log('bien '+bien.nombre)
 					
@@ -108,182 +116,145 @@ export default {
 					}
 
 					let valor_reparacion = null
-					let deducible_aplicado_a_reparacion = 0
-
-					let deducible_aplicado_a_nuevo = 0
+					let deducible_aplicado = 0
 
 					if (bien.valor_reparacion) {
 						valor_reparacion = Number(bien.valor_reparacion)
 					}
 
-					let indemnizacion_reparacion = 0
-					let indemnizacion_a_nuevo = 0
+					let indemnizacion_bien = 0
+
+					let remanente_a_cubrir = 0
+
+					if (usar_reparacion) {
+						remanente_a_cubrir = remanente_reparacion
+					} else {
+						remanente_a_cubrir = remanente_a_nuevo
+					}
+
+					console.log('___________________________________')
+					console.log(bien.nombre)
+					console.log('___________________________________')
+					console.log('remanente_a_cubrir: '+generals.methods.price(remanente_a_cubrir))
 
 					bien.coberturas.forEach(cobertura_bien => {
+
 
 						let cobertura_store = state.coberturas.find(_cobertura => {
 							return _cobertura.id == cobertura_bien.id 
 						})
 
-						let fondos_reparacion = Number(cobertura_store.fondos_reparacion)
-						let fondos_a_nuevo = Number(cobertura_store.fondos_a_nuevo)
+						let fondos = Number(cobertura_store.fondos)
 
 						let cobertura_aplicada = {
 							id: cobertura_store.id,
 							nombre: cobertura_store.nombre,
-							fondos_reparacion: cobertura_store.fondos_reparacion,
-							fondos_a_nuevo: cobertura_store.fondos_a_nuevo,
-							remanente_a_cubrir_reparacion: remanente_reparacion,
-							remanente_a_cubrir_a_nuevo: remanente_a_nuevo,
+							fondos: cobertura_store.fondos,
+							remanente_a_cubrir: remanente_a_cubrir,
 							deducible: cobertura_store.pivot.deducible ? cobertura_store.pivot.deducible : 0,
 						}
 
-						// Se suma a las perdidas para el resumen final
-						if (usar_reparacion) {
-							// console.log('Se suma a perdidas el valor de reparacion')
-							cobertura_store.perdidas += remanente_reparacion
+						cobertura_store.perdidas += remanente_a_cubrir
+
+
+						console.log('Cobertura: '+cobertura_aplicada.nombre)
+						console.log('Fondos: '+generals.methods.price(cobertura_store.fondos))
+
+
+						if (fondos >= remanente_a_cubrir) {
+							cobertura_store.fondos -= remanente_a_cubrir
+							console.log('Habia fondos, se le restaron '+generals.methods.price(remanente_a_cubrir)+', el fonde quedo en '+generals.methods.price(cobertura_store.fondos))
 						} else {
-							cobertura_store.perdidas += remanente_a_nuevo
-						}
-
-
-						// console.log(cobertura_aplicada.nombre+' tiene '+cobertura_aplicada.fondos+' para pagar '+remanente)
-
-
-						if (fondos_reparacion >= remanente_reparacion) {
-							cobertura_store.fondos_reparacion -= remanente_reparacion
-						} else {
-							cobertura_store.fondos_reparacion = 0
-						}
-
-
-						if (fondos_a_nuevo >= remanente_a_nuevo) {
-							cobertura_store.fondos_a_nuevo -= remanente_a_nuevo
-						} else {
-							cobertura_store.fondos_a_nuevo = 0
+							cobertura_store.fondos = 0
+							console.log('NO habia fondos, quedaron en '+generals.methods.price(cobertura_store.fondos))
 						}
 
 
 						if (cobertura_store.pivot.deducible) {
 
-							let deducible_reparacion = remanente_reparacion * Number(cobertura_store.pivot.deducible) / 100
+							let deducible = remanente_a_cubrir * Number(cobertura_store.pivot.deducible) / 100
 
-							remanente_reparacion -= deducible_reparacion
+							remanente_a_cubrir -= deducible
 
-							deducible_aplicado_a_reparacion += deducible_reparacion
+							deducible_aplicado += deducible
 
+							cobertura_store.deducible += deducible
 
-
-							let deducible_a_nuevo = remanente_a_nuevo * Number(cobertura_store.pivot.deducible) / 100
-							
-
-	 						remanente_a_nuevo -= deducible_a_nuevo
-
-							deducible_aplicado_a_nuevo += deducible_a_nuevo
-
-							if (usar_reparacion) {
-								cobertura_store.deducible += deducible_reparacion
-							} else {
-								cobertura_store.deducible += deducible_a_nuevo
-							}
+							console.log('deducible de '+generals.methods.price(deducible))
+							console.log('el remanente_a_cubrir quedo en '+generals.methods.price(remanente_a_cubrir))
 
 						} 
 
-						cobertura_aplicada.deducible_aplicado = remanente_a_nuevo
+						cobertura_aplicada.deducible_aplicado = remanente_a_cubrir
 
-						let indemnizado_reparacion = 0
-						let indemnizado_a_nuevo = 0
+						let indemnizadocion_cobertura = 0
 
-						if (fondos_reparacion >= remanente_reparacion) {
+						if (fondos >= remanente_a_cubrir) {
 
-							indemnizado_reparacion = remanente_reparacion
-							indemnizacion_reparacion += remanente_reparacion
+							indemnizadocion_cobertura = remanente_a_cubrir
+							indemnizacion_bien += remanente_a_cubrir
 
-							remanente_reparacion = 0
+							remanente_a_cubrir = 0
+
+							console.log('Los fondos son mayores a remanente_a_cubrir, indemnizacion_bien = '+generals.methods.price(indemnizacion_bien))
+							console.log('indemnizadocion_cobertura = '+generals.methods.price(indemnizadocion_cobertura))
 
 						} else {
 
-							let indemnizado = fondos_reparacion 
+							let indemnizado = fondos 
 
-							indemnizado_reparacion = indemnizado
+							indemnizadocion_cobertura = indemnizado
 							
-							indemnizacion_reparacion += fondos_reparacion
+							indemnizacion_bien += fondos
 
-							remanente_reparacion -= fondos_reparacion
+							remanente_a_cubrir -= fondos
+
+							console.log('Los fondos son MENORES a remanente_a_cubrir, indemnizacion_bien = '+generals.methods.price(indemnizacion_bien))
+							console.log('indemnizadocion_cobertura = '+generals.methods.price(indemnizadocion_cobertura))
 
 						}
 						
-						if (fondos_a_nuevo >= remanente_a_nuevo) {
 
-							indemnizado_a_nuevo = remanente_a_nuevo
-							indemnizacion_a_nuevo += remanente_a_nuevo
+						cobertura_store.indemnizacion += indemnizadocion_cobertura
 
-							remanente_a_nuevo = 0
-
-						} else {
-
-							let indemnizado = fondos_a_nuevo 
-
-							indemnizado_a_nuevo = indemnizado
-							
-							indemnizacion_a_nuevo += fondos_a_nuevo
-
-							remanente_a_nuevo -= fondos_a_nuevo
-
-						}
-
-						if (usar_reparacion) {
-							// console.log('sumando indemnizado_reparacion de '+indemnizado_reparacion)
-							cobertura_store.indemnizacion += indemnizado_reparacion
-						} else {
-							// console.log('sumando indemnizado_a_nuevo de '+indemnizado_a_nuevo)
-							cobertura_store.indemnizacion += indemnizado_a_nuevo
-						}
-
-						cobertura_aplicada.remanente_reparacion = remanente_reparacion
-						cobertura_aplicada.remanente_a_nuevo = remanente_a_nuevo
+						cobertura_aplicada.remanente = remanente_a_cubrir
 
 						bien.coberturas_aplicadas.push(cobertura_aplicada)
 
 					})
 
-					bien.remanente_reparacion = remanente_reparacion
-					bien.remanente_a_nuevo = remanente_a_nuevo
-					bien.indemnizacion_reparacion = indemnizacion_reparacion
-					bien.indemnizacion_a_nuevo = indemnizacion_a_nuevo
+					bien.remanente_a_cubrir = remanente_a_cubrir
+					bien.indemnizacion_bien = indemnizacion_bien
 
-					bien.deducible_aplicado_a_nuevo = deducible_aplicado_a_nuevo
+					bien.deducible_aplicado = deducible_aplicado
 
 
-					if (bien.valor_reparacion) {
-						// console.log('bien.valor_reparacion')
-						// console.log(bien.valor_reparacion)
-						// console.log('deducible_aplicado_a_reparacion')
-						// console.log(deducible_aplicado_a_reparacion)
-						let reparacion = bien.valor_reparacion - deducible_aplicado_a_reparacion
+					if (bien.valor_reparacion && bien.valor_reposicion_a_nuevo) {
+						
+						let reparacion = bien.valor_reparacion - deducible_aplicado
 
-						// console.log('reparacion')
-						// console.log(reparacion)
+						console.log('reparacion')
+						console.log(reparacion)
 
-						// console.log('indemnizacion_a_nuevo')
-						// console.log(indemnizacion_a_nuevo)
+						console.log('valor_reposicion_a_nuevo')
+						console.log(bien.valor_reposicion_a_nuevo)
 
-						let ratio = reparacion / Number(indemnizacion_a_nuevo)
+						let ratio = reparacion / Number(bien.valor_reposicion_a_nuevo)
 
-						// console.log('ratio')
-						// console.log(ratio)
+						console.log('ratio de '+bien.nombre)
+						console.log(ratio)
 						
 						ratio = ratio+' '
 						ratio = ratio.substring(2,4)
 						bien.ratio = ratio 
-
-						bien.deducible_aplicado_a_reparacion = deducible_aplicado_a_reparacion
 					}
 				
 					// console.log('El remanente del bien quedo en '+bien.remanente)
 
 					// console.log('________________________')
-				} 
+				} else {
+					console.log('No se va a usar el bien '+bien.nombre+', posicion_en_liquidacion: '+bien.posicion_en_liquidacion)
+				}
 
 			})
 

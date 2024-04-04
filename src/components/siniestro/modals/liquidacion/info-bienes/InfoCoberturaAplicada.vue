@@ -3,7 +3,6 @@
 		<h5>
 			Cobertura {{ index + 1 }}: {{ cobertura.nombre }}
 		</h5>
-
 		<b-table
 		:fields="fields"
 		:items="items">
@@ -39,7 +38,7 @@ export default {
 			if (this.index > 0) {
 				items.push({
 					concepto: 'Remanente a cubrir',
-					valor: this.price(this.cobertura.remanente_a_cubrir_a_nuevo),
+					valor: this.price(this.cobertura.remanente_a_cubrir),
 				})
 			}
 			items = items.concat([
@@ -53,7 +52,8 @@ export default {
 				},
 				{
 					concepto: 'Cobertura '+this.cobertura.nombre,
-					valor: this.price(this.cobertura.fondos_a_nuevo),
+					// valor: this.cobertura.fondos,
+					valor: this.price(this.cobertura.fondos),
 				},
 				// {
 				// 	concepto: 'Remanente a cubrir',
@@ -70,7 +70,7 @@ export default {
 					concepto: 'Indemnizacion asegurado',
 					// valor: this.price(this.bien.indemnizacion_asegurado),
 					// valor: this.price(this.bien.valor_depreciado - this.cobertura.deducible_aplicado),
-					valor: this.price(this.bien.indemnizacion_a_nuevo),
+					valor: this.price(this.bien.indemnizacion_bien),
 				})
 			}
 			return items

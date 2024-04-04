@@ -170,8 +170,11 @@ export default {
 			if (this.siniestro.aseguradora) {
 				console.log(2)
 				if (this.siniestro.ramo_id && this.siniestro.ramo_id != 0) {
+					console.log(4)
 					if (this.siniestro.aseguradora.nombre == 'Sancor') {
+						console.log(5)
 						if (this.siniestro.causa_siniestro) {
+							console.log(6)
 							this.opciones_para_imprimir = [
 								{
 									text: 'Pago indemnizatorio',
@@ -185,6 +188,8 @@ export default {
 							this.$bvModal.show('opciones-para-imprimir')
 							link = 'VoucherSancor'
 							window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+						} else {
+							this.$toast.error('Indique la causa del siniestro')
 						}
 					} else if (this.siniestro.aseguradora.nombre == 'MetLife') {
 						link = 'ConformidadPagoIndemnizatorioLife'
