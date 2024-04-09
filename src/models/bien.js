@@ -109,14 +109,14 @@ export default {
 			show: true,
 		},
 		{
-			key: 'valor_reparacion',
-			type: 'number',
-			show: true,
-		},
-		{
 			key: 'indemnizacion',
 			show: true,
 			function: 'getBienIndemnizacionANuevo'
+		},
+		{
+			key: 'valor_reparacion',
+			type: 'number',
+			show: true,
 		},
 		{
 			key: 'ratio',
