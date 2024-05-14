@@ -149,10 +149,12 @@ export default {
 						console.log('aporte para indemnizacion: ')
 						console.log('monto_a_pagar: '+generals.methods.price(aporte_para_indemnizacion.monto_a_pagar))
 						console.log('deducible: '+generals.methods.price(aporte_para_indemnizacion.deducible))
+						console.log('monto_con_deducible_aplicado: '+generals.methods.price(aporte_para_indemnizacion.monto_con_deducible_aplicado))
 						
 						console.log('aporte para reparacion: ')
 						console.log('monto_a_pagar: '+generals.methods.price(aporte_para_reparacion.monto_a_pagar))
 						console.log('deducible: '+generals.methods.price(aporte_para_reparacion.deducible))
+						console.log('monto_con_deducible_aplicado: '+generals.methods.price(aporte_para_reparacion.monto_con_deducible_aplicado))
 
 						if (usar_reparacion) {
 
@@ -160,9 +162,11 @@ export default {
 
 							if (bien.remanente_reparacion > 0) {
 
-								cobertura_store.perdidas += precio_reparacion
-								cobertura_store.indemnizacion += aporte_para_reparacion.monto_con_deducible_aplicado
-								cobertura_store.deducible += aporte_para_reparacion.deducible
+								// cobertura_store.perdidas += Number(aporte_para_indemnizacion.monto_a_pagar)
+								// cobertura_store.perdidas += Number(bien.remanente_reparacion)
+								cobertura_store.perdidas += Number(precio_reparacion)
+								cobertura_store.indemnizacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)
+								cobertura_store.deducible += Number(aporte_para_reparacion.deducible)
 
 							}
 
@@ -174,9 +178,11 @@ export default {
 
 							if (bien.remanente_indemnizacion > 0) {
 
-								cobertura_store.perdidas += precio_indemnizacion
-								cobertura_store.indemnizacion += aporte_para_indemnizacion.monto_con_deducible_aplicado
-								cobertura_store.deducible += aporte_para_indemnizacion.deducible
+								// cobertura_store.perdidas += Number(aporte_para_indemnizacion.monto_a_pagar)
+								// cobertura_store.perdidas += Number(bien.remanente_indemnizacion)
+								cobertura_store.perdidas += Number(precio_indemnizacion)
+								cobertura_store.indemnizacion += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)
+								cobertura_store.deducible += Number(aporte_para_indemnizacion.deducible)
 
 							} 
 
@@ -185,10 +191,11 @@ export default {
 
 						if (bien.remanente_reparacion > 0) {
 
-							bien.remanente_reparacion -= aporte_para_reparacion.monto_con_deducible_aplicado	
-							bien.indemnizacion_reparacion += aporte_para_reparacion.monto_con_deducible_aplicado	
-							bien.deducible_aplicado_a_reparacion += aporte_para_reparacion.deducible
+							bien.remanente_reparacion -= Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
+							bien.indemnizacion_reparacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
+							bien.deducible_aplicado_a_reparacion += Number(aporte_para_reparacion.deducible)
 							console.log('remanente_reparacion: '+generals.methods.price(bien.remanente_reparacion))
+							console.log('bien.indemnizacion_reparacion: '+generals.methods.price(bien.indemnizacion_reparacion))
 
 						} else {
 							console.log('No afecto porque no habia remanente')
@@ -196,11 +203,12 @@ export default {
 
 						if (bien.remanente_indemnizacion > 0) {
 
-							bien.remanente_indemnizacion -= aporte_para_indemnizacion.monto_con_deducible_aplicado	
-							bien.indemnizacion_a_nuevo += aporte_para_indemnizacion.monto_con_deducible_aplicado	
-							bien.deducible_aplicado_a_indemnizacion += aporte_para_indemnizacion.deducible
+							bien.remanente_indemnizacion -= Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
+							bien.indemnizacion_a_nuevo += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
+							bien.deducible_aplicado_a_indemnizacion += Number(aporte_para_indemnizacion.deducible)
 
 							console.log('remanente_indemnizacion: '+generals.methods.price(bien.remanente_indemnizacion))
+							console.log('bien.indemnizacion_a_nuevo: '+generals.methods.price(bien.indemnizacion_a_nuevo))
 						
 						} else {
 							console.log('No afecto porque no habia remanente')

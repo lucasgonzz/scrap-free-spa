@@ -4,6 +4,9 @@ export default {
 
 			let monto_aporte_para_indemnizacion = 0
 			let monto_deducible = 0
+			let monto_con_deducible_aplicado = 0
+
+			let fondos_insuficientes = false
 
 			let cobertura_aplicada = {
 				id: cobertura_store.id,
@@ -19,8 +22,10 @@ export default {
 					cobertura_store.fondos -= bien.remanente_indemnizacion
 				}
 				monto_aporte_para_indemnizacion = bien.remanente_indemnizacion
-			
+
 			} else {
+
+				fondos_insuficientes = true
 
 				monto_aporte_para_indemnizacion = cobertura_store.fondos
 				
@@ -36,14 +41,14 @@ export default {
 				
 				bien.remanente_indemnizacion -= monto_deducible
 
-				// cobertura_store.deducible += monto_deducible
-
+				if (!fondos_insuficientes) {
+					monto_con_deducible_aplicado = monto_aporte_para_indemnizacion - monto_deducible
+				} else {
+					monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
+				}
 
 			} else {
-
-				// bien.deducible_aplicado_a_reparacion = 0
-				// bien.reparacion_con_deducible = bien.valor_reparacion
-
+				monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
 			}
 			
 			cobertura_aplicada.deducible_aplicado = bien.remanente_indemnizacion
@@ -53,13 +58,16 @@ export default {
 			return {
 				monto_a_pagar: monto_aporte_para_indemnizacion,
 				deducible: monto_deducible,
-				monto_con_deducible_aplicado: monto_aporte_para_indemnizacion - monto_deducible,
+				monto_con_deducible_aplicado: monto_con_deducible_aplicado,
 			} 
 		},
 		get_aporte_para_reparacion(bien, cobertura_store) {
 
 			let monto_aporte_para_reparacion = 0
 			let monto_deducible = 0
+			let monto_con_deducible_aplicado = 0
+			
+			let fondos_insuficientes = false
 
 
 			if (cobertura_store.fondos >= bien.remanente_reparacion) {
@@ -69,6 +77,8 @@ export default {
 			
 			} else {
 
+				fondos_insuficientes = true
+				
 				monto_aporte_para_reparacion = cobertura_store.fondos
 				cobertura_store.fondos = 0
 			
@@ -80,21 +90,20 @@ export default {
 
 				bien.remanente_reparacion -= monto_deducible
 
-				// cobertura_store.deducible += monto_deducible
-
-				// cobertura_aplicada.deducible_aplicado = bien.remanente_reparacion
+				if (!fondos_insuficientes) {
+					monto_con_deducible_aplicado = monto_aporte_para_reparacion - monto_deducible
+				} else {
+					monto_con_deducible_aplicado = monto_aporte_para_reparacion
+				}
 
 			} else {
-
-				// bien.deducible_aplicado_a_reparacion = 0
-				// bien.reparacion_con_deducible = bien.valor_reparacion
-
+				monto_con_deducible_aplicado = monto_aporte_para_reparacion
 			}
 
 			return {
 				monto_a_pagar: monto_aporte_para_reparacion,
 				deducible: monto_deducible,
-				monto_con_deducible_aplicado: monto_aporte_para_reparacion - monto_deducible,
+				monto_con_deducible_aplicado: monto_con_deducible_aplicado,
 			} 
 		},
 		usar_reparacion(bien) {

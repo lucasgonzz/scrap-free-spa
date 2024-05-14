@@ -54,6 +54,15 @@ export default {
 	overflow-x: scroll
 	overflow-y: hidden
 	flex-wrap: nowrap
+
+	-webkit-scrollbar 
+		-ms-overflow-style: none
+		scrollbar-width: none
+		display: none !important
+		
+	-ms-overflow-style: none
+	scrollbar-width: none
+	
 	.gestor-item 
 		width: 100px !important
 		cursor: pointer 

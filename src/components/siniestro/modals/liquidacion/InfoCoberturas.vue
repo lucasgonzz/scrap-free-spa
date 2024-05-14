@@ -59,7 +59,7 @@ export default {
 					// indemnizacion: cobertura.indemnizacion,
 					indemnizacion: this.price(cobertura.indemnizacion),
 				})
-				total += cobertura.indemnizacion
+				total += Number(cobertura.indemnizacion)
 			})
 			items.push({
 				cobertura_afectada: 'TOTAL PERDIDA',
