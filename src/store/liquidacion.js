@@ -20,7 +20,11 @@ export default {
 			let bienes = state.siniestro.bienes 
 
 			bienes = bienes.filter(bien => {
-				return bien.posicion_en_liquidacion != 0 || bien.posicion_en_liquidacion == ''
+				console.log('comparando posicion de '+bien.nombre)
+				console.log(bien.posicion_en_liquidacion)
+				console.log(bien.posicion_en_liquidacion != 0)
+				console.log(bien.posicion_en_liquidacion === '')
+				return bien.posicion_en_liquidacion != 0 || bien.posicion_en_liquidacion === ''
 			})
 
 			console.log('se van a usar los siguientes bienes:')
@@ -165,7 +169,10 @@ export default {
 								// cobertura_store.perdidas += Number(aporte_para_indemnizacion.monto_a_pagar)
 								// cobertura_store.perdidas += Number(bien.remanente_reparacion)
 								cobertura_store.perdidas += Number(precio_reparacion)
-								cobertura_store.indemnizacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)
+
+								cobertura_store.indemnizacion += Number(aporte_para_reparacion.monto_a_pagar)
+								// cobertura_store.indemnizacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)
+								
 								cobertura_store.deducible += Number(aporte_para_reparacion.deducible)
 
 							}
@@ -181,7 +188,10 @@ export default {
 								// cobertura_store.perdidas += Number(aporte_para_indemnizacion.monto_a_pagar)
 								// cobertura_store.perdidas += Number(bien.remanente_indemnizacion)
 								cobertura_store.perdidas += Number(precio_indemnizacion)
-								cobertura_store.indemnizacion += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)
+								
+								cobertura_store.indemnizacion += Number(aporte_para_indemnizacion.monto_a_pagar)
+								// cobertura_store.indemnizacion += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)
+								
 								cobertura_store.deducible += Number(aporte_para_indemnizacion.deducible)
 
 							} 
@@ -191,8 +201,12 @@ export default {
 
 						if (bien.remanente_reparacion > 0) {
 
-							bien.remanente_reparacion -= Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
-							bien.indemnizacion_reparacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
+							bien.remanente_reparacion -= Number(aporte_para_reparacion.monto_a_pagar)	
+							bien.indemnizacion_reparacion += Number(aporte_para_reparacion.monto_a_pagar)
+							
+							// bien.remanente_reparacion -= Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
+							// bien.indemnizacion_reparacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
+							
 							bien.deducible_aplicado_a_reparacion += Number(aporte_para_reparacion.deducible)
 							console.log('remanente_reparacion: '+generals.methods.price(bien.remanente_reparacion))
 							console.log('bien.indemnizacion_reparacion: '+generals.methods.price(bien.indemnizacion_reparacion))
@@ -203,8 +217,12 @@ export default {
 
 						if (bien.remanente_indemnizacion > 0) {
 
-							bien.remanente_indemnizacion -= Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
-							bien.indemnizacion_a_nuevo += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
+							bien.remanente_indemnizacion -= Number(aporte_para_indemnizacion.monto_a_pagar)	
+							bien.indemnizacion_a_nuevo += Number(aporte_para_indemnizacion.monto_a_pagar)
+							
+							// bien.remanente_indemnizacion -= Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
+							// bien.indemnizacion_a_nuevo += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
+							
 							bien.deducible_aplicado_a_indemnizacion += Number(aporte_para_indemnizacion.deducible)
 
 							console.log('remanente_indemnizacion: '+generals.methods.price(bien.remanente_indemnizacion))
@@ -223,11 +241,15 @@ export default {
 					})
 
 					if (usar_reparacion) {
-						console.log('ratio: ')
-						let ratio = Number(bien.indemnizacion_reparacion) / Number(bien.indemnizacion_a_nuevo)+''
-						console.log(ratio)
-						ratio = ratio.substring(2,4)
-						console.log(ratio)
+
+						let valorReparacion = Number(bien.indemnizacion_reparacion);
+						let valorNuevo = Number(bien.indemnizacion_a_nuevo);
+
+						let ratio = (valorReparacion / valorNuevo).toFixed(2); // Asegura 2 decimales
+						ratio = ratio.replace('.', '').substring(1, 3); // Remueve el punto y obtiene los dígitos correctos
+
+						console.log('ratio:');
+						console.log(ratio);
 						bien.ratio = ratio
 					}
 

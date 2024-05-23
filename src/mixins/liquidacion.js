@@ -16,6 +16,32 @@ export default {
 				deducible: cobertura_store.pivot.deducible ? cobertura_store.pivot.deducible : 0,
 			}
 
+
+			// DEDUCIBLE
+			if (cobertura_store.pivot.deducible) {
+
+				monto_deducible = bien.remanente_indemnizacion * Number(cobertura_store.pivot.deducible) / 100
+				
+				bien.remanente_indemnizacion -= monto_deducible
+
+				// monto_con_deducible_aplicado = monto_aporte_para_indemnizacion - monto_deducible
+
+				// if (!fondos_insuficientes) {
+				// 	monto_con_deducible_aplicado = monto_aporte_para_indemnizacion - monto_deducible
+				// } else {
+				// 	monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
+				// }
+
+			} else {
+				// monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
+			}
+
+
+			monto_con_deducible_aplicado = bien.remanente_indemnizacion
+			
+			
+			cobertura_aplicada.deducible_aplicado = bien.remanente_indemnizacion
+
 			if (cobertura_store.fondos >= bien.remanente_indemnizacion) {
 				
 				if (!usar_reparacion) {
@@ -35,24 +61,6 @@ export default {
 			
 			}
 
-			if (cobertura_store.pivot.deducible) {
-
-				monto_deducible = bien.remanente_indemnizacion * Number(cobertura_store.pivot.deducible) / 100
-				
-				bien.remanente_indemnizacion -= monto_deducible
-
-				if (!fondos_insuficientes) {
-					monto_con_deducible_aplicado = monto_aporte_para_indemnizacion - monto_deducible
-				} else {
-					monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
-				}
-
-			} else {
-				monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
-			}
-			
-			cobertura_aplicada.deducible_aplicado = bien.remanente_indemnizacion
-
 			bien.coberturas_aplicadas.push(cobertura_aplicada)
 
 			return {
@@ -70,6 +78,29 @@ export default {
 			let fondos_insuficientes = false
 
 
+			// DEDUCIBLE
+
+			if (cobertura_store.pivot.deducible) {
+
+				monto_deducible = bien.remanente_reparacion * Number(cobertura_store.pivot.deducible) / 100
+
+				bien.remanente_reparacion -= monto_deducible
+
+				// monto_con_deducible_aplicado = monto_aporte_para_reparacion - monto_deducible
+
+				// if (!fondos_insuficientes) {
+				// 	monto_con_deducible_aplicado = monto_aporte_para_reparacion - monto_deducible
+				// } else {
+				// 	monto_con_deducible_aplicado = monto_aporte_para_reparacion
+				// }
+
+			} else {
+				// monto_con_deducible_aplicado = monto_aporte_para_reparacion
+			}
+
+			monto_con_deducible_aplicado = bien.remanente_reparacion
+
+
 			if (cobertura_store.fondos >= bien.remanente_reparacion) {
 				
 				cobertura_store.fondos -= bien.remanente_reparacion
@@ -82,22 +113,6 @@ export default {
 				monto_aporte_para_reparacion = cobertura_store.fondos
 				cobertura_store.fondos = 0
 			
-			}
-
-			if (cobertura_store.pivot.deducible) {
-
-				monto_deducible = bien.remanente_reparacion * Number(cobertura_store.pivot.deducible) / 100
-
-				bien.remanente_reparacion -= monto_deducible
-
-				if (!fondos_insuficientes) {
-					monto_con_deducible_aplicado = monto_aporte_para_reparacion - monto_deducible
-				} else {
-					monto_con_deducible_aplicado = monto_aporte_para_reparacion
-				}
-
-			} else {
-				monto_con_deducible_aplicado = monto_aporte_para_reparacion
 			}
 
 			return {

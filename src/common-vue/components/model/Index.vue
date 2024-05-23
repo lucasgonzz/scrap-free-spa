@@ -404,25 +404,27 @@ export default {
 					let input = document.getElementById(this.model_name+'-'+prop.key)
 					console.log('input de '+prop.key)
 					console.log(input)
-					if (prop.type == 'search') {
-						let model_id_value = input.getAttribute('model_id')
-						if (model_id_value) {
-							this.model[prop.key] = input.getAttribute('model_id')
-							console.log('Se le puso el value de search para '+prop.text)
+					if (input.value) {
+						if (prop.type == 'search') {
+							let model_id_value = input.getAttribute('model_id')
+							if (model_id_value) {
+								this.model[prop.key] = input.getAttribute('model_id')
+								console.log('Se le puso el value de search para '+prop.text)
+							} else {
+								console.log('NO SE le puso el value de search para '+prop.text)
+							}
+						} else if (prop.type == 'checkbox') {
+							let model_id_value = input.getAttribute('model_id')
+							if (model_id_value) {
+								this.model[prop.key] = input.getAttribute('model_id')
+								console.log('Se le puso el value de search para '+prop.text)
+							} else {
+								console.log('NO SE le puso el value de search para '+prop.text)
+							}
 						} else {
-							console.log('NO SE le puso el value de search para '+prop.text)
+							console.log('se le puso el value tipo text de '+input.value)
+							this.model[prop.key] = input.value
 						}
-					} else if (prop.type == 'checkbox') {
-						let model_id_value = input.getAttribute('model_id')
-						if (model_id_value) {
-							this.model[prop.key] = input.getAttribute('model_id')
-							console.log('Se le puso el value de search para '+prop.text)
-						} else {
-							console.log('NO SE le puso el value de search para '+prop.text)
-						}
-					} else {
-						console.log('se le puso el value de '+input.value)
-						this.model[prop.key] = input.value
 					}
 				}
 			})
