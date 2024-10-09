@@ -7,6 +7,8 @@ import generals from '@/common-vue/mixins/generals'
 export default {
 	namespaced: true,
 	state: {
+		input_values: [],
+
 		model_name: 'siniestro',
 		from_dates: false,
 		is_selecteable: false,
@@ -42,6 +44,9 @@ export default {
 		loading: false,
 	},
 	mutations: {
+		set_input_values(state, value) {
+			state.input_values = value
+		},
 		setLoading(state, value) {
 			state.loading = value
 		},

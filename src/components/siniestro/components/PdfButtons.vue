@@ -112,36 +112,34 @@ export default {
 		rechazo() {
 			let link
 			if (this.siniestro.aseguradora.nombre == 'Sancor') {
-				if (this.siniestro.causa_siniestro) {
-					// if (this.siniestro.causa_siniestro.nombre == 'Fluctuacion') {
-					// 	link = 'FluctuacionElectromangneticaNoCubierta'
-					// } else if (this.siniestro.causa_siniestro.nombre == 'Evento no cubierto') {
-					// 	link = 'EventoNoCubierto'
-					// } else if (this.siniestro.causa_siniestro.nombre == 'Desgaste y/o vicios propios') {
-					// 	link = 'DesgasteYOViciosPropios'
-					// } else {
-					// 	this.$toast.error('La causa del siniestro no tiene ningun documento asignado')
-					// 	return
-					// }
-					this.opciones_para_imprimir = [
-						{
-							text: 'Fluctuacion',
-							link: 'FluctuacionElectromangneticaNoCubierta'
-						},
-						{
-							text: 'Evento no cubierto',
-							link: 'EventoNoCubierto'
-						},
-						{
-							text: 'Desgaste y/o vicios propios',
-							link: 'DesgasteYOViciosPropios'
-						},
-					]	
-					this.$bvModal.show('opciones-para-imprimir')
-					// window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
-				} else {
-					this.$toast.error('Indique la causa del siniestro')
+				console.log('causa del siniestro id:')
+				console.log(this.siniestro.causa_siniestro_id)
+				if (!this.siniestro.fecha_denuncia) {
+					this.$toast.error('Indique la fecha de denuncia')
+					return false	
 				}
+				if (!this.siniestro.causa_siniestro_id || this.siniestro.causa_siniestro_id == 0) {
+					this.$toast.error('Indique la causa del siniestro')
+					return false
+				}
+					
+				this.opciones_para_imprimir = [
+					{
+						text: 'Fluctuacion',
+						link: 'FluctuacionElectromangneticaNoCubierta'
+					},
+					{
+						text: 'Evento no cubierto',
+						link: 'EventoNoCubierto'
+					},
+					{
+						text: 'Desgaste y/o vicios propios',
+						link: 'DesgasteYOViciosPropios'
+					},
+				]	
+				this.$bvModal.show('opciones-para-imprimir')
+				// window.open(process.env.VUE_APP_API_URL+'/pdf/'+this.siniestro.id+'/'+link)
+				
 			}
 		},
 		retiro() {
@@ -207,10 +205,10 @@ export default {
 			}
 		},
 		informeLiquidador() {
-			// if (!this.siniestro.tipo_orden_de_servicio) {
-			// 	this.$toast.error('Indique TIPO ORDEN DE SERVICIO del siniestro')
-			// 	return false
-			// }
+			if (!this.siniestro.fecha_informe_tecnico) {
+				this.$toast.error('Indique FECHA INFORME TECNICO para el siniestro')
+				return false
+			}
 			this.opciones_para_imprimir = [
 				{
 					text: 'Informe liquidador',

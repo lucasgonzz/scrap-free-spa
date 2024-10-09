@@ -354,6 +354,8 @@ export default {
 				setTimeout(() => {
 					this.$bvModal.hide(this.model_name)
 				}, 100)
+			} else {
+				this.setModel(this.model, this.model_name, [], false, false) 
 			}
 		},
 		clearModel(info) {
@@ -388,9 +390,13 @@ export default {
 			if (this.prop_to_send_on_save) {
 				model_to_send[this.prop_to_send_on_save.key] = this.prop_to_send_on_save.value
 			}
+			// if (this.model_name == 'siniestro') {
+			// 	model_to_send.input_values = this.$store.state.siniestro.input_values
+			// }
 			return model_to_send
 		},
 		setPropsValues() {
+			let input_values = []
 			this.properties.forEach(prop => {
 				if (
 					(prop.type == 'text' 
@@ -401,17 +407,24 @@ export default {
 					|| prop.type == 'select')
 
 					&& typeof prop.not_show_on_form == 'undefined' && typeof prop.show_only_if_is_created == 'undefined') {
+
 					let input = document.getElementById(this.model_name+'-'+prop.key)
 					console.log('input de '+prop.key)
 					console.log(input)
-					if (input.value) {
+
+					if (input.value && (input.value == 0 || input.value == '0')) {
+						console.log('NO ENTRO '+prop.text+' proque tenia el valor: '+input.value)
+						console.log('el model tiene: ')
+						console.log(this.model[prop.key])
+
+					} else {
 						if (prop.type == 'search') {
 							let model_id_value = input.getAttribute('model_id')
 							if (model_id_value) {
 								this.model[prop.key] = input.getAttribute('model_id')
-								console.log('Se le puso el value de search para '+prop.text)
+								console.log('Se le puso el model_id de search para '+prop.text)
 							} else {
-								console.log('NO SE le puso el value de search para '+prop.text)
+								console.log('NO SE le puso el model_id de search para '+prop.text)
 							}
 						} else if (prop.type == 'checkbox') {
 							let model_id_value = input.getAttribute('model_id')
@@ -421,11 +434,11 @@ export default {
 							} else {
 								console.log('NO SE le puso el value de search para '+prop.text)
 							}
-						} else {
+						} else if (input.value) {
 							console.log('se le puso el value tipo text de '+input.value)
 							this.model[prop.key] = input.value
 						}
-					}
+					} 
 				}
 			})
 		},

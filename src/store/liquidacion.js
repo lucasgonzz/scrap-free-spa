@@ -125,6 +125,10 @@ export default {
 
 					bien.remanente_reparacion = precio_reparacion
 
+					let monto_para_perdidas_indemnizacion = precio_indemnizacion
+
+					let monto_para_perdidas_reparacion = precio_reparacion
+
 					bien.indemnizacion_a_nuevo = 0
 					bien.indemnizacion_reparacion = 0
 
@@ -133,6 +137,10 @@ export default {
 
 					console.log('remanente_indemnizacion: '+generals.methods.price(bien.remanente_indemnizacion))
 					console.log('remanente_reparacion: '+generals.methods.price(bien.remanente_reparacion))
+
+
+					let remanente_indemnizacion_sin_deducible_para_perdidas = precio_indemnizacion
+					let remanente_reparacion_sin_deducible_para_perdidas = precio_reparacion
 
 					bien.coberturas.forEach(cobertura_bien => {
 
@@ -151,14 +159,18 @@ export default {
 						let aporte_para_reparacion = liquidacion.methods.get_aporte_para_reparacion(bien, cobertura_store)
 
 						console.log('aporte para indemnizacion: ')
-						console.log('monto_a_pagar: '+generals.methods.price(aporte_para_indemnizacion.monto_a_pagar))
+						// console.log('monto_a_pagar: '+generals.methods.price(aporte_para_indemnizacion.monto_a_pagar))
 						console.log('deducible: '+generals.methods.price(aporte_para_indemnizacion.deducible))
 						console.log('monto_con_deducible_aplicado: '+generals.methods.price(aporte_para_indemnizacion.monto_con_deducible_aplicado))
 						
 						console.log('aporte para reparacion: ')
-						console.log('monto_a_pagar: '+generals.methods.price(aporte_para_reparacion.monto_a_pagar))
+						// console.log('monto_a_pagar: '+generals.methods.price(aporte_para_reparacion.monto_a_pagar))
 						console.log('deducible: '+generals.methods.price(aporte_para_reparacion.deducible))
 						console.log('monto_con_deducible_aplicado: '+generals.methods.price(aporte_para_reparacion.monto_con_deducible_aplicado))
+						
+
+						console.log('monto_para_perdidas_indemnizacion: '+generals.methods.price(monto_para_perdidas_indemnizacion))
+						console.log('monto_para_perdidas_reparacion: '+generals.methods.price(monto_para_perdidas_reparacion))
 
 						if (usar_reparacion) {
 
@@ -166,14 +178,13 @@ export default {
 
 							if (bien.remanente_reparacion > 0) {
 
-								// cobertura_store.perdidas += Number(aporte_para_indemnizacion.monto_a_pagar)
-								// cobertura_store.perdidas += Number(bien.remanente_reparacion)
-								cobertura_store.perdidas += Number(precio_reparacion)
+								cobertura_store.perdidas += Number(remanente_reparacion_sin_deducible_para_perdidas)
 
 								cobertura_store.indemnizacion += Number(aporte_para_reparacion.monto_a_pagar)
-								// cobertura_store.indemnizacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)
 								
 								cobertura_store.deducible += Number(aporte_para_reparacion.deducible)
+
+								// remanente_reparacion_sin_deducible_para_perdidas -= Number(aporte_para_reparacion.monto_a_pagar)
 
 							}
 
@@ -185,15 +196,13 @@ export default {
 
 							if (bien.remanente_indemnizacion > 0) {
 
-								// cobertura_store.perdidas += Number(aporte_para_indemnizacion.monto_a_pagar)
-								// cobertura_store.perdidas += Number(bien.remanente_indemnizacion)
-								cobertura_store.perdidas += Number(precio_indemnizacion)
+								cobertura_store.perdidas += Number(remanente_indemnizacion_sin_deducible_para_perdidas)
 								
 								cobertura_store.indemnizacion += Number(aporte_para_indemnizacion.monto_a_pagar)
-								// cobertura_store.indemnizacion += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)
 								
 								cobertura_store.deducible += Number(aporte_para_indemnizacion.deducible)
 
+								// remanente_indemnizacion_sin_deducible_para_perdidas -= Number(aporte_para_indemnizacion.monto_a_pagar)
 							} 
 
 
@@ -203,12 +212,16 @@ export default {
 
 							bien.remanente_reparacion -= Number(aporte_para_reparacion.monto_a_pagar)	
 							bien.indemnizacion_reparacion += Number(aporte_para_reparacion.monto_a_pagar)
-							
-							// bien.remanente_reparacion -= Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
-							// bien.indemnizacion_reparacion += Number(aporte_para_reparacion.monto_con_deducible_aplicado)	
+
+							monto_para_perdidas_reparacion -= Number(aporte_para_reparacion.monto_a_pagar)
+
+
+
+							remanente_reparacion_sin_deducible_para_perdidas = bien.remanente_reparacion
 							
 							bien.deducible_aplicado_a_reparacion += Number(aporte_para_reparacion.deducible)
 							console.log('remanente_reparacion: '+generals.methods.price(bien.remanente_reparacion))
+							console.log('remanente_reparacion_sin_deducible_para_perdidas: '+generals.methods.price(remanente_reparacion_sin_deducible_para_perdidas))
 							console.log('bien.indemnizacion_reparacion: '+generals.methods.price(bien.indemnizacion_reparacion))
 
 						} else {
@@ -216,16 +229,21 @@ export default {
 						} 
 
 						if (bien.remanente_indemnizacion > 0) {
-
+ 
 							bien.remanente_indemnizacion -= Number(aporte_para_indemnizacion.monto_a_pagar)	
 							bien.indemnizacion_a_nuevo += Number(aporte_para_indemnizacion.monto_a_pagar)
 							
-							// bien.remanente_indemnizacion -= Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
-							// bien.indemnizacion_a_nuevo += Number(aporte_para_indemnizacion.monto_con_deducible_aplicado)	
+							monto_para_perdidas_indemnizacion -= Number(aporte_para_indemnizacion.monto_a_pagar)
+
+
+							remanente_indemnizacion_sin_deducible_para_perdidas = bien.remanente_indemnizacion
+
+
 							
 							bien.deducible_aplicado_a_indemnizacion += Number(aporte_para_indemnizacion.deducible)
 
 							console.log('remanente_indemnizacion: '+generals.methods.price(bien.remanente_indemnizacion))
+							console.log('remanente_indemnizacion_sin_deducible_para_perdidas: '+generals.methods.price(remanente_indemnizacion_sin_deducible_para_perdidas))
 							console.log('bien.indemnizacion_a_nuevo: '+generals.methods.price(bien.indemnizacion_a_nuevo))
 						
 						} else {
