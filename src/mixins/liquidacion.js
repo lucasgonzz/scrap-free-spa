@@ -11,18 +11,20 @@ export default {
 			let cobertura_aplicada = {
 				id: cobertura_store.id,
 				nombre: cobertura_store.nombre,
-				fondos: cobertura_store.fondos,
+				fondos: cobertura_store.fondos, 
 				remanente_a_cubrir: bien.remanente_indemnizacion,
 				deducible: cobertura_store.pivot.deducible ? cobertura_store.pivot.deducible : 0,
+				deducible_monto: cobertura_store.pivot.deducible_monto ? cobertura_store.pivot.deducible_monto : 0,
 			}
 
 
 			// DEDUCIBLE
 			if (cobertura_store.pivot.deducible) {
 
-				monto_deducible = bien.remanente_indemnizacion * Number(cobertura_store.pivot.deducible) / 100
-				
-				bien.remanente_indemnizacion -= monto_deducible
+				monto_deducible = Number(bien.remanente_indemnizacion) * Number(cobertura_store.pivot.deducible) / 100
+				console.log('Sumando deducible de '+cobertura_store.pivot.deducible+'. monto_deducible = '+monto_deducible)
+			 	
+				// bien.remanente_indemnizacion -= monto_deducible
 
 				// monto_con_deducible_aplicado = monto_aporte_para_indemnizacion - monto_deducible
 
@@ -32,9 +34,14 @@ export default {
 				// 	monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
 				// }
 
-			} else {
-				// monto_con_deducible_aplicado = monto_aporte_para_indemnizacion
 			}
+
+			if (cobertura_store.pivot.deducible_monto) {
+				monto_deducible += Number(cobertura_store.pivot.deducible_monto)
+				console.log('Sumando le monto deducible de '+cobertura_store.pivot.deducible_monto+'. monto_deducible = '+monto_deducible)
+			}
+			
+			bien.remanente_indemnizacion -= monto_deducible
 
 
 			monto_con_deducible_aplicado = bien.remanente_indemnizacion
@@ -84,20 +91,15 @@ export default {
 
 				monto_deducible = bien.remanente_reparacion * Number(cobertura_store.pivot.deducible) / 100
 
-				bien.remanente_reparacion -= monto_deducible
-
-				// monto_con_deducible_aplicado = monto_aporte_para_reparacion - monto_deducible
-
-				// if (!fondos_insuficientes) {
-				// 	monto_con_deducible_aplicado = monto_aporte_para_reparacion - monto_deducible
-				// } else {
-				// 	monto_con_deducible_aplicado = monto_aporte_para_reparacion
-				// }
-
-			} else {
-				// monto_con_deducible_aplicado = monto_aporte_para_reparacion
 			}
 
+			if (cobertura_store.pivot.deducible_monto) {
+				monto_deducible += Number(cobertura_store.pivot.deducible_monto)
+				console.log('Sumando le monto deducible de '+cobertura_store.pivot.deducible_monto+'. monto_deducible = '+monto_deducible)
+			}
+			
+			bien.remanente_reparacion -= monto_deducible
+			
 			monto_con_deducible_aplicado = bien.remanente_reparacion
 
 

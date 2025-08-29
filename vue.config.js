@@ -23,7 +23,8 @@ module.exports = {
     },
 	devServer: {
     	host: 'scrap-free.local',
-    	port: '8081'
+    	port: '8080'
+    	// port: '8081'
     },
 	pwa: {
         workboxOptions: {

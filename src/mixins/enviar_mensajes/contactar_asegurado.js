@@ -136,6 +136,10 @@ export default {
 
 			mensaje_mail.push(text_mail)
 
+
+			text += '%0A %0A(Conforme a las condiciones particulares de la póliza y la LEY Nº 17.418 artículos 46 y 55 s.s quedan suspendidos los términos para expresarnos acerca de su derecho hasta que no sea presentada la información solicitada y suficiente para una correcta auditoría).'
+
+
 			text += '%0A %0APara comenzar el proceso le voy a solicitar la siguiente información: %0A %0A 1.Foto de frente del equipo(s). (Foto completa). %0A %0A 2.Foto trasera del equipo(s). (Foto que se vea completa) %0A %0A 3.Foto de las etiquetas donde conste modelo y número de serie. %0A %0A 4.Factura de compra, en caso de no tenerla manifestar fecha aproximada de compra.'
 			
 			text_mail = 'Para comenzar el proceso le voy a solicitar la siguiente información:'

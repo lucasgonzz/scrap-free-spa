@@ -318,6 +318,7 @@ export default {
 			color: rgba(0, 0, 0, .6)
 		@if ($theme == 'dark') 
 			background: #333 !important
+			// background: rgba(255,255,255,.9) !important
 			i
 				color: #FFF
 	.bg-gray 

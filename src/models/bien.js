@@ -100,6 +100,11 @@ export default {
 						key: 'deducible',
 						type: 'number',
 					},
+					{
+						text: 'Monto Deducible',
+						key: 'deducible_monto',
+						type: 'number',
+					},
 				],
 			}
 		},

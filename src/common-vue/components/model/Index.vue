@@ -301,7 +301,7 @@ export default {
 					})
 					.catch(err => {
 						console.log(err)
-						this.$toast.error(err)
+						this.$toast.error(err.response.data.message)
 						this.loading = false
 					})
 				} else {
@@ -343,7 +343,7 @@ export default {
 					})
 					.catch(err => {
 						console.log(err)
-						this.$toast.error(err)
+						this.$toast.error(err.response.data.message)
 						this.loading = false
 					})
 				}

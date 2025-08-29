@@ -66,11 +66,13 @@ export default {
 			])
 
 			if (this.index == this.bien.coberturas.length-1) {
+				console.log('this.bien.indemnizacion_bien:')
+				console.log(this.bien.indemnizacion_bien)
 				items.push({
 					concepto: 'Indemnizacion asegurado',
 					// valor: this.price(this.bien.indemnizacion_asegurado),
 					// valor: this.price(this.bien.valor_depreciado - this.cobertura.deducible_aplicado),
-					valor: this.price(this.bien.indemnizacion_bien),
+					valor: this.price(this.bien.indemnizacion_a_nuevo),
 				})
 			}
 			return items
